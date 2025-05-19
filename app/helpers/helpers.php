@@ -8,14 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 
 
-function date_Test()
-{
 
-
-    return $data = [
-        ['id' => 2, 'name' => 'Louie']
-    ];
-}
 
 function insert_position()
 {
@@ -64,4 +57,31 @@ function date_converter_date($date)
 
 
     return Carbon::parse($date)->format('M j, Y');
+}
+
+
+function insert_type()
+{
+
+
+    $array = [
+        'Accompany To The Airports',
+        'Account Visit',
+        'Aircon Cleaning',
+        'Benefit Orientation',
+        'Bidding Proposal F2F Submission',
+        'Billing Concerns',
+        'Business Presentation'
+    ];
+
+    $data = array_map(function ($type) {
+        return [
+            'type' => $type,
+            'status' => 1,
+            'date_created' => Carbon::now()
+        ];
+    }, $array);
+
+    DB::table('aits_shuttle_types')->insert($data);
+
 }

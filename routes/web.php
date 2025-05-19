@@ -68,7 +68,7 @@ Route::controller(Aits_Request_Room_approval_Controller::class)->group(function 
 
 
 Route::controller(Aits_Transit_Controller::class)->group(function () {
-
+    Route::post('aits_save_shuttle_request', 'aits_save_shuttle_request')->name('aits_save_shuttle_request');
 });
 
 

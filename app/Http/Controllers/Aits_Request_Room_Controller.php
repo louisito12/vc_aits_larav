@@ -170,11 +170,11 @@ class Aits_Request_Room_Controller extends Controller
     {
         $request_no = 1;
 
-        $recent_request = AitsRequestRoomModel::
-            where('is_transact', 1)
-            ->where('year', Carbon::now()->year)
-            ->orderBy('request_no', 'Desc')
+        $recent_request = AitsRequestRoomModel::where('is_transact', 1)
+            ->whereDate('date_created', Carbon::today()->toDateString())
+            ->orderBy('request_no', 'desc')
             ->first();
+
 
         if ($recent_request) {
             $request_no = (int) $recent_request->request_no + 1;
@@ -285,8 +285,7 @@ class Aits_Request_Room_Controller extends Controller
             ->addColumn('request_no', function ($data) {
                 $number = $data->request_no;
                 $request_number = sprintf('%03d', $number);
-
-                return $data->year . '-' . $request_number;
+                return Carbon::parse($data->date_created)->format('Y-m-d') . '-' . $request_number;
 
             })
             ->rawColumns(['action', 'status', 'admin_action'])
@@ -432,8 +431,6 @@ class Aits_Request_Room_Controller extends Controller
             $data->orig_id = $request->id;
             $data->edited_by = Auth::user()->id;
             $data->is_transact = 0;
-
-
 
 
 
