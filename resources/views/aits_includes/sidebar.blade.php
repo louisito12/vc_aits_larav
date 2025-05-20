@@ -60,6 +60,9 @@
                     $admin = [
                         "room_approval_view" => Request::is('room_approval_view'),
                         "aits_car_view" => Request::is('aits_car_view'),
+                        "aits_transit_approval_view" => Request::is('aits_transit_approval_view'),
+
+
                     ];
 
 
@@ -120,12 +123,22 @@
                                 Reservation</a>
                         </li>
 
+                        <li class="slide">
+                            <a href="{{ route('aits_transit_approval_view') }}"
+                                class="side-menu__item {{ Request::is('aits_transit_approval_view') ? 'active' : '' }}">
+                                Shuttle Service Approval</a>
+                        </li>
+
+
+
 
                         <li class="slide">
                             <a href="{{ route('aits_car_view') }}"
                                 class="side-menu__item {{ Request::is('aits_car_view') ? 'active' : '' }}">
                                 Car Management</a>
                         </li>
+
+
 
 
 

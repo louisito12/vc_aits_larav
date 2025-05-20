@@ -280,10 +280,8 @@
 
                         })
 
-
-                        // Swal.fire('Approved!', 'The request has been approved.', 'success');
                     } else {
-                        // Swal.fire('Cancelled', 'The request was not approved.', 'error');
+                       
                     }
                 });
             })

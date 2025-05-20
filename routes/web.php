@@ -5,6 +5,7 @@ use App\Http\Controllers\Aits_Delivery_Controller;
 use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
 use App\Http\Controllers\Aits_Transit_Controller;
+use App\Http\Controllers\AitsTransitApproval;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RequestRoomController;
 use App\Http\Controllers\UserController;
@@ -69,6 +70,11 @@ Route::controller(Aits_Request_Room_approval_Controller::class)->group(function 
 
 Route::controller(Aits_Transit_Controller::class)->group(function () {
     Route::post('aits_save_shuttle_request', 'aits_save_shuttle_request')->name('aits_save_shuttle_request');
+    Route::get('get_shuttel_request_data', 'get_shuttel_request_data')->name('get_shuttel_request_data');
+    Route::get('retrieve_shuttle_request/{id}', 'retrieve_shuttle_request')->name('retrieve_shuttle_request');
+    Route::get('delete_shuttle_request/{id}', 'delete_shuttle_request')->name('delete_shuttle_request');
+    Route::post('update_shuttle_request', 'update_shuttle_request')->name('update_shuttle_request');
+
 });
 
 
@@ -83,6 +89,12 @@ Route::controller(Aits_Car_Management_Controller::class)->group(function () {
     Route::post('edit_vehicle', 'edit_vehicle')->name('edit_vehicle');
 });
 
+Route::controller(AitsTransitApproval::class)->group(function () {
+    Route::Get('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
+    Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
+
+});
+
 
 
 //page authentication
@@ -93,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('transit_request_view', [Aits_Transit_Controller::class, 'transit_request_view'])->name('transit_request_view');
     Route::get('room_approval_view', [Aits_Request_Room_approval_Controller::class, 'room_approval_view'])->name('room_approval_view');
     Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
+    Route::get('aits_transit_approval_view', [AitsTransitApproval::class, 'aits_transit_approval_view'])->name('aits_transit_approval_view');
 });
 
 

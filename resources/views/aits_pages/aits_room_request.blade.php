@@ -1,3 +1,4 @@
+use Carbon\Carbon;
 @extends('aits_main_page')
 
 
@@ -78,12 +79,17 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Date From</label>
-                            <input id="date_from" type="datetime-local" class="form-control spec_input">
+                            <input min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
+                                max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="date_from"
+                                type="datetime-local" class="form-control spec_input">
                         </div>
 
                         <div class="col-6">
                             <label>Date To</label>
-                            <input id="date_to" type="datetime-local" class="form-control spec_input">
+                            <input id="date_to" type="datetime-local"
+                                min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
+                                max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
+                                class="form-control spec_input">
                         </div>
                     </div>
                     <br>
@@ -201,14 +207,18 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Date From</label>
-                            <input id="edit_update_from" type="datetime-local" class="form-control spec_input">
+                            <input id="edit_update_from" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
+                                max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" type="datetime-local"
+                                class="form-control spec_input">
                             <input id="hidden_id" type="text" hidden class="form-control spec_input">
 
                         </div>
 
                         <div class="col-6">
                             <label>Date To</label>
-                            <input id="edit_update_to" type="datetime-local" class="form-control spec_input">
+                            <input id="edit_update_to" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
+                                max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" type="datetime-local"
+                                class="form-control spec_input">
                         </div>
                     </div>
                     <br>
@@ -379,9 +389,6 @@
                         $('#view_purpose').val(e['data']['remarks']);
 
 
-
-
-
                     }
                 });
 
@@ -438,6 +445,8 @@
                                     text: "Your Request has been deleted.",
                                     icon: "success"
                                 });
+                                $('#room_request_tbl').DataTable().ajax.reload();
+
                             }
                         })
 
@@ -498,6 +507,10 @@
                     $('#edit_purpose_row').attr('hidden', true);
                 }
             })
+
+
+
+
         })
     </script>
 

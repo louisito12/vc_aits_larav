@@ -40,6 +40,12 @@ function date_coverters($date)
     return Carbon::createFromFormat('Y-m-d h:i A', $date)->format('Y-m-d\TH:i');
 }
 
+function date_coverters_transit($date)
+{
+
+    return Carbon::createFromFormat('Y-m-d H:i:s.v', $date)->format('Y-m-d\TH:i');
+}
+
 
 function date_from_to_converter_date($date)
 {
@@ -83,5 +89,31 @@ function insert_type()
     }, $array);
 
     DB::table('aits_shuttle_types')->insert($data);
+
+}
+
+function dynamic_file($path)
+{
+
+    if (config('app.env') == 'local') {
+        return ('http://127.0.0.1:8000/' . $path);
+    } else {
+        return url(env('APP_ENV') . 'public/' . $path);
+    }
+
+}
+
+function insert_driver()
+{
+
+
+    DB::table('aits_drivers')->insert([
+
+        'fname' => 'Paul',
+        'mname' => 'D.',
+        'lname' => 'Makr',
+        'status' => 1,
+        'date_created' => Carbon::now(),
+    ]);
 
 }

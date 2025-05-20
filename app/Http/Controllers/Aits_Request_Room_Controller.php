@@ -437,9 +437,10 @@ class Aits_Request_Room_Controller extends Controller
             $logData = $data->toArray();
             unset($logData['id']);
             unset($logData['updated_at']);
-
+            
 
             $this->table_logs($logData);
+
 
             $request->merge([
                 'date_from' => $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),
