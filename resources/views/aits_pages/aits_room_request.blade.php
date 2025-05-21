@@ -184,6 +184,22 @@ use Carbon\Carbon;
                         </div>
                     </div>
 
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Request Status</label>
+                            <input type="text" id="show_data_status" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved By </label>
+                            <input type="text" id="show_data_approver" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved Date </label>
+                            <input type="text" id="show_data_approve_date" class="form-control">
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -387,6 +403,16 @@ use Carbon\Carbon;
                         $('#view_room_name').val(e['data']['room_id']);
                         $('#view_events').val(e['data']['event_id']);
                         $('#view_purpose').val(e['data']['remarks']);
+                        $('#show_data_status').val(e['data']['request_status']);
+                        $('#show_data_approver').val(
+                            e['data']['get_approved_data']
+                                ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']
+                                : ''
+                        );
+                        $('#show_data_approve_date').val(e['data']['approve_date']);
+
+
+
 
 
                     }

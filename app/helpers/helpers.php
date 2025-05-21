@@ -29,9 +29,16 @@ function get_department($id)
 
 function date_converter($date)
 {
+    // Return null if the date is null
+    if (is_null($date)) {
+        return null;
+    }
 
+    // Use Carbon::make to handle null values
+    $carbonDate = Carbon::make($date);
 
-    return Carbon::parse($date)->format('M j, Y, g:i A');
+    // Return formatted date if valid, otherwise return null
+    return $carbonDate ? $carbonDate->format('M j, Y, g:i A') : null;
 }
 
 function date_coverters($date)

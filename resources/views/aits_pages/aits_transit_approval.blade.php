@@ -11,7 +11,7 @@
             text-align: center !important;
             vertical-align: middle;
             font-size: 0.8em;
-            /* Adjust this value as needed */
+            
         }
     </style>
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
@@ -161,7 +161,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="view_data_header"> Approve Shuttle Request
+                    <h6 class="modal-title" id="approve_data_header"> Approve Shuttle Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -178,6 +178,7 @@
 
                                 @endforeach
                             </select>
+                            <input type="text" hidden id="approve_id">
                         </div>
                         <div class="col-6">
                             <label>Car</label>
@@ -200,6 +201,19 @@
                         <div class="col-6">
                             <label>Model</label>
                             <input readonly id="model" type="text" class="form-control">
+
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Departure Date</label>
+                            <input readonly type="datetime-local" id="departure_date" class="form-control">
+                        </div>
+                        <div class="col-6">
+                            <label>Pick Up Date</label>
+                            <input readonly id="pick_up_date_app" type="datetime-local" class="form-control">
 
                         </div>
                     </div>
@@ -290,6 +304,28 @@
                     $('#driver_id').val('');
                     $('#car_id').val('');
                     $('#approve_modal').modal('show');
+                    $('#approve_id').val($(this).data('id'))
+
+
+
+                    $.ajax({
+                        url: "retrieve_shuttle_request/" + $(this).data('id'),
+                        type: "GET",
+                        success: function (e) {
+                            if (e['isValid'] == false) {
+                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                return
+                            }
+
+                            $('#approve_data_header').text('Approve Shuttle Request  #' + e['data']['request_number'])
+                            $('#departure_date').val(e['data']['departure_date']);
+                            $('#pick_up_date_app').val(e['data']['pick_up_date']);
+
+                        }
+                    })
+
+
+
 
                     // Swal.fire({
                     //     title: 'Are you sure?',
@@ -331,7 +367,6 @@
                 }
                 if ($(this).data('val') == 2) {
                     //dissapproved
-
                     Swal.fire({
                         title: "Are you sure?",
                         text: "You want to disapprove this request?",
@@ -348,7 +383,7 @@
                                 success: function (e) {
                                     Swal.fire({
                                         title: "Disapproved!",
-                                        text: "Your file has been Disapproved.",
+                                        text: "Your Request has been Disapproved.",
                                         icon: "success"
                                     });
                                     $('#tbl_transit').DataTable().ajax.reload();
@@ -375,7 +410,6 @@
                             return
                         }
 
-
                         $('#show_shuttle_modal').modal('show');
                         $('#show_id').val(e['data']['id']);
                         $('#show_departure_date').val(e['data']['departure_date']);
@@ -392,9 +426,13 @@
 
                     }
                 })
+
+
+
+
+
+
             })
-
-
 
 
             $('#car_id').change(function () {
@@ -408,6 +446,55 @@
                 })
             })
 
+
+            $('#approve_shuttle_btn').click(function () {
+                // car_id, driver_id, approve_id
+
+                const car_id_approve = $('#car_id').val();
+                const driver_id_approve = $('#driver_id').val();
+                const approve_id_approve = $('#approve_id').val();
+
+                if (car_id_approve == "" || driver_id_approve == "") {
+                    alertify.error('<span style="color: white;"> All fileds is required </span>');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('approve_shuttle_request') }}",
+                    type: "POST",
+                    data: {
+                        car_id: car_id_approve,
+                        driver_id: driver_id_approve,
+                        id: approve_id_approve,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (e) {
+                        if (e['isValid'] == false) {
+                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            return
+                        }
+
+                        $('#approve_modal').modal('hide');
+                        Swal.fire({
+                            title: "Approve!",
+                            text: "Your Request has been approved.",
+                            icon: "success"
+                        });
+                        $('#tbl_transit').DataTable().ajax.reload();
+                        $('#model').val('');
+                        $('#brand').val('');
+                        $('#driver_id').val('');
+                        $('#car_id').val('');
+
+                    }
+
+
+                })
+
+
+            });
 
 
 

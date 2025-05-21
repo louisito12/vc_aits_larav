@@ -92,7 +92,7 @@ Route::controller(Aits_Car_Management_Controller::class)->group(function () {
 Route::controller(AitsTransitApproval::class)->group(function () {
     Route::Get('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
     Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
-
+    Route::post('approve_shuttle_request', 'approve_shuttle_request')->name('approve_shuttle_request');
 });
 
 

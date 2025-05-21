@@ -345,8 +345,8 @@ class Aits_Request_Room_Controller extends Controller
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor', 'get_requestor_data', 'get_department', 'get_approved_data'])->find($id);
             $data->date_from = date_coverters($data->date_from);
             $data->date_to = date_coverters($data->date_to);
+            $data->approve_date = date_converter($data->approve_date);
 
-            $data->approve_date = date_converter($data->dateapprove_date_created);
 
             return [
 
@@ -400,8 +400,8 @@ class Aits_Request_Room_Controller extends Controller
                 }
             }
 
-            $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
-            $dateTo = $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
+            $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $dateTo = $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             if ($request->date_from > $request->date_to) {
                 return response()->json([
                     'msg' => 'The To date must be later than from date !',
@@ -410,6 +410,7 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
 
             }
+            
             $from_date = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
 
@@ -431,9 +432,6 @@ class Aits_Request_Room_Controller extends Controller
             $data->orig_id = $request->id;
             $data->edited_by = Auth::user()->id;
             $data->is_transact = 0;
-
-
-
             $logData = $data->toArray();
             unset($logData['id']);
             unset($logData['updated_at']);
@@ -446,13 +444,8 @@ class Aits_Request_Room_Controller extends Controller
                 'date_from' => $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'date_to' => $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A'),
             ]);
-
+            
             $data_update = AitsRequestRoomModel::where('id', $request->id)->update($request->except(['id']));
-
-
-
-
-
 
 
         } catch (\Exception $e) {
