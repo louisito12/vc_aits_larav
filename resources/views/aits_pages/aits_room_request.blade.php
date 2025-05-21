@@ -409,11 +409,8 @@ use Carbon\Carbon;
                                 ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']
                                 : ''
                         );
+
                         $('#show_data_approve_date').val(e['data']['approve_date']);
-
-
-
-
 
                     }
                 });

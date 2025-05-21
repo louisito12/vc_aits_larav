@@ -323,6 +323,24 @@
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>
                     </div>
+
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Request Status</label>
+                            <input disabled type="text" class="form-control" id="show_req_stats">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved By</label>
+                            <input disabled type="text" class="form-control" id="show_approver">
+
+                        </div>
+                        <div class="col-4">
+                            <label>Approved Date</label>
+                            <input disabled type="text" class="form-control" id="show_approve_date">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -387,7 +405,24 @@
                             $('#show_client_name').val(e['data']['client_name']);
                             $('#show_passenger_number').val(e['data']['passenger_number']);
                             $('#show_manager_id').val(e['data']['manager_id']);
+                            $('#show_passenger_number').val(e['data']['passenger_number']);
+                            $('#show_manager_id').val(e['data']['manager_id']);
+                            $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
 
+
+
+
+                            $('#show_req_stats').val(e['data']['request_status']);
+                            $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
+                                + ' ' + e['data']['get_approver_data']['lastname'] : '');
+
+                            $('#show_approve_date').val(e['data']['date_approved']);
+
+                            show_req_stats
+                            show_approver
+                            show_approve_date
+
+                            get_approver_data
 
                         }
 

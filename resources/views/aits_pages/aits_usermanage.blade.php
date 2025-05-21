@@ -33,7 +33,6 @@
                             <thead>
                                 <tr>
                                     <th class="spec_input w-25">Full Name</th>
-                                    <th class="spec_input w-25">Email</th>
                                     <th class="spec_input w-25">Department</th>
                                     <th class="spec_input w-25">Position</th>
                                     <th class="spec_input w-25">Action</th>
@@ -114,11 +113,11 @@
     <script>
         $(document).ready(function () {
             $('#user_tbl').DataTable()
-            
+
             $('#add_user_btn').click(function () {
                 $('#add_user_modal').modal('show')
             });
 
-        })
+        });
     </script>
 @endsection

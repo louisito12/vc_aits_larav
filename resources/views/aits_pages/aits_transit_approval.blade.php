@@ -11,7 +11,7 @@
             text-align: center !important;
             vertical-align: middle;
             font-size: 0.8em;
-            
+
         }
     </style>
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
@@ -143,6 +143,23 @@
                         <div hidden class="col-3">
                             <label>OB Form</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Request Status</label>
+                            <input disabled type="text" class="form-control" id="show_req_stats">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved By</label>
+                            <input disabled type="text" class="form-control" id="show_approver">
+
+                        </div>
+                        <div class="col-4">
+                            <label>Approved Date</label>
+                            <input disabled type="text" class="form-control" id="show_approve_date">
+
                         </div>
                     </div>
                 </div>
@@ -423,7 +440,11 @@
                         $('#show_passenger_number').val(e['data']['passenger_number']);
                         $('#show_manager_id').val(e['data']['manager_id']);
                         $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
+                        $('#show_req_stats').val(e['data']['request_status']);
+                        $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
+                            + ' ' + e['data']['get_approver_data']['lastname'] : '');
 
+                        $('#show_approve_date').val(e['data']['date_approved']);
                     }
                 })
 
@@ -495,6 +516,9 @@
 
 
             });
+
+
+
 
 
 

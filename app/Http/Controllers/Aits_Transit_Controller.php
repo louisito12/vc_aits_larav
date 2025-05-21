@@ -323,7 +323,7 @@ class Aits_Transit_Controller extends Controller
         try {
 
             $data = AitsShuttleRequest::
-                with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+                with(['get_event_data', 'get_requestor', 'get_requestor_data','get_approver_data'])
                 ->find($id);
 
             $number = $data->request_no;
@@ -334,7 +334,10 @@ class Aits_Transit_Controller extends Controller
             $data->departure_date = date_coverters_transit($data->departure_date);
             $data->appointment_date = date_coverters_transit($data->appointment_date);
             $data->pick_up_date = date_coverters_transit($data->pick_up_date);
+            $data->date_approved = date_converter($data->date_approved);
+
             $data->request_number = $req_no;
+
 
             if ($data->type == null) {
                 $data->type == "remarks";

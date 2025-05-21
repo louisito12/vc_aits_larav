@@ -15,10 +15,10 @@
             </nav>
         </div>
 
-        <div class="d-flex my-xl-auto right-content align-items-center">
+        <!-- <div  class="d-flex my-xl-auto right-content align-items-center">
 
 
-            <!-- <div hidden class="mb-xl-0">
+            <div  class="mb-xl-0">
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,8 +36,8 @@
 
             <div class="pe-1 mb-xl-0">
                 <button type="button" class="btn btn-warning  btn-icon me-2"><i class="mdi mdi-refresh"></i></button>
-            </div> -->
-        </div>
+            </div>
+        </div> -->
 
 
     </div>
@@ -70,15 +70,6 @@
                                     <th class="spec_input w-25">Date Requested</th>
                                     <th class="spec_input w-25">Request Status</th>
                                     <th class="spec_input w-25">Action</th>
-
-
-
-
-
-
-
-
-
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -88,8 +79,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- Modal -->
 
@@ -185,8 +174,6 @@
 
     <script>
         $(document).ready(function () {
-
-
 
             $('#room_request_tbl').DataTable({
                 ajax: {

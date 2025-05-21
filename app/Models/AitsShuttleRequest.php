@@ -30,4 +30,9 @@ class AitsShuttleRequest extends Model
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'user_id');
     }
+
+    public function get_approver_data()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'approved_by');
+    }
 }
