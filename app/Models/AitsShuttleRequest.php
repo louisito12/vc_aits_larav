@@ -35,4 +35,10 @@ class AitsShuttleRequest extends Model
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'approved_by');
     }
+
+    public function get_manager_data()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'manager_id');
+
+    }
 }

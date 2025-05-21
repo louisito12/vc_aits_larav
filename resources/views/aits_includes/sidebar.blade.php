@@ -139,11 +139,11 @@
                         </li>
 
 
-                        <li class="slide">
+                        <!-- <li class="slide">
                             <a href="{{ route('user_manage_view') }}"
                                 class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
                                 Users Management</a>
-                        </li>
+                        </li> -->
 
 
 

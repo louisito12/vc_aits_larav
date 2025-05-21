@@ -438,7 +438,7 @@
                         $('#show_remarks').val(e['data']['remarks']);
                         $('#show_client_name').val(e['data']['client_name']);
                         $('#show_passenger_number').val(e['data']['passenger_number']);
-                        $('#show_manager_id').val(e['data']['manager_id']);
+                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
                         $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
                         $('#show_req_stats').val(e['data']['request_status']);
                         $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']

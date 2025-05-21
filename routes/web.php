@@ -74,6 +74,7 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
     Route::get('retrieve_shuttle_request/{id}', 'retrieve_shuttle_request')->name('retrieve_shuttle_request');
     Route::get('delete_shuttle_request/{id}', 'delete_shuttle_request')->name('delete_shuttle_request');
     Route::post('update_shuttle_request', 'update_shuttle_request')->name('update_shuttle_request');
+    Route::get('show_list_managers', 'show_list_managers')->name('show_list_managers');
 
 });
 

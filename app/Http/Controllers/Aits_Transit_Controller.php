@@ -25,8 +25,11 @@ class Aits_Transit_Controller extends Controller
             ->where('expiry_date', '>=', Carbon::now())
             ->get();
         $type = AitsShuttleType::where('status', 1)->get();
-
-        return view('aits_pages.aits_transit_request_view', compact('vehicle', 'type'));
+        $manager = DB::connection('ict_ticketing')
+            ->table('tbl_personal_data')
+            ->where('poslevel_id', 1003)
+            ->get();
+        return view('aits_pages.aits_transit_request_view', compact('vehicle', 'type', 'manager'));
     }
 
     public function aits_save_shuttle_request(Request $request)
@@ -323,7 +326,7 @@ class Aits_Transit_Controller extends Controller
         try {
 
             $data = AitsShuttleRequest::
-                with(['get_event_data', 'get_requestor', 'get_requestor_data','get_approver_data'])
+                with(['get_event_data','get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data'])
                 ->find($id);
 
             $number = $data->request_no;
@@ -570,6 +573,9 @@ class Aits_Transit_Controller extends Controller
 
 
     }
+
+
+
 
 
 

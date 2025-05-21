@@ -141,7 +141,16 @@
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
-                            <input type="text" id="manager_app" class="form-control spec_input">
+                            <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
+                            <select name="" class="form-control" id="manager_app">
+                                <option value="">Select Manager</option>
+                                @foreach ($manager as $managers)
+                                    <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
+                                        {{ $managers->lastname }}
+                                    </option>
+
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-3">
                             <label>OB Form</label>
@@ -233,7 +242,16 @@
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
-                            <input type="text" id="edit_manager_id" class="form-control spec_input">
+                            <!-- <input type="text" id="edit_manager_id" class="form-control spec_input"> -->
+                            <select name="" class="form-control" id="edit_manager_id">
+                                <option value="">Select Manager</option>
+                                @foreach ($manager as $managers)
+                                    <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
+                                        {{ $managers->lastname }}
+                                    </option>
+
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-3">
                             <label>OB Form</label>
@@ -406,10 +424,11 @@
                             $('#show_passenger_number').val(e['data']['passenger_number']);
                             $('#show_manager_id').val(e['data']['manager_id']);
                             $('#show_passenger_number').val(e['data']['passenger_number']);
-                            $('#show_manager_id').val(e['data']['manager_id']);
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
 
 
+                         
+                            $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
 
 
                             $('#show_req_stats').val(e['data']['request_status']);

@@ -410,7 +410,7 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
 
             }
-            
+
             $from_date = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
 
@@ -435,7 +435,7 @@ class Aits_Request_Room_Controller extends Controller
             $logData = $data->toArray();
             unset($logData['id']);
             unset($logData['updated_at']);
-            
+
 
             $this->table_logs($logData);
 
@@ -444,7 +444,7 @@ class Aits_Request_Room_Controller extends Controller
                 'date_from' => $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'date_to' => $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A'),
             ]);
-            
+
             $data_update = AitsRequestRoomModel::where('id', $request->id)->update($request->except(['id']));
 
 
