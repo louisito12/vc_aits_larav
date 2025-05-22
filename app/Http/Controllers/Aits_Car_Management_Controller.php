@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsArea;
+use App\Models\AitsDeliveryType;
 use DateTime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\AitsVehicleModel;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class Aits_Car_Management_Controller extends Controller
@@ -16,6 +19,7 @@ class Aits_Car_Management_Controller extends Controller
 
     public function aits_car_view()
     {
+
         return view('aits_pages.aits_vehicle_management');
     }
 
@@ -34,26 +38,19 @@ class Aits_Car_Management_Controller extends Controller
 
         try {
             $data = AitsVehicleModel::where('status', 1)->get();
-
-
             return DataTables::of($data)
                 ->addColumn('status', function ($data) {
                     $expiry = $data->expiry_date;
                     $expiryDate = Carbon::parse($expiry);
                     $currentDate = Carbon::now();
-
-
                     if ($currentDate->greaterThan($expiryDate)) {
                         $status = 'expired';
                     } else {
                         $status = 'valid';
                     }
-
                     return $this->status_html($status);
-
                 })
                 ->addColumn('action', function ($data) {
-
                     return '<center>
                         <div  class="btn-group dropstart input_spec my-1 ">
                             <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-pill"
@@ -68,7 +65,6 @@ class Aits_Car_Management_Controller extends Controller
                         </div>
                         </center>
                     ';
-
                 })
                 ->addColumn('expiry_date', function ($data) {
                     $expiry = $data->expiry_date;

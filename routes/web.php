@@ -80,7 +80,9 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
 
 
 Route::controller(Aits_Delivery_Controller::class)->group(function () {
-
+    Route::post('aits_save_delivery', 'aits_save_delivery')->name('aits_save_delivery');
+    Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
+    Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
 });
 
 Route::controller(Aits_Car_Management_Controller::class)->group(function () {
@@ -105,9 +107,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('request_room_view', [Aits_Request_Room_Controller::class, 'request_room_view'])->name('request_room_view');
     Route::get('transit_request_view', [Aits_Transit_Controller::class, 'transit_request_view'])->name('transit_request_view');
     Route::get('room_approval_view', [Aits_Request_Room_approval_Controller::class, 'room_approval_view'])->name('room_approval_view');
-    Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
     Route::get('aits_transit_approval_view', [AitsTransitApproval::class, 'aits_transit_approval_view'])->name('aits_transit_approval_view');
     Route::get('aits_delivery_view', [Aits_Delivery_Controller::class, 'aits_delivery_view'])->name('aits_delivery_view');
+    Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
+
 });
 
 

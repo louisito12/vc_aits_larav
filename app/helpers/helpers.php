@@ -124,3 +124,10 @@ function insert_driver()
     ]);
 
 }
+
+function request_number($no, $date)
+{
+    $number = $no;
+    $request_number = sprintf('%03d', $number);
+    return Carbon::parse($date)->format('Y-m-d') . '-' . $request_number;
+}
