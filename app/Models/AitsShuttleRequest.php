@@ -15,8 +15,13 @@ class AitsShuttleRequest extends Model
     public function get_event_data()
     {
         return $this->belongsTo(AitsShuttleType::class, 'type', 'id');
+        // return $this->belongsTo(AitsShuttleType::class, 'type', 'id')->withDefault();
 
     }
+    // public function getTestDataAttribute()
+    // {
+    //     return $this->get_event_data->test_data();
+    // }
 
 
     public function get_requestor()

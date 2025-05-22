@@ -107,6 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('room_approval_view', [Aits_Request_Room_approval_Controller::class, 'room_approval_view'])->name('room_approval_view');
     Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
     Route::get('aits_transit_approval_view', [AitsTransitApproval::class, 'aits_transit_approval_view'])->name('aits_transit_approval_view');
+    Route::get('aits_delivery_view', [Aits_Delivery_Controller::class, 'aits_delivery_view'])->name('aits_delivery_view');
 });
 
 

@@ -99,7 +99,6 @@
                             <label>Date From</label>
                             <input disabled id="view_date_from" type="datetime-local" class="form-control spec_input">
                         </div>
-
                         <div class="col-6">
                             <label>Date To</label>
                             <input disabled id="view_date_to" type="datetime-local" class="form-control spec_input">
@@ -135,7 +134,6 @@
                             <textarea disabled id="view_purpose" class="form-control" id=""></textarea>
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-4">

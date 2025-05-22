@@ -65,6 +65,10 @@
 
                     ];
 
+                    $logistics = [
+                        "aits_delivery_view" => Request::is('aits_delivery_view'),
+                    ];
+
 
                 @endphp
 
@@ -105,8 +109,40 @@
                 <!-- End::slide -->
 
 
-                <!-- Admin Slide -->
+                <br>
+                <!-- Logistics Request -->
+                <li class="slide has-sub {{in_array(true, $logistics) ? 'open' : ''}}">
+                    <a href="javascript:void(0);"
+                        class="side-menu__item {{in_array(true, $logistics) ? 'active' : ''}}">
+                        <i style="width:30px;" class="fa-solid fa-truck-ramp-box"></i>
+                        <span class="side-menu__label">Logistics Request</span>
+                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide side-menu__label1 ">
+                            <a href="javascript:void(0);">Logistics Request</a>
+                        </li>
 
+
+                        <li class="slide">
+                            <a href="{{ route('aits_delivery_view') }}"
+                                class="side-menu__item {{ Request::is('aits_delivery_view') ? 'active' : '' }}">
+                                Delivery Request</a>
+                        </li>
+
+
+
+
+
+
+
+
+                    </ul>
+                </li>
+
+
+                <br>
+                <!-- Admin Slide -->
                 <li class="slide has-sub {{in_array(true, $admin) ? 'open' : ''}}">
                     <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $admin) ? 'active' : ''}}">
                         <i style="width:30px;" class="fa-solid fa-user-tie"></i>

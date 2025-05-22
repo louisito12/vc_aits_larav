@@ -427,21 +427,15 @@
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
 
 
-                         
+            
                             $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
-
-
                             $('#show_req_stats').val(e['data']['request_status']);
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                                 + ' ' + e['data']['get_approver_data']['lastname'] : '');
 
                             $('#show_approve_date').val(e['data']['date_approved']);
 
-                            show_req_stats
-                            show_approver
-                            show_approve_date
-
-                            get_approver_data
+                       
 
                         }
 

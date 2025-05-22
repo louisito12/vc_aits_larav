@@ -194,9 +194,7 @@ class Aits_Transit_Controller extends Controller
             ->where('user_id', Auth::user()->id)->get();
 
 
-
         return $this->transit_data_table($data);
-
 
 
     }
@@ -270,7 +268,6 @@ class Aits_Transit_Controller extends Controller
                 
                         ';
             })
-
             ->addColumn('admin_action', function ($data) {
                 $hidden = $data->request_status != 'Pending' ? 'hidden' : '';
 
@@ -288,7 +285,6 @@ class Aits_Transit_Controller extends Controller
                     </div>
                 ';
             })
-
             ->rawColumns(['action', 'status', 'action_file', 'admin_action'])
             ->make(true);
     }
@@ -326,7 +322,7 @@ class Aits_Transit_Controller extends Controller
         try {
 
             $data = AitsShuttleRequest::
-                with(['get_event_data','get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data'])
+                with(['get_event_data', 'get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data'])
                 ->find($id);
 
             $number = $data->request_no;
