@@ -109,13 +109,11 @@ class Aits_Delivery_Controller extends Controller
 
     public function uploade_file_transit($id, $table_name, $files, $delivery)
     {
-
         foreach ($files as $item) {
             $ext = $item->getClientOriginalExtension();
             $fname = $item->getClientOriginalName();
             $year = Carbon::now()->year;
             $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
-
             AitsFileModel::create([
                 "table_name" => $table_name,
                 "attachment_id" => $id,
@@ -157,14 +155,12 @@ class Aits_Delivery_Controller extends Controller
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->where('status', 1)->where('user_id', Auth::user()->id)->get();
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
-
                 return '
                     <center>
                     <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
                     </center> ';
-
             })
             ->addColumn('request_no', function ($data) {
                 return request_number($data->request_no, $data->date_created);
@@ -232,7 +228,7 @@ class Aits_Delivery_Controller extends Controller
     {
 
         if ($status == "Pending") {
-            $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
+            $stat = '<span class="badge rounded-pill bg-warning">Undelivered</span>';
         } else if ($status == "Delivered") {
             $stat = '   <span class="badge rounded-pill bg-success">Delivered</span>';
 
@@ -298,11 +294,6 @@ class Aits_Delivery_Controller extends Controller
                 'status' => 0,
                 'is_transact' => 0,
             ]);
-
-
-
-
-
 
             if ($request->file('file')) {
                 $this->uploade_file_transit($request->id, 'AitsDelivery', $request->file('file'), 1);

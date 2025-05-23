@@ -42,9 +42,7 @@ class Aits_Transit_Controller extends Controller
             $validated = Validator::make(
                 $request->all(),
                 [
-                    'departure_date' => [
-                        'required',
-                    ],
+                    'departure_date' => ['required'],
                     'appointment_date' => ['required'],
                     'pick_up_date' => ['required'],
                     'client_name' => ['required'],
@@ -53,9 +51,6 @@ class Aits_Transit_Controller extends Controller
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],
-
-
-
                 ],
             );
 
@@ -69,7 +64,6 @@ class Aits_Transit_Controller extends Controller
             }
 
 
-
             if ($request->type == "remarks") {
                 if ($request->purpose == "") {
                     return response()->json([
@@ -79,7 +73,6 @@ class Aits_Transit_Controller extends Controller
                     ]);
                 }
             }
-
 
             $dateFrom = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $dateTo = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
@@ -91,9 +84,9 @@ class Aits_Transit_Controller extends Controller
                 ]);
             }
 
+
             $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
-
             // $validation = $this->date_validation($from_date, $to_date);
             // if ($validation != 0) {
             //     return response()->json([
@@ -102,7 +95,6 @@ class Aits_Transit_Controller extends Controller
             //         "isValid" => false,
             //     ]);
             // }
-
 
 
             $request->merge([
