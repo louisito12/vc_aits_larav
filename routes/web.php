@@ -5,6 +5,7 @@ use App\Http\Controllers\Aits_Delivery_Controller;
 use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
 use App\Http\Controllers\Aits_Transit_Controller;
+use App\Http\Controllers\AitsDeliveryApprove;
 use App\Http\Controllers\AitsTransitApproval;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RequestRoomController;
@@ -44,14 +45,11 @@ Route::controller(LoginController::class)->group(function () {
 
 
 Route::controller(UserController::class)->group(function () {
-
     Route::post('add_user_data', 'add_user_data')->name('add_user_data');
     Route::get('retrieve_user/{id}', 'retrieve_user')->name('retrieve_user');
     Route::post('update_user', 'update_user')->name('update_user');
     Route::get('retrieve_department', 'retrieve_department')->name('retrieve_department');
-
 });
-
 
 
 Route::controller(Aits_Request_Room_Controller::class)->group(function () {
@@ -60,8 +58,8 @@ Route::controller(Aits_Request_Room_Controller::class)->group(function () {
     Route::get('retrieve_room_request/{id}', 'retrieve_room_request')->name('retrieve_room_request');
     Route::post('update_request_room', 'update_request_room')->name('update_request_room');
     Route::get('delete_request/{id}', 'delete_request')->name('delete_request');
-
 });
+
 Route::controller(Aits_Request_Room_approval_Controller::class)->group(function () {
     Route::get('get_room_approval_data', 'get_room_approval_data')->name('get_room_approval_data');
     Route::get('approved_room_request/{id}/{approve}', 'approved_room_request')->name('approved_room_request');
@@ -75,7 +73,6 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
     Route::get('delete_shuttle_request/{id}', 'delete_shuttle_request')->name('delete_shuttle_request');
     Route::post('update_shuttle_request', 'update_shuttle_request')->name('update_shuttle_request');
     Route::get('show_list_managers', 'show_list_managers')->name('show_list_managers');
-
 });
 
 
@@ -83,7 +80,11 @@ Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::post('aits_save_delivery', 'aits_save_delivery')->name('aits_save_delivery');
     Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
     Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
+    Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
+    Route::get('delete_delivery_request/{id}', 'delete_delivery_request')->name('delete_delivery_request');
+    Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');
 });
+
 
 Route::controller(Aits_Car_Management_Controller::class)->group(function () {
     Route::post('save_vehicle', 'save_vehicle')->name('save_vehicle');
@@ -92,11 +93,18 @@ Route::controller(Aits_Car_Management_Controller::class)->group(function () {
     Route::post('edit_vehicle', 'edit_vehicle')->name('edit_vehicle');
 });
 
+
 Route::controller(AitsTransitApproval::class)->group(function () {
     Route::Get('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
     Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
     Route::post('approve_shuttle_request', 'approve_shuttle_request')->name('approve_shuttle_request');
 });
+
+
+
+
+
+
 
 
 
@@ -110,11 +118,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_transit_approval_view', [AitsTransitApproval::class, 'aits_transit_approval_view'])->name('aits_transit_approval_view');
     Route::get('aits_delivery_view', [Aits_Delivery_Controller::class, 'aits_delivery_view'])->name('aits_delivery_view');
     Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
+    Route::get('aits_deliver_assign', [AitsDeliveryApprove::class, 'aits_deliver_assign'])->name('aits_deliver_assign');
 
 });
 
 
 // role -> admin,driver('itenerary arrive'),messenger(''),user
-
-
-Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');
+// Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');

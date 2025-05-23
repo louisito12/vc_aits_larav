@@ -62,6 +62,7 @@
                         "aits_car_view" => Request::is('aits_car_view'),
                         "aits_transit_approval_view" => Request::is('aits_transit_approval_view'),
                         "user_manage_view" => Request::is('user_manage_view'),
+                        "aits_deliver_assign" => Request::is('aits_deliver_assign'),
 
                     ];
 
@@ -163,6 +164,13 @@
                             <a href="{{ route('aits_transit_approval_view') }}"
                                 class="side-menu__item {{ Request::is('aits_transit_approval_view') ? 'active' : '' }}">
                                 Shuttle Service Approval</a>
+                        </li>
+
+
+                        <li class="slide">
+                            <a href="{{ route('aits_deliver_assign') }}"
+                                class="side-menu__item {{ Request::is('aits_deliver_assign') ? 'active' : '' }}">
+                                Delivery Assigned Messenger</a>
                         </li>
 
 

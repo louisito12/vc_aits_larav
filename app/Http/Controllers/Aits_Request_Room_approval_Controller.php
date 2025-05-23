@@ -28,10 +28,7 @@ class Aits_Request_Room_approval_Controller extends Controller
 
         try {
 
-
             $data = AitsRequestRoomModel::where('status', 1)->get();
-
-
             $controller = new Aits_Request_Room_Controller();
             return $controller->room_request_datatable($data);
 
@@ -60,8 +57,6 @@ class Aits_Request_Room_approval_Controller extends Controller
                 'approve_date' => Carbon::now(),
                 'request_status' => $status,
             ]);
-
-
 
 
         } catch (\Exception $e) {

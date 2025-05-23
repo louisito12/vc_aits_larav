@@ -14,7 +14,6 @@
                 </ol>
             </nav>
         </div>
-
         <!-- <div   class="d-flex my-xl-auto right-content align-items-center">
                 <div class="pe-1 mb-xl-0">
                     <button type="button" class="btn btn-info btn-icon me-2 btn-b"><i
@@ -43,8 +42,6 @@
                     </div>
                 </div>
             </div> -->
-
-
 
     </div>
 
@@ -89,7 +86,6 @@
 
     <script>
         $(document).ready(function () {
-
             $('#tbl_data').DataTable(
                 {
                     serverSide: true,
@@ -99,9 +95,6 @@
                         searchPlaceholder: 'Search...',
                         sSearch: '',
                     },
-
-
-
                     ajax: {
                         url: "{{ route('get_doctors_data') }}",
                         type: "POST",
@@ -111,8 +104,6 @@
 
 
                     },
-
-
                     columns: [
                         {
                             data: "hospName",
@@ -131,8 +122,6 @@
                                 $(td).addClass('spec_input')
                             }
                         },
-
-
                         {
                             data: "hospContactno",
                             "createdCell": function (td, cellData, rowData, row, col) {
