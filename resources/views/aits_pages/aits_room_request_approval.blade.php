@@ -18,28 +18,26 @@
         <!-- <div  class="d-flex my-xl-auto right-content align-items-center">
 
 
-            <div  class="mb-xl-0">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Filter Request
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
-                        <li><a class="dropdown-item test" href="javascript:void(0);">All</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">Approval For Today</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">All Pending</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);">All Approved</a></li>
-                    </ul>
+                <div  class="mb-xl-0">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter Request
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                            <li><a class="dropdown-item test" href="javascript:void(0);">All</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">Approval For Today</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">All Pending</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);">All Approved</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            &nbsp;
+                &nbsp;
 
-            <div class="pe-1 mb-xl-0">
-                <button type="button" class="btn btn-warning  btn-icon me-2"><i class="mdi mdi-refresh"></i></button>
-            </div>
-        </div> -->
-
-
+                <div class="pe-1 mb-xl-0">
+                    <button type="button" class="btn btn-warning  btn-icon me-2"><i class="mdi mdi-refresh"></i></button>
+                </div>
+            </div> -->
     </div>
 
 
@@ -79,12 +77,10 @@
             </div>
         </div>
     </div>
-
     <!-- Modal -->
 
+
     <!-- add user -->
-
-
     <div class="modal fade" id="view_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -159,11 +155,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 
 @endsection
 

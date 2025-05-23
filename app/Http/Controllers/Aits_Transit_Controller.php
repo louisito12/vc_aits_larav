@@ -110,20 +110,15 @@ class Aits_Transit_Controller extends Controller
             ]);
 
 
-
-
             if ($request->type == "remarks") {
                 $insert = $request->except(['type']);
             }
-
-
 
             $data = AitsShuttleRequest::create($request->except(['file']));
             $this->uploade_file_transit($data->id, "AitsShuttleRequest", 'aits_shuttle_file', $request->file('file'));
 
 
             return [
-
                 'msg' => 'Succesfully Inserted',
                 'data' => $data,
                 'status' => 200,

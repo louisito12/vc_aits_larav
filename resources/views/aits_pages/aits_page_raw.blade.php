@@ -76,14 +76,9 @@
     </div>
 
 
-
-
-
 @endsection
 
-
 @section('scripts')
-
     <script>
         $(document).ready(function () {
             $('#tbl_data').DataTable(
@@ -101,8 +96,6 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-
-
                     },
                     columns: [
                         {
@@ -141,6 +134,7 @@
                             }
                         }
                     ],
+
                     "drawCallback": function (oSettings) {
                         let pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
                         pagination.toggle(this.api().page.info().pages > 1);

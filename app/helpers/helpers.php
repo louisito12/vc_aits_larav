@@ -5,14 +5,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 
-
-
-
-
-
 function insert_position()
 {
-
     $insert = DB::table('aits_user_positions')->insert([
         'position' => 'System Developer',
         'date_created' => Carbon::now()
@@ -29,27 +23,22 @@ function get_department($id)
 
 function date_converter($date)
 {
-    // Return null if the date is null
+
     if (is_null($date)) {
         return null;
     }
 
-    // Use Carbon::make to handle null values
     $carbonDate = Carbon::make($date);
-
-    // Return formatted date if valid, otherwise return null
     return $carbonDate ? $carbonDate->format('M j, Y, g:i A') : null;
 }
 
 function date_coverters($date)
 {
-
     return Carbon::createFromFormat('Y-m-d h:i A', $date)->format('Y-m-d\TH:i');
 }
 
 function date_coverters_transit($date)
 {
-
     return Carbon::createFromFormat('Y-m-d H:i:s.v', $date)->format('Y-m-d\TH:i');
 }
 
@@ -67,15 +56,12 @@ function get_user_profile($id)
 
 function date_converter_date($date)
 {
-
-
     return Carbon::parse($date)->format('M j, Y');
 }
 
 
 function insert_type()
 {
-
 
     $array = [
         'Accompany To The Airports',
@@ -107,7 +93,6 @@ function dynamic_file($path)
     } else {
         return url(env('APP_ENV') . 'public/' . $path);
     }
-
 }
 
 function insert_driver()

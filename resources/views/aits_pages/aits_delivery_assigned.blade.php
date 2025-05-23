@@ -28,16 +28,12 @@
         }
     </style>
 
-
-
-
     <!-- Page Header Close -->
     <div class="row">
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3"> Assign Delivery</div>
-
                 </div>
 
                 <div class="card-body">
@@ -55,7 +51,7 @@
                                     <th class="text-center">Company Name </th>
                                     <th class="text-center">View Request File </th>
                                     <th class="text-center">Status</th>
-                             
+
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -65,9 +61,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <!-- Modal -->
 
@@ -88,7 +81,6 @@
                     {
                         data: "request_no"
                     },
-
                     {
                         data: "date_created"
                     },
@@ -119,8 +111,6 @@
                     {
                         data: "req_status",
                     },
-
-                  
                 ]
             });
 
