@@ -132,6 +132,10 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::get('email_template', function () {
+    return view('emails.email');
+});
+
 
 // role -> admin,driver('itenerary arrive'),messenger(''),user
 // Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');
