@@ -6,11 +6,11 @@
 
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
-            <h5 class="page-title fs-21 mb-1">Request for Delivery</h5>
+            <h5 class="page-title fs-21 mb-1">Request for Pick Up</h5>
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Logistics Request</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Request for Delivery</li>
+                    <li class="breadcrumb-item active" aria-current="page">Request for Pick Up</li>
                 </ol>
             </nav>
         </div>
@@ -37,7 +37,7 @@
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
-                    <div class="card-title m-1 p-3">Delivery Request</div>
+                    <div class="card-title m-1 p-3">Pick Up Request</div>
                     <button id="add_request_btn" class="btn btn-success m-3">Add Request</button>
                 </div>
 
@@ -49,7 +49,7 @@
                                     <th class="text-center">Request #</th>
                                     <th class="text-center">Date Requested</th>
                                     <th class="text-center">Department </th>
-                                    <th class="text-center">Delivery Address</th>
+                                    <th class="text-center">Pick Up Address</th>
                                     <th class="text-center">Area </th>
                                     <th class="text-center">Client Name </th>
                                     <th class="text-center">Company Name </th>
@@ -99,16 +99,16 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-4">
-                            <label>Delivery Type</label>
+                        <div class="col-6">
+                            <label>Pick Up Type</label>
                             <select id="delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Pick Up Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <label>Area</label>
                             <select name="" id="area_id" class="form-control spec_input">
                                 <option value="">Select Area</option>
@@ -118,10 +118,7 @@
                             </select>
 
                         </div>
-                        <div class="col-4">
-                            <label>Document Counts</label>
-                            <input type="number" id="count_documents" class="form-control spec_input">
-                        </div>
+
                     </div>
                     <br>
                     <div class="row">
@@ -160,7 +157,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="edit_header"> Edit Delivery Request
+                    <h6 class="modal-title" id="edit_header"> Edit Pick Up Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -184,16 +181,16 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-4">
-                            <label>Delivery Type</label>
+                        <div class="col-6">
+                            <label>Pick Up Type</label>
                             <select id="edit_delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Pick Up Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <label>Area</label>
                             <select name="" id="edit_area_id" class="form-control spec_input">
                                 <option value="">Select Area</option>
@@ -203,10 +200,7 @@
                             </select>
 
                         </div>
-                        <div class="col-4">
-                            <label>Document Counts</label>
-                            <input type="number" id="edit_count_documents" class="form-control spec_input">
-                        </div>
+
                     </div>
                     <br>
                     <div class="row">
@@ -244,7 +238,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="edit_header"> Show Delivery Request
+                    <h6 class="modal-title" id="edit_header"> Show Pick Up Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -269,9 +263,9 @@
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Delivery Type</label>
+                            <label>Pick Up Type</label>
                             <select disabled id="show_delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Pick Up Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
@@ -335,24 +329,9 @@
 
     <script>
         $(document).ready(function () {
-            // $('.get_value').change(function () {
-            //     const array_id = [];
-            //     $('.get_value:checked').each(function () {
-            //         array_id.push($(this).val());
-            //     });
-            //     console.log(array_id);
-            //     if ($(this).prop('checked')) {
-            //         $('.get_value').prop('checked', true);
-            //     }
-            //     else {
-            //         $('.get_value').prop('checked', false);
-            //     }
-            // });
-
-
             $('#deliver_tbl').DataTable({
                 ajax: {
-                    url: "show_delivery_request/1"
+                    url: "show_delivery_request/3"
                 },
                 columns: [
                     {
@@ -424,7 +403,7 @@
                 form_data.append('complete_address', complete_address);
                 form_data.append('delivery_remarks', delivery_remarks);
                 form_data.append('file[]', file);
-                form_data.append('procedures', 1);
+                form_data.append('procedures', 3);
                 $.ajax({
                     url: "{{ route('aits_save_delivery') }}",
                     type: "POST",
@@ -478,9 +457,6 @@
                         $('#edit_complete_address').val(e['data']['complete_address']);
                         $('#edit_delivery_remarks').val(e['data']['delivery_remarks']);
 
-
-
-
                     }
                 });
             });
@@ -497,7 +473,6 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
-
                         $('#show_id').val(e['data']['id']);
                         $('#show_name_receiver').val(e['data']['name_receiver']);
                         $('#show_company_name').val(e['data']['company_name']);
@@ -543,13 +518,9 @@
                     }
                 });
 
-
-
-
-            })
+            });
 
             $('#edit_delivery').click(function () {
-
                 const edit_id = $('#edit_id').val();
                 const edit_name_receiver = $('#edit_name_receiver').val();
                 const edit_company_name = $('#edit_company_name').val();
@@ -570,7 +541,7 @@
                 edit_form_data.append('complete_address', edit_complete_address);
                 edit_form_data.append('delivery_remarks', edit_delivery_remarks);
                 edit_form_data.append('id', edit_id);
-                edit_form_data.append('procedures', 1);
+                edit_form_data.append('procedures', 3);
 
 
                 if (edit_file != undefined) {

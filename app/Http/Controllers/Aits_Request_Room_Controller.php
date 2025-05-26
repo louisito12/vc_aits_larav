@@ -145,7 +145,6 @@ class Aits_Request_Room_Controller extends Controller
 
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])
-                ->where('status', 1)
                 ->where('request_by', Auth::user()->id)->get();
 
 
@@ -226,16 +225,18 @@ class Aits_Request_Room_Controller extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
-
+                if ($data->status == 0 || $data->request_status != 'Pending') {
+                    return '
+                    <center>
+                    <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
+                       </center> ';
+                }
                 return '
                     <center>
                     <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
-                    </center>
-               
-                    ';
-
+                    </center> ';
             })
             ->addColumn('room', function ($data) {
                 return $data['get_room_data']['room_name'];
@@ -263,7 +264,7 @@ class Aits_Request_Room_Controller extends Controller
 
             })
             ->addColumn('status', function ($data) {
-                return $this->status_html($data->request_status);
+                return $this->status_html($data->request_status, $data->id);
             })
             ->addColumn('admin_action', function ($data) {
                 $hidden = $data->request_status != 'Pending' ? 'hidden' : '';
@@ -293,7 +294,7 @@ class Aits_Request_Room_Controller extends Controller
     }
 
 
-    public function status_html($status)
+    public function status_html($status, $id)
     {
 
         if ($status == "Pending") {
@@ -312,6 +313,15 @@ class Aits_Request_Room_Controller extends Controller
         } else {
             $stat = '
             <span class="badge rounded-pill bg-danger">Error</span>
+            
+            ';
+        }
+
+
+        $status_data = AitsRequestRoomModel::where('id', $id)->first()->status;
+        if ($status_data == 0) {
+            $stat = '
+            <span class="badge rounded-pill bg-danger">Cancelled</span>
             
             ';
         }
@@ -346,8 +356,6 @@ class Aits_Request_Room_Controller extends Controller
             $data->date_from = date_coverters($data->date_from);
             $data->date_to = date_coverters($data->date_to);
             $data->approve_date = date_converter($data->approve_date);
-
-
             return [
 
                 'msg' => 'Succesfully Provided',
@@ -355,7 +363,6 @@ class Aits_Request_Room_Controller extends Controller
                 'status' => 200,
                 "isValid" => true,
             ];
-
         } catch (\Exception $e) {
             return [
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),

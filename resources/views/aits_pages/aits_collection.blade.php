@@ -6,11 +6,11 @@
 
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
-            <h5 class="page-title fs-21 mb-1">Request for Delivery</h5>
+            <h5 class="page-title fs-21 mb-1">Request for Collection</h5>
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Logistics Request</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Request for Delivery</li>
+                    <li class="breadcrumb-item active" aria-current="page">Request for Collection</li>
                 </ol>
             </nav>
         </div>
@@ -37,7 +37,7 @@
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
-                    <div class="card-title m-1 p-3">Delivery Request</div>
+                    <div class="card-title m-1 p-3">Collection Request</div>
                     <button id="add_request_btn" class="btn btn-success m-3">Add Request</button>
                 </div>
 
@@ -46,10 +46,11 @@
                         <table id="deliver_tbl" class="table table-bordered text-nowrap table-sm text-center">
                             <thead>
                                 <tr>
+
                                     <th class="text-center">Request #</th>
                                     <th class="text-center">Date Requested</th>
                                     <th class="text-center">Department </th>
-                                    <th class="text-center">Delivery Address</th>
+                                    <th class="text-center">Collection Address</th>
                                     <th class="text-center">Area </th>
                                     <th class="text-center">Client Name </th>
                                     <th class="text-center">Company Name </th>
@@ -78,7 +79,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Delivery Request
+                    <h6 class="modal-title" id="">Collection Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -100,9 +101,9 @@
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Delivery Type</label>
+                            <label>Collection Type</label>
                             <select id="delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Collection Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
@@ -119,7 +120,7 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Document Counts</label>
+                            <label>Collection Counts</label>
                             <input type="number" id="count_documents" class="form-control spec_input">
                         </div>
                     </div>
@@ -160,7 +161,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="edit_header"> Edit Delivery Request
+                    <h6 class="modal-title" id="edit_header"> Edit Collection Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -185,9 +186,9 @@
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Delivery Type</label>
+                            <label>Collection Type</label>
                             <select id="edit_delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Collection Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
@@ -204,7 +205,7 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Document Counts</label>
+                            <label>Collection Counts</label>
                             <input type="number" id="edit_count_documents" class="form-control spec_input">
                         </div>
                     </div>
@@ -244,7 +245,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="edit_header"> Show Delivery Request
+                    <h6 class="modal-title" id="edit_header"> Show Collection Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -269,9 +270,9 @@
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Delivery Type</label>
+                            <label>Collection Type</label>
                             <select disabled id="show_delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Delivery Type</option>
+                                <option value="">Select Collection Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
@@ -288,7 +289,7 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Document Counts</label>
+                            <label>Collection Counts</label>
                             <input disabled type="number" id="show_count_documents" class="form-control spec_input">
                         </div>
                     </div>
@@ -307,7 +308,6 @@
                             <textarea disabled class="form-control spec_input" id="show_delivery_remarks"></textarea>
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-6">
@@ -352,7 +352,7 @@
 
             $('#deliver_tbl').DataTable({
                 ajax: {
-                    url: "show_delivery_request/1"
+                    url: "show_delivery_request/2"
                 },
                 columns: [
                     {
@@ -424,7 +424,7 @@
                 form_data.append('complete_address', complete_address);
                 form_data.append('delivery_remarks', delivery_remarks);
                 form_data.append('file[]', file);
-                form_data.append('procedures', 1);
+                form_data.append('procedures', 2);
                 $.ajax({
                     url: "{{ route('aits_save_delivery') }}",
                     type: "POST",
@@ -560,6 +560,8 @@
                 const edit_complete_address = $('#edit_complete_address').val();
                 const edit_delivery_remarks = $('#edit_delivery_remarks').val();
                 const edit_file = $('#edit_file')[0].files[0];
+
+
                 const edit_form_data = new FormData();
                 edit_form_data.append('name_receiver', edit_name_receiver);
                 edit_form_data.append('company_name', edit_company_name);
@@ -570,7 +572,7 @@
                 edit_form_data.append('complete_address', edit_complete_address);
                 edit_form_data.append('delivery_remarks', edit_delivery_remarks);
                 edit_form_data.append('id', edit_id);
-                edit_form_data.append('procedures', 1);
+                edit_form_data.append('procedures', 2);
 
 
                 if (edit_file != undefined) {

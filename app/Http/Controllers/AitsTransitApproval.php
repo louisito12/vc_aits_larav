@@ -15,8 +15,6 @@ class AitsTransitApproval extends Controller
 {
     //
 
-
-
     public function aits_transit_approval_view()
     {
 
@@ -37,26 +35,19 @@ class AitsTransitApproval extends Controller
 
     public function get_approval_transit()
     {
-
-
-
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
-            ->where('status', 1)
             ->get();
+        $new_controller = new Aits_Transit_Controller();
+        return $new_controller->transit_data_table($data);
 
-        return app(Aits_Transit_Controller::class)->transit_data_table($data);
 
     }
     public function approve_shuttle_request(Request $request)
     {
         try {
 
-
-
             $data = AitsShuttleRequest::find($request->id);
             $validation = $this->date_validation($data->pick_up_date, $data->departure_date, $request->car_id);
-
-
             if ($validation != 0) {
                 return response()->json([
                     'msg' => 'The service shuttle Car for that time is no longer available !',
@@ -64,7 +55,6 @@ class AitsTransitApproval extends Controller
                     "isValid" => false,
                 ]);
             }
-
             AitsShuttleRequest::where('id', $request->id)->update([
                 'car_id' => $request->car_id,
                 'driver_id' => $request->driver_id,
@@ -73,8 +63,6 @@ class AitsTransitApproval extends Controller
                 "date_approved" => Carbon::now()
 
             ]);
-
-
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),

@@ -113,11 +113,7 @@ class Aits_Car_Management_Controller extends Controller
             $data = AitsVehicleModel::find($id);
             $data->start_date = Carbon::createFromFormat('Y-m-d H:i:s.u', $data->start_date)->format('Y-m-d');
             $data->expiry_date = Carbon::createFromFormat('Y-m-d H:i:s.u', $data->expiry_date)->format('Y-m-d');
-
-
-
             return [
-
                 'msg' => 'Succesfully Provided',
                 'data' => $data,
                 'status' => 200,

@@ -315,11 +315,11 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Destination</label>
-                            <textarea disabled class="form-control" name="" id="show_destination"></textarea>
+                            <textarea disabled class="form-control" id="show_destination"></textarea>
                         </div>
                         <div class="col-6">
                             <label>Remarks</label>
-                            <textarea disabled class="form-control" name="" id="show_remarks"></textarea>
+                            <textarea disabled class="form-control" id="show_remarks"></textarea>
                         </div>
                     </div>
                     <br><br>
@@ -335,6 +335,10 @@
                         <div class="col-3">
                             <label>Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
+                        </div>
+                        <div class="col-3">
+                            <label>Requestor Name</label>
+                            <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
                         <div hidden class="col-3">
                             <label>OB Form</label>
@@ -368,8 +372,6 @@
         </div>
     </div>
 
-
-
     <!-- Modal end -->
 
 
@@ -395,6 +397,7 @@
                         }
 
                         if (procedure == "edit_data") {
+
                             $('#edit_shuttle_modal').modal('show');
                             $('#edit_id').val(e['data']['id']);
                             $('#edit_departure_date').val(e['data']['departure_date']);
@@ -407,10 +410,10 @@
                             $('#edit_client_name').val(e['data']['client_name']);
                             $('#edit_passenger_number').val(e['data']['passenger_number']);
                             $('#edit_manager_id').val(e['data']['manager_id']);
-
                         }
 
                         if (procedure == "show_data") {
+
                             $('#show_shuttle_modal').modal('show');
                             $('#show_id').val(e['data']['id']);
                             $('#show_departure_date').val(e['data']['departure_date']);
@@ -425,18 +428,12 @@
                             $('#show_manager_id').val(e['data']['manager_id']);
                             $('#show_passenger_number').val(e['data']['passenger_number']);
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
-
-
-            
+                            $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                             $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
                             $('#show_req_stats').val(e['data']['request_status']);
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                                 + ' ' + e['data']['get_approver_data']['lastname'] : '');
-
                             $('#show_approve_date').val(e['data']['date_approved']);
-
-                       
-
                         }
 
 
@@ -485,7 +482,7 @@
                         // },
                     },
                     {
-                        data: "status"
+                        data: "status_html"
                     },
 
 

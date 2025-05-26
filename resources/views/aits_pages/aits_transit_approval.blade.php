@@ -140,6 +140,11 @@
                             <label>Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
                         </div>
+                        <div class="col-3">
+                            <label>Requestor Name</label>
+                            <input disabled type="text" id="show_requestor" class="form-control">
+                        </div>
+
                         <div hidden class="col-3">
                             <label>OB Form</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
@@ -299,7 +304,7 @@
                         // },
                     },
                     {
-                        data: "status"
+                        data: "status_html"
                     },
 
 
@@ -443,7 +448,7 @@
                         $('#show_req_stats').val(e['data']['request_status']);
                         $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                             + ' ' + e['data']['get_approver_data']['lastname'] : '');
-
+                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                         $('#show_approve_date').val(e['data']['date_approved']);
                     }
                 })

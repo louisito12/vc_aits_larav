@@ -76,9 +76,9 @@ class Aits_Transit_Controller extends Controller
 
             $dateFrom = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $dateTo = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-            if ($dateFrom > $dateTo) {
+            if ($dateFrom < $dateTo) {
                 return response()->json([
-                    'msg' => 'The pick up date must not be later than Departure date!',
+                    'msg' => 'The Departure date must not be later than Pick up date!',
                     'status' => 402,
                     "isValid" => false,
                 ]);
@@ -125,10 +125,7 @@ class Aits_Transit_Controller extends Controller
                 "isValid" => true,
             ];
 
-            // http://127.0.0.1:8000/aits_shuttle_file/2025/20250519140305_4315.pdf
-
-
-
+            // http://127.0.0.1:8000/aits_shuttle_file/2025/20250519140305_4315.pdf0
             // $this->uploade_file_transit(1, 'louie', $request->file('file'));
 
         } catch (\Exception $e) {
@@ -177,7 +174,7 @@ class Aits_Transit_Controller extends Controller
     {
 
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
-            ->where('status', 1)
+
             ->where('user_id', Auth::user()->id)->get();
 
 
@@ -229,7 +226,10 @@ class Aits_Transit_Controller extends Controller
                 return $data['get_event_data'] ? $data['get_event_data']['type'] : $data->purpose;
             })
 
-            ->addColumn('status', function ($data) {
+            ->addColumn('status_html', function ($data) {
+                if ($data->status == 0) {
+                    return '<h5> <span class="badge rounded-pill bg-danger">Cancelled</span></h5>';
+                }
 
                 return $this->status_html($data->request_status);
             })
@@ -272,33 +272,26 @@ class Aits_Transit_Controller extends Controller
                     </div>
                 ';
             })
-            ->rawColumns(['action', 'status', 'action_file', 'admin_action'])
+            ->rawColumns(['action', 'status_html', 'action_file', 'admin_action'])
             ->make(true);
     }
 
 
     public function status_html($status)
     {
-
         if ($status == "Pending") {
-            $stat = '
-            <span class="badge rounded-pill bg-warning">Pending</span>
-            ';
+            $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
         } else if ($status == "Approved") {
-            $stat = '
-            <span class="badge rounded-pill bg-success">Approved</span>
-';
+            $stat = '<span class="badge rounded-pill bg-success">Approved</span>';
+
         } else if ($status == "Disapproved") {
-            $stat = '
-            <span class="badge rounded-pill bg-danger">Disapproved</span>
-            
-            ';
+            $stat = '<span class="badge rounded-pill bg-danger">Disapproved</span>  ';
+
         } else {
-            $stat = '
-            <span class="badge rounded-pill bg-danger">Error</span>
-            
-            ';
+            $stat = '<span class="badge rounded-pill bg-danger">Error</span> ';
         }
+
+
 
         return '<center><h5>' . $stat . '</h5></center>';
     }
@@ -315,22 +308,17 @@ class Aits_Transit_Controller extends Controller
             $number = $data->request_no;
             $request_number = sprintf('%03d', $number);
             $req_no = Carbon::parse($data->date_created)->format('Y-m-d') . '-' . $request_number;
-
-
             $data->departure_date = date_coverters_transit($data->departure_date);
             $data->appointment_date = date_coverters_transit($data->appointment_date);
             $data->pick_up_date = date_coverters_transit($data->pick_up_date);
             $data->date_approved = date_converter($data->date_approved);
-
             $data->request_number = $req_no;
-
-
+            
             if ($data->type == null) {
                 $data->type == "remarks";
             }
 
             return [
-
                 'msg' => 'Succesfully Provided',
                 'data' => $data,
                 'status' => 200,
@@ -339,14 +327,11 @@ class Aits_Transit_Controller extends Controller
 
 
         } catch (\Exception $e) {
-
-
             return response()->json([
                 'msg' => $e,
                 'status' => 402,
                 'isValid' => false,
             ]);
-
         }
     }
 
@@ -357,7 +342,6 @@ class Aits_Transit_Controller extends Controller
 
         $fromDate = Carbon::parse($date_from)->format('Y-m-d H:i:s');
         $toDate = Carbon::parse($date_to)->format('Y-m-d H:i:s');
-
         $query = "
         SELECT COUNT(*) AS overlapping_count
         FROM aits_shuttle_requests    WHERE
@@ -367,8 +351,6 @@ class Aits_Transit_Controller extends Controller
         OR ('$toDate' BETWEEN pick_up_date AND departure_date) )
         AND request_status='Approved';
         ";
-
-
         $data = DB::connection('sqlsrv')->select($query, []);
 
 
@@ -392,11 +374,6 @@ class Aits_Transit_Controller extends Controller
             AitsShuttleRequest::where('id', $id)->update(['status' => 0]);
 
         } catch (\Exception $e) {
-
-
-
-
-
             return response()->json([
                 'msg' => $e,
                 'isValid' => false,
@@ -410,7 +387,6 @@ class Aits_Transit_Controller extends Controller
     {
 
         try {
-
             // AitsShuttleRequest::get();
             $validated = Validator::make(
                 $request->all(),

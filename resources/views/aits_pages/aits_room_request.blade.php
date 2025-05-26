@@ -183,20 +183,27 @@ use Carbon\Carbon;
                             <textarea disabled id="view_purpose" class="form-control" id=""></textarea>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Requestor Name</label>
+                            <input disabled type="text" id="show_requestor" class="form-control">
+                        </div>
+                    </div>
 
                     <br>
                     <div class="row">
                         <div class="col-4">
                             <label>Request Status</label>
-                            <input type="text" id="show_data_status" class="form-control">
+                            <input disabled type="text" id="show_data_status" class="form-control">
                         </div>
                         <div class="col-4">
                             <label>Approved By </label>
-                            <input type="text" id="show_data_approver" class="form-control">
+                            <input disabled type="text" id="show_data_approver" class="form-control">
                         </div>
                         <div class="col-4">
                             <label>Approved Date </label>
-                            <input type="text" id="show_data_approve_date" class="form-control">
+                            <input disabled type="text" id="show_data_approve_date" class="form-control">
                         </div>
                     </div>
 
@@ -409,6 +416,8 @@ use Carbon\Carbon;
                                 ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']
                                 : ''
                         );
+
+                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
 
                         $('#show_data_approve_date').val(e['data']['approve_date']);
 

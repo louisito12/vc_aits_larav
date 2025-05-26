@@ -28,7 +28,7 @@ class Aits_Request_Room_approval_Controller extends Controller
 
         try {
 
-            $data = AitsRequestRoomModel::where('status', 1)->get();
+            $data = AitsRequestRoomModel::where('is_transact', 1)->get();
             $controller = new Aits_Request_Room_Controller();
             return $controller->room_request_datatable($data);
 

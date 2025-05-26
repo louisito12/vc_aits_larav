@@ -75,7 +75,7 @@
         $(document).ready(function () {
             $('#deliver_tbl').DataTable({
                 ajax: {
-                    url: "{{ route('show_delivery_request') }}"
+                    url: "{{ route('get_logistics_request') }}"
                 },
                 columns: [
                     {

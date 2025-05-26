@@ -46,4 +46,5 @@ class AitsShuttleRequest extends Model
         return $this->hasOne(UserProfile::class, 'user_id', 'manager_id');
 
     }
+ 
 }

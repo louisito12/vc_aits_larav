@@ -68,7 +68,13 @@
 
                     $logistics = [
                         "aits_delivery_view" => Request::is('aits_delivery_view'),
+                        "aits_collection_view" => Request::is('aits_collection_view'),
+                        "aits_pick_up_view" => Request::is('aits_pick_up_view'),
+
                     ];
+
+
+
 
 
                 @endphp
@@ -131,6 +137,23 @@
                                 Delivery Request</a>
                         </li>
 
+                        <li class="slide">
+                            <a href="{{ route('aits_collection_view') }}"
+                                class="side-menu__item {{ Request::is('aits_collection_view') ? 'active' : '' }}">
+                                Collection Request</a>
+                        </li>
+
+
+                        <li class="slide">
+                            <a href="{{ route('aits_pick_up_view') }}"
+                                class="side-menu__item {{ Request::is('aits_pick_up_view') ? 'active' : '' }}">
+                                Pick Up Request</a>
+                        </li>
+
+
+              
+
+
 
 
 
@@ -170,7 +193,7 @@
                         <li class="slide">
                             <a href="{{ route('aits_deliver_assign') }}"
                                 class="side-menu__item {{ Request::is('aits_deliver_assign') ? 'active' : '' }}">
-                                Delivery Assigned Messenger</a>
+                                Logistics Assigned Messenger</a>
                         </li>
 
 

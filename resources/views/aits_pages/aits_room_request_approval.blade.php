@@ -18,26 +18,26 @@
         <!-- <div  class="d-flex my-xl-auto right-content align-items-center">
 
 
-                <div  class="mb-xl-0">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Filter Request
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
-                            <li><a class="dropdown-item test" href="javascript:void(0);">All</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">Approval For Today</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">All Pending</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);">All Approved</a></li>
-                        </ul>
-                    </div>
-                </div>
-                &nbsp;
+                        <div  class="mb-xl-0">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter Request
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                                    <li><a class="dropdown-item test" href="javascript:void(0);">All</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);">Approval For Today</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);">All Pending</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);">All Approved</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        &nbsp;
 
-                <div class="pe-1 mb-xl-0">
-                    <button type="button" class="btn btn-warning  btn-icon me-2"><i class="mdi mdi-refresh"></i></button>
-                </div>
-            </div> -->
+                        <div class="pe-1 mb-xl-0">
+                            <button type="button" class="btn btn-warning  btn-icon me-2"><i class="mdi mdi-refresh"></i></button>
+                        </div>
+                    </div> -->
     </div>
 
 
@@ -130,6 +130,15 @@
                             <textarea disabled id="view_purpose" class="form-control" id=""></textarea>
                         </div>
                     </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Requestor Name</label>
+                            <input disabled type="text" id="show_requestor" class="form-control">
+                        </div>
+                    </div>
+
                     <br>
                     <div class="row">
                         <div class="col-4">
@@ -235,7 +244,7 @@
 
                         }
 
-
+                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
 
 
 

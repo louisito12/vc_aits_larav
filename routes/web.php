@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Aits_Car_Management_Controller;
 use App\Http\Controllers\Aits_Delivery_Controller;
+use App\Http\Controllers\Aits_logistics_approval;
 use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
 use App\Http\Controllers\Aits_Transit_Controller;
@@ -10,6 +11,7 @@ use App\Http\Controllers\AitsTransitApproval;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RequestRoomController;
 use App\Http\Controllers\UserController;
+use App\Models\AitsDelivery;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -78,11 +80,12 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
 
 Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::post('aits_save_delivery', 'aits_save_delivery')->name('aits_save_delivery');
-    Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
+    Route::get('show_delivery_request/{procedure}', 'show_delivery_request')->name('show_delivery_request');
     Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
     Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
     Route::get('delete_delivery_request/{id}', 'delete_delivery_request')->name('delete_delivery_request');
     Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');
+
 });
 
 
@@ -98,6 +101,11 @@ Route::controller(AitsTransitApproval::class)->group(function () {
     Route::Get('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
     Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
     Route::post('approve_shuttle_request', 'approve_shuttle_request')->name('approve_shuttle_request');
+});
+Route::controller(Aits_logistics_approval::class)->group(function () {
+    Route::get('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
+
+
 });
 
 
@@ -119,6 +127,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_delivery_view', [Aits_Delivery_Controller::class, 'aits_delivery_view'])->name('aits_delivery_view');
     Route::get('aits_car_view', [Aits_Car_Management_Controller::class, 'aits_car_view'])->name('aits_car_view');
     Route::get('aits_deliver_assign', [AitsDeliveryApprove::class, 'aits_deliver_assign'])->name('aits_deliver_assign');
+    Route::get('aits_collection_view', [Aits_Delivery_Controller::class, 'aits_collection_view'])->name('aits_collection_view');
+    Route::get('aits_pick_up_view', [Aits_Delivery_Controller::class, 'aits_pick_up_view'])->name('aits_pick_up_view');
 
 });
 
