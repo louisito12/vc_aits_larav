@@ -50,7 +50,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('add_user_data', 'add_user_data')->name('add_user_data');
     Route::get('retrieve_user/{id}', 'retrieve_user')->name('retrieve_user');
     Route::post('update_user', 'update_user')->name('update_user');
-    Route::get('retrieve_department', 'retrieve_department')->name('retrieve_department');
+    Route::get('retrieve_department', 'retrieve_department')->name('retrieve_department'); 
 });
 
 
