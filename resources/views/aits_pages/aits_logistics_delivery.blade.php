@@ -47,8 +47,6 @@
                                     <th class="text-center">View Request File </th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Action </th>
-
-
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -63,7 +61,6 @@
 
 
     <!-- Modal -->
-
     <div class="modal fade" id="add_delivery_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
