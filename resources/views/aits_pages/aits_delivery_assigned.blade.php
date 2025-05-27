@@ -15,25 +15,16 @@
             </nav>
         </div>
 
-
-
     </div>
 
-    <style>
-        #deliver_tbl th,
-        #deliver_tbl td {
-            text-align: center !important;
-            vertical-align: middle;
-            font-size: 0.8em;
-        }
-    </style>
+
 
     <!-- Page Header Close -->
     <div class="row">
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
-                    <div class="card-title m-1 p-3"> Assign Delivery</div>
+                    <div class="card-title m-1 p-3"> Logistic Information</div>
                 </div>
 
                 <div class="card-body">
@@ -42,6 +33,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Request #</th>
+                                    <th class="text-center">Logistic</th>
                                     <th class="text-center">Date Requested</th>
                                     <th class="text-center">Department </th>
                                     <th class="text-center">Requestor </th>
@@ -51,7 +43,8 @@
                                     <th class="text-center">Company Name </th>
                                     <th class="text-center">View Request File </th>
                                     <th class="text-center">Status</th>
-
+                                    <th class="text-center">Assign status</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -65,6 +58,182 @@
     <!-- Modal -->
 
 
+
+    <!-- add user -->
+    <div class="modal fade" id="assigne_mess_modal" tabindex="-1" aria-labelledby="assigneMessModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <!-- modal-dialog-centered -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="assigneMessModalLabel">Assign Messenger</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- <div class="row mb-3"> -->
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="request_number" class="form-label">Request Number</label>
+                            <input type="text" id="request_number" class="form-control" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label for="request_status" class="form-label">Request Status</label>
+                            <input type="text" id="request_status" class="form-control" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label for="date_requested" class="form-label">Date Requested</label>
+                            <input type="text" id="date_requested" class="form-control" disabled>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+
+                            <label class="form-label">Requestor Name</label>
+                            <input type="text" id="requestor_name" class="form-control" disabled>
+                            <input type="text" id="hidden_id" hidden class="form-control" disabled>
+
+
+                        </div>
+                        <div class="col-4">
+
+                            <label class="form-label">Messenger Name</label>
+                            <select class="form-control" id="messenger_id">
+                                <option value="">Choose a Messenger</option>
+                                @foreach ($messenger as $messengers)
+
+                                    <option value="{{ $messengers->cen_user_id }}">{{ $messengers->fname }}
+                                        {{ $messengers->lname }}
+                                    </option>
+
+                                @endforeach
+                            </select>
+
+                        </div>
+                        <div class="col-4">
+
+                            <label class="form-label">Prcoessing Date</label>
+
+                            <input min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00" class="form-control"
+                                type="datetime-local" id="process_date">
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="assign_messenger" class="btn btn-primary">Assign Messenger</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="show_delivery_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="edit_header"> Logistics Request Details
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Receiver Name</label>
+                            <input disabled type="text" id="show_name_receiver" class="form-control spec_input">
+                            <input type="text" hidden id="show_id" class="form-control spec_input">
+
+                        </div>
+                        <div class="col-4">
+                            <label>Company Name</label>
+                            <input disabled type="text" id="show_company_name" class="form-control spec_input">
+
+                        </div>
+                        <div class="col-4">
+                            <label>Receiver Contact</label>
+                            <input disabled type="text" id="show_contact_receiver" class="form-control spec_input">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Delivery Type</label>
+                            <select disabled id="show_delivery_type_id" class="form-control spec_input">
+                                <option value="">Select Delivery Type</option>
+                                @foreach ($type as $types)
+                                    <option value="{{ $types->id }}">{{ $types->del_type }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label>Area</label>
+                            <select disabled name="" id="show_area_id" class="form-control spec_input">
+                                <option value="">Select Area</option>
+                                @foreach ($area as $areas)
+                                    <option value="{{ $areas->id }}">{{ $areas->area }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                        <div class="col-4">
+                            <label>Document Counts</label>
+                            <input disabled type="number" id="show_count_documents" class="form-control spec_input">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Complete Address</label>
+                            <textarea disabled class="form-control spec_input" id="show_complete_address"></textarea>
+                        </div>
+                        <div class="col-6">
+                            <label>Remarks</label>
+                            <textarea disabled class="form-control spec_input" id="show_delivery_remarks"></textarea>
+                        </div>
+                    </div>
+                    <br>
+
+
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Requestor</label>
+                            <input type="text" disabled class="form-control spec_input" id="req_name">
+                        </div>
+                        <div class="col-4">
+                            <label>Assign By</label>
+                            <input type="text" disabled class="form-control spec_input" id="admin_name">
+                        </div>
+                        <div class="col-4">
+                            <label>Assign By</label>
+                            <input type="text" disabled class="form-control spec_input" id="date_assign">
+                        </div>
+                        <input type="text" hidden id="process_val">
+                        <input type="text" hidden id="hidden_id">
+
+                    </div>
+                    <br>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- End modal -->
 
 
 @endsection
@@ -81,6 +250,10 @@
                     {
                         data: "request_no"
                     },
+                    {
+                        data: "logistics_stat"
+                    },
+
                     {
                         data: "date_created"
                     },
@@ -111,7 +284,128 @@
                     {
                         data: "req_status",
                     },
+                    {
+                        data: "messenger_stat"
+                    },
+                    {
+                        data: "action",
+                    },
                 ]
+            });
+
+            $(document).on('click', '.btn_approved', function () {
+                const params_val = $(this).data('val');
+                if (params_val == 1) {
+                    //assign messenger
+                    $('#assigne_mess_modal').modal('show');
+                    $.ajax({
+                        url: "get_delivery_data/" + $(this).data('id'),
+                        dataType: 'json',
+                        success: function (e) {
+                            if (e['isValid'] === false) {
+                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                return;
+                            }
+                            $('#date_requested').val(e['data']['date_requested']);
+                            $('#request_number').val(e['data']['request_number']);
+                            $('#request_status').val(e['data']['req_stat']);
+                            $('#requestor_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
+                            $('#hidden_id').val(e['data']['id']);
+
+                        },
+
+                    });
+
+
+                }
+
+
+            });
+
+            $('#assign_messenger').click(function () {
+                const logistics_id = $('#hidden_id').val();
+                const messenger_id = $('#messenger_id').val();
+                const process_date = $('#process_date').val();
+
+                $.ajax({
+                    url: "{{ route('assigned_messenger') }}",
+                    type: "POST",
+                    data: {
+                        id: logistics_id,
+                        messenger_id: messenger_id,
+                        procedure_date: process_date,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (e) {
+                        if (e['isValid'] == false) {
+                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            return;
+                        }
+                        $('#messenger_id').val('');
+                        $('#process_date').val('');
+                        $('#assigne_mess_modal').modal('hide');
+                        $('#deliver_tbl').DataTable().ajax.reload();
+                        Swal.fire('Success!', 'The request has been Process.', 'success');
+                    }
+                })
+
+
+
+
+            });
+
+
+
+
+
+
+
+            $(document).on('click', '.btn_show_data', function () {
+                //delivery process
+
+
+
+
+
+
+                $('#show_delivery_request_modal').modal('show');
+                $.ajax({
+                    url: "get_delivery_data/" + $(this).data('id'),
+                    success: function (e) {
+                        if (e['isValid'] == false) {
+                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            return;
+                        }
+                        $('#show_id').val(e['data']['id']);
+                        $('#show_name_receiver').val(e['data']['name_receiver']);
+                        $('#show_company_name').val(e['data']['company_name']);
+                        $('#show_contact_receiver').val(e['data']['contact_receiver']);
+                        $('#show_delivery_type_id').val(e['data']['delivery_type_id']);
+                        $('#show_area_id').val(e['data']['area_id']);
+                        $('#show_count_documents').val(e['data']['count_documents']);
+                        $('#show_complete_address').val(e['data']['complete_address']);
+                        $('#show_delivery_remarks').val(e['data']['delivery_remarks']);
+                        $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] +
+                            ' ' + e['data']['get_requestor_fullname']['lastname'])
+                        $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data']['request_number']);
+                        $('#admin_name').val(
+                            e['data']['get_admin_data']
+                                ? e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname']
+                                : '');
+
+                        $('#date_assign').val(e['data']['date_assign']);
+                        $('#hidden_id').val(e['data']['id'])
+
+
+                    }
+                })
+
+
+
+
+
             });
 
 

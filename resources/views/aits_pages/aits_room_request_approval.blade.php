@@ -51,9 +51,7 @@
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">Room Request</div>
-
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm">
@@ -78,6 +76,9 @@
         </div>
     </div>
     <!-- Modal -->
+
+
+
 
 
     <!-- add user -->
@@ -131,14 +132,12 @@
                         </div>
                     </div>
                     <br>
-
                     <div class="row">
                         <div class="col-6">
                             <label>Requestor Name</label>
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-4">
@@ -155,11 +154,9 @@
                             <input disabled id="approve_data_text" type="text" class="form-control spec_input">
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
                 </div>
             </div>
         </div>

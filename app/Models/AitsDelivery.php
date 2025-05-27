@@ -23,17 +23,22 @@ class AitsDelivery extends Model
         return $this->hasOne(UserModel::class, 'id', 'user_id');
 
     }
-    public function get_delivery_type(){
+    public function get_delivery_type()
+    {
 
         return $this->hasOne(AitsDeliveryType::class, 'id', 'delivery_type_id');
 
 
 
     }
-     public function get_requestor_fullname()
+    public function get_requestor_fullname()
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'user_id');
 
+    }
+    public function get_admin_data()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'assign_by');
     }
 
 }

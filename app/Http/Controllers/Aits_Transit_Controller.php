@@ -256,8 +256,7 @@ class Aits_Transit_Controller extends Controller
                         ';
             })
             ->addColumn('admin_action', function ($data) {
-                $hidden = $data->request_status != 'Pending' ? 'hidden' : '';
-
+                $hidden = ($data->request_status != 'Pending' || $data->status == 0) ? 'hidden' : '';
                 return '
                     <div  class="btn-group dropstart input_spec my-1">
                         <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
@@ -292,7 +291,6 @@ class Aits_Transit_Controller extends Controller
         }
 
 
-
         return '<center><h5>' . $stat . '</h5></center>';
     }
 
@@ -313,7 +311,7 @@ class Aits_Transit_Controller extends Controller
             $data->pick_up_date = date_coverters_transit($data->pick_up_date);
             $data->date_approved = date_converter($data->date_approved);
             $data->request_number = $req_no;
-            
+
             if ($data->type == null) {
                 $data->type == "remarks";
             }

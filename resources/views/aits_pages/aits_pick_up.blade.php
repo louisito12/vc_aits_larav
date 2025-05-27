@@ -57,7 +57,6 @@
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Action </th>
 
-
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -399,7 +398,7 @@
                 form_data.append('contact_receiver', contact_receiver);
                 form_data.append('delivery_type_id', delivery_type_id);
                 form_data.append('area_id', area_id);
-                form_data.append('count_documents', count_documents);
+     
                 form_data.append('complete_address', complete_address);
                 form_data.append('delivery_remarks', delivery_remarks);
                 form_data.append('file[]', file);
@@ -537,7 +536,7 @@
                 edit_form_data.append('contact_receiver', edit_contact_receiver);
                 edit_form_data.append('delivery_type_id', edit_delivery_type_id);
                 edit_form_data.append('area_id', edit_area_id);
-                edit_form_data.append('count_documents', edit_count_documents);
+
                 edit_form_data.append('complete_address', edit_complete_address);
                 edit_form_data.append('delivery_remarks', edit_delivery_remarks);
                 edit_form_data.append('id', edit_id);

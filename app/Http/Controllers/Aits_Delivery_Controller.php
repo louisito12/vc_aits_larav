@@ -136,6 +136,7 @@ class Aits_Delivery_Controller extends Controller
                 "status" => 1,
                 "date_created" => Carbon::now(),
                 'procedure' => $delivery,
+                'user_id' => Auth::user()->id,
             ]);
 
 
@@ -205,7 +206,7 @@ class Aits_Delivery_Controller extends Controller
                 if ($data->status == 0) {
                     return ' <h5> <span class="badge rounded-pill bg-danger">Cancelled</span></h5>';
                 }
-                return $this->status_html($data->request_status, $procedure);
+                return $this->status_html($data->request_status, $procedure, $data->id);
 
             })
             ->addColumn('view_file_request', function ($data) {
@@ -231,8 +232,29 @@ class Aits_Delivery_Controller extends Controller
     public function get_delivery_data($id)
     {
         try {
-            $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->find($id);
+
+
+            $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_admin_data'])->find($id);
+            $procedure = $data->procedures;
+            $stat = '';
+            if ($procedure == 1) {
+                $stat = 'For Delivery';
+            }
+            if ($procedure == 2) {
+                $stat = 'For Collection';
+            }
+            if ($procedure == 3) {
+                $stat = 'For Pick Up';
+            }
+
+
             $data->req_name = $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
+            $data->req_stat = $stat;
+            $data->request_number = request_number($data->request_no, $data->date_created);
+            $data->date_requested = date_converter($data->date_created);
+            $data->date_assign = date_converter($data->date_assign);
+
+
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',
                 'status' => 200,
@@ -251,7 +273,7 @@ class Aits_Delivery_Controller extends Controller
 
 
 
-    public function status_html($status, $procedure)
+    public function status_html($status, $procedure, $request_id)
     {
 
         if ($procedure == 1) {
@@ -260,8 +282,8 @@ class Aits_Delivery_Controller extends Controller
             } else if ($status == "Delivered") {
                 $stat = '   <span class="badge rounded-pill bg-success">Delivered</span>';
 
-            } else if ($status == "Rescheduled") {
-                $stat = ' <span class="badge rounded-pill bg-secondary">Disapproved</span> ';
+            } else if ($status == "Reschedule") {
+                $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
 
             } else {
                 $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
@@ -278,7 +300,7 @@ class Aits_Delivery_Controller extends Controller
             return '<center><h5>' . $stat . '</h5></center>';
         }
 
-          if ($procedure == 3) {
+        if ($procedure == 3) {
             if ($status == "Pending") {
                 $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
             } else {
@@ -353,7 +375,7 @@ class Aits_Delivery_Controller extends Controller
             ]);
 
             if ($request->file('file')) {
-                AitsFileModel::where('procedure', $request->procedures)->where('attachment_id',$request->id)->where('table_name', 'AitsDelivery')->update(['status' => 0]);
+                AitsFileModel::where('procedure', $request->procedures)->where('attachment_id', $request->id)->where('table_name', 'AitsDelivery')->update(['status' => 0]);
                 $this->uploade_file_transit($request->id, 'AitsDelivery', $request->file('file'), $request->procedures);
             }
             AitsDelivery::where('id', $request->id)->update($request->except(['id', 'file']));

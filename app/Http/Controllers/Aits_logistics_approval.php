@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\AitsDelivery;
+use App\Models\AitsMessenger;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
 use App\Models\DepartmentModel;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use Validator;
 
 class Aits_logistics_approval extends Controller
 {
@@ -19,21 +23,6 @@ class Aits_logistics_approval extends Controller
             ->orderBy('procedures', 'asc')
             ->get();
         return DataTables::of($data)
-            ->addColumn('action', function ($data) {
-
-                if ($data->status == 0 || $data->request_status != 'Pending') {
-                    return '
-                    <center>
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
-                       </center> ';
-                }
-                return '
-                    <center>
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
-                    </center> ';
-            })
             ->addColumn('request_no', function ($data) {
                 return request_number($data->request_no, $data->date_created);
             })
@@ -59,10 +48,10 @@ class Aits_logistics_approval extends Controller
                     return ' <h5> <span class="badge rounded-pill bg-danger">Cancelled</span></h5>';
                 }
                 $aits_deliver = new Aits_Delivery_Controller();
-                return $aits_deliver->status_html($data->request_status, $data->procedures);
+                return $aits_deliver->status_html($data->request_status, $data->procedures,$data->if);
 
             })
-            
+
             ->addColumn('view_file_request', function ($data) {
                 $data_file = AitsFileModel::where('table_name', 'AitsDelivery')
                     ->where('procedure', $data->procedures)
@@ -78,9 +67,114 @@ class Aits_logistics_approval extends Controller
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
-            ->rawColumns(['action', 'view_file_request', 'req_status'])
+            ->addColumn('logistics_stat', function ($data) {
+                $procedure = $data->procedures;
+                $stat = '';
+
+                if ($procedure == 1) {
+                    $stat = 'For Delivery';
+                }
+                if ($procedure == 2) {
+                    $stat = 'For Collection';
+                }
+                if ($procedure == 3) {
+                    $stat = 'For Pick Up';
+                }
+
+                return $stat;
+
+            })
+            ->addColumn('messenger_stat', function ($data) {
+                $html = '';
+
+                if ($data->messenger_id != null) {
+                    $stat = '<span class="badge rounded-pill bg-success">Messenger Assigned</span>';
+                } else {
+
+                    $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
+                }
+
+                return '<h5>' . $stat . '</h5>';
+
+            })
+
+            ->addColumn('action', function ($data) {
+
+                $hidden = $data->messenger_id != null ? 'hidden' : '';
+
+                return '
+             <div  class="btn-group dropstart input_spec my-1">
+            <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Action
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Assign Messenger</a></li>
+                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
+                <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+            </ul>
+             </div>  ';
+
+            })
+
+            ->rawColumns(['action', 'view_file_request', 'req_status', 'messenger_stat'])
+            //ginagawa neto yung html char is ginagawa nyang html attr-> kapag dinakalagay magigign text lang yan.
             ->make(true);
 
     }
 
+    public function assigned_messenger(Request $request)
+    {
+
+
+        try {
+            $validated = Validator::make(
+                $request->all(),
+                [
+                    'messenger_id' => [
+                        'required',
+                    ],
+                    'procedure_date' => ['required'],
+
+                ],
+            );
+
+
+            if ($validated->fails()) {
+                return response()->json([
+                    'msg' => 'All fields are required!',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
+            // $messenger_data = AitsMessenger::find($request->messenger_id)->cen_user_id;
+            $request->merge([
+                // 'messenger_id' => $messenger_data,
+                'assign_by' => Auth::user()->id,
+                'date_assign' => Carbon::now(),
+                'procedure_date' => Carbon::parse($request->procedure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
+
+            ]);
+
+
+
+            AitsDelivery::where('id', $request->id)->update($request->except(['id']));
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'data' => [],
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+
+    }
+
 }
+
+
+
+
+//1 = delivery, 2 = collection , 3 pickup

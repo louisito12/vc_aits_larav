@@ -3,6 +3,7 @@
 use App\Http\Controllers\Aits_Car_Management_Controller;
 use App\Http\Controllers\Aits_Delivery_Controller;
 use App\Http\Controllers\Aits_logistics_approval;
+use App\Http\Controllers\Aits_Messenger_Controller;
 use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
 use App\Http\Controllers\Aits_Transit_Controller;
@@ -50,7 +51,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('add_user_data', 'add_user_data')->name('add_user_data');
     Route::get('retrieve_user/{id}', 'retrieve_user')->name('retrieve_user');
     Route::post('update_user', 'update_user')->name('update_user');
-    Route::get('retrieve_department', 'retrieve_department')->name('retrieve_department'); 
+    Route::get('retrieve_department', 'retrieve_department')->name('retrieve_department');
 });
 
 
@@ -102,10 +103,19 @@ Route::controller(AitsTransitApproval::class)->group(function () {
     Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
     Route::post('approve_shuttle_request', 'approve_shuttle_request')->name('approve_shuttle_request');
 });
+
 Route::controller(Aits_logistics_approval::class)->group(function () {
     Route::get('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
+    Route::post('assigned_messenger', 'assigned_messenger')->name('assigned_messenger');
+
+});
 
 
+
+
+Route::controller(Aits_Messenger_Controller::class)->group(function () {
+    Route::get('aits_messenger_logistics', 'aits_messenger_logistics')->name('aits_messenger_logistics');
+    Route::post('messenger_delivered', 'messenger_delivered')->name('messenger_delivered');
 });
 
 
@@ -113,10 +123,7 @@ Route::controller(Aits_logistics_approval::class)->group(function () {
 
 
 
-
-
-
-//page authentication
+//pages authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('aits_dashboard', [LoginController::class, 'aits_dashboard'])->name('aits_dashboard');
     Route::get('user_manage_view', [UserController::class, 'user_manage_view'])->name('user_manage_view');
@@ -129,8 +136,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_deliver_assign', [AitsDeliveryApprove::class, 'aits_deliver_assign'])->name('aits_deliver_assign');
     Route::get('aits_collection_view', [Aits_Delivery_Controller::class, 'aits_collection_view'])->name('aits_collection_view');
     Route::get('aits_pick_up_view', [Aits_Delivery_Controller::class, 'aits_pick_up_view'])->name('aits_pick_up_view');
-
+    Route::get('aits_messenger_view', [Aits_Messenger_Controller::class, 'aits_messenger_view'])->name('aits_messenger_view');
 });
+
 
 Route::get('email_template', function () {
     return view('emails.email');

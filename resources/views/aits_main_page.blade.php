@@ -10,6 +10,15 @@
         font-size: 12px;
         padding: 2px;
     }
+
+
+
+    th,
+    td {
+        text-align: center !important;
+        vertical-align: middle !important;
+        font-size: 0.8em !important;
+    }
 </style>
 
 <body>

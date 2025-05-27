@@ -116,3 +116,16 @@ function request_number($no, $date)
     $request_number = sprintf('%03d', $number);
     return Carbon::parse($date)->format('Y-m-d') . '-' . $request_number;
 }
+
+function add_messenger()
+{
+
+    // DB::table('aits_messengers')->insert([
+    //     'fname' => 'Messenger',
+    //     'mname' => 'Delivery',
+    //     'lname' => 'two',
+    //     'cen_user_id' => 1126,
+    //     'status' => 1,
+    //     'date_created' => Carbon::now(),
+    // ]);
+}

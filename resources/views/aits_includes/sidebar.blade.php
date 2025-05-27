@@ -74,6 +74,10 @@
                     ];
 
 
+                    $messenger = [
+                        "aits_messenger_view" => request::is('aits_messenger_view'),
+                    ];
+
 
 
 
@@ -151,7 +155,7 @@
                         </li>
 
 
-              
+
 
 
 
@@ -221,6 +225,42 @@
 
                     </ul>
                 </li>
+
+
+                <br>
+                <!-- Messenger Side -->
+                <li class="slide has-sub {{in_array(true, $messenger) ? 'open' : ''}}">
+                    <a href="javascript:void(0);"
+                        class="side-menu__item {{in_array(true, $messenger) ? 'active' : ''}}">
+                        <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i>
+
+                        <span class="side-menu__label">Messenger Logistics</span>
+                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide side-menu__label1 ">
+                            <a href="javascript:void(0);">Service Request</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('aits_messenger_view') }}"
+                                class="side-menu__item {{ Request::is('aits_messenger_view') ? 'active' : '' }}">
+                                My Logisitics</a>
+                        </li>
+
+
+
+
+
+
+
+
+
+
+                    </ul>
+                </li>
+
+
+
 
 
 

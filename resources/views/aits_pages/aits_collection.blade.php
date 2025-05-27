@@ -19,15 +19,6 @@
 
     </div>
 
-    <style>
-        #deliver_tbl th,
-        #deliver_tbl td {
-            text-align: center !important;
-            vertical-align: middle;
-
-            font-size: 0.8em;
-        }
-    </style>
 
 
 

@@ -19,15 +19,6 @@
 
     </div>
 
-    <style>
-        #deliver_tbl th,
-        #deliver_tbl td {
-            text-align: center !important;
-            vertical-align: middle;
-
-            font-size: 0.8em;
-        }
-    </style>
 
 
 
@@ -497,7 +488,6 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
-
                         $('#show_id').val(e['data']['id']);
                         $('#show_name_receiver').val(e['data']['name_receiver']);
                         $('#show_company_name').val(e['data']['company_name']);
