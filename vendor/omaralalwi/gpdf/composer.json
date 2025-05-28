@@ -1,0 +1,85 @@
+{
+    "name": "omaralalwi/gpdf",
+    "description": "Custom PDF wrapper supporting Arabic language",
+    "keywords": [
+        "gpdf",
+        "arabic-pdf",
+        "laravel-pdf",
+        "rtl-pdf",
+        "arabic-fonts",
+        "pdf-generation",
+        "arabic-pdf-php",
+        "pdf-s3",
+        "store-pdf-s3",
+        "right-to-left-pdf",
+        "laravel-pdf-arabic",
+        "php-pdf-library",
+        "arabic-text-pdf",
+        "pdf-export",
+        "multi-language-pdf",
+        "utf8-pdf",
+        "arabic-reports",
+        "pdf-toolkit",
+        "dompdf-alternative",
+        "tcpdf-alternative",
+        "mpdf-alternative",
+        "arabic-documents",
+        "pdf-watermark",
+        "laravel-pdf-generator",
+        "arabic-pdf-laravel",
+        "s3-pdf-storage",
+        "arabic-pdf-library",
+        "generate-pdf-arabic",
+        "php-pdf-builder",
+        "arabic-pdf-export",
+        "rtl-support-pdf",
+        "pdf-headers-footers"
+    ],
+    "homepage": "https://github.com/omaralalwi/gpdf",
+    "license": "MIT",
+    "type": "library",
+    "version": "1.0.7",
+    "authors": [
+        {
+            "name": "omar alalwi",
+            "email": "omaralwi2010@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2|^8.3",
+        "aws/aws-sdk-php": "^3.308",
+        "dompdf/dompdf": "^3.0",
+        "khaled.alshamaa/ar-php": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Omaralalwi\\Gpdf\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Omaralalwi\\Gpdf\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --log-junit junit.xml",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Omaralalwi\\Gpdf\\GpdfServiceProvider"
+            ],
+            "aliases": {
+                "Gpdf": "Omaralalwi\\Gpdf\\Facade\\Gpdf"
+            }
+        }
+    }
+}

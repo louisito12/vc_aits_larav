@@ -55,21 +55,45 @@ class Aits_Delivery_Controller extends Controller
     {
 
         try {
+            // $object = [];
+            // if ($request->procedures != 3) {
+            //     $object = ['count_documents' => ['required']];
+            // }
+
+            // $validated = Validator::make(
+            //     $request->all(),
+            //     [
+            //         'name_receiver' => [
+            //             'required',
+            //         ],
+            //         'company_name' => ['required'],
+            //         'contact_receiver' => ['required'],
+            //         'delivery_type_id' => ['required'],
+            //         'area_id' => ['required'],
+
+            //         $object,
+            //         'complete_address' => ['required'],
+            //         'delivery_remarks' => ['required'],
+            //     ],
+            // );
+
+            $rules = [
+                'name_receiver' => ['required'],
+                'company_name' => ['required'],
+                'contact_receiver' => ['required'],
+                'delivery_type_id' => ['required'],
+                'area_id' => ['required'],
+                'complete_address' => ['required'],
+                'delivery_remarks' => ['required'],
+            ];
+
+            if ($request->procedures != 3) {
+                $rules['count_documents'] = ['required'];
+            }
 
             $validated = Validator::make(
                 $request->all(),
-                [
-                    'name_receiver' => [
-                        'required',
-                    ],
-                    'company_name' => ['required'],
-                    'contact_receiver' => ['required'],
-                    'delivery_type_id' => ['required'],
-                    'area_id' => ['required'],
-                    'count_documents' => ['required'],
-                    'complete_address' => ['required'],
-                    'delivery_remarks' => ['required'],
-                ],
+                $rules
             );
 
 
@@ -294,6 +318,11 @@ class Aits_Delivery_Controller extends Controller
         if ($procedure == 2) {
             if ($status == "Pending") {
                 $stat = '<span class="badge rounded-pill bg-warning">Uncollected</span>';
+            } else if ($status == "Delivered") {
+                $stat = '<span class="badge rounded-pill bg-success">Collected</span>';
+            } else if ($status == "Reschedule") {
+                $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
+
             } else {
                 $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
             }
@@ -303,6 +332,11 @@ class Aits_Delivery_Controller extends Controller
         if ($procedure == 3) {
             if ($status == "Pending") {
                 $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
+            } else if ($status == "Delivered") {
+                $stat = '<span class="badge rounded-pill bg-success">Pick up</span>';
+            } else if ($status == "Reschedule") {
+                $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
+
             } else {
                 $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
             }

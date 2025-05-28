@@ -24,91 +24,82 @@
 
     <!-- Page Header Close -->
 
-
-    <div class="card">
-        <div class="card-body">
+    <!-- Total Requests Section -->
+    <div class="row">
+        <div class="container mt-4">
             <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-xm-12">
-                    <div class="card overflow-hidden sales-card bg-primary-gradient">
-                        <div class="px-3 pt-3  pb-2 pt-0">
-                            <div>
-                                <h6 class="mb-3 fs-12 text-fixed-white">TODAY ORDERS</h6>
-                            </div>
-                            <div class="pb-0 mt-0">
-                                <div class="d-flex">
-                                    <div>
-                                        <h4 class="fs-20 fw-bold mb-1 text-fixed-white">$5,74.12</h4>
-
-                                    </div>
-
-                                </div>
-                            </div>
+                <!-- Total Requests Section -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><i class="fas fa-tasks"></i> Total Requests</h5>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Room Reservation
+                                    <span class="badge bg-primary rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Logistics Request
+                                    <span class="badge bg-primary rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Shuttle Request
+                                    <span class="badge bg-primary rounded-pill">0</span>
+                                </li>
+                            </ol>
                         </div>
-                        <div id="compositeline"></div>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-xm-12">
-                    <div class="card overflow-hidden sales-card bg-danger-gradient">
-                        <div class="px-3 pt-3  pb-2 pt-0">
-                            <div>
-                                <h6 class="mb-3 fs-12 text-fixed-white">TODAY EARNINGS</h6>
-                            </div>
-                            <div class="pb-0 mt-0">
-                                <div class="d-flex">
-                                    <div>
-                                        <h4 class="fs-20 fw-bold mb-1 text-fixed-white">$1,230.17</h4>
 
-                                    </div>
-
-                                </div>
-                            </div>
+                <!-- Pending Requests Section -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><i class="fas fa-clock"></i> Pending Requests</h5>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Room Reservation
+                                    <span class="badge bg-warning rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Logistics Request
+                                    <span class="badge bg-warning rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Shuttle Request
+                                    <span class="badge bg-warning rounded-pill">0</span>
+                                </li>
+                            </ol>
                         </div>
-                        <div id="compositeline2"></div>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-xm-12">
-                    <div class="card overflow-hidden sales-card bg-success-gradient">
-                        <div class="px-3 pt-3  pb-2 pt-0">
-                            <div>
-                                <h6 class="mb-3 fs-12 text-fixed-white">TOTAL EARNINGS</h6>
-                            </div>
-                            <div class="pb-0 mt-0">
-                                <div class="d-flex">
-                                    <div>
-                                        <h4 class="fs-20 fw-bold mb-1 text-fixed-white">$7,125.70</h4>
 
-                                    </div>
-
-                                </div>
-                            </div>
+                <!-- Approved Requests Section -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><i class="fas fa-check-circle"></i> Approved Requests</h5>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Room Reservation
+                                    <span class="badge bg-success rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Logistics Request
+                                    <span class="badge bg-success rounded-pill">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Shuttle Request
+                                    <span class="badge bg-success rounded-pill">0</span>
+                                </li>
+                            </ol>
                         </div>
-                        <div id="compositeline3"></div>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-xm-12">
-                    <div class="card overflow-hidden sales-card bg-warning-gradient">
-                        <div class="px-3 pt-3  pb-2 pt-0">
-                            <div>
-                                <h6 class="mb-3 fs-12 text-fixed-white">PRODUCT SOLD</h6>
-                            </div>
-                            <div class="pb-0 mt-0">
-                                <div class="d-flex">
-                                    <div>
-                                        <h4 class="fs-20 fw-bold mb-1 text-fixed-white">$4,820.50</h4>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div id="compositeline4"></div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
-
-
 
 
 

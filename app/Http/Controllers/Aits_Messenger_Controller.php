@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsDriver;
 use App\Models\AitsLogisticsResched;
 use Validator;
 use Carbon\Carbon;
@@ -13,6 +14,7 @@ use App\Models\DepartmentModel;
 use App\Models\AitsDeliveryType;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
+use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
 
 class Aits_Messenger_Controller extends Controller
 {
@@ -119,22 +121,22 @@ class Aits_Messenger_Controller extends Controller
                 $hidden = '';
                 $procedures = $data->procedures;
 
-                if ($procedures == 1) {
-                    //for delivery action
-                    $html = '
+
+                //for delivery action
+                $html = '
                        <div  class="btn-group dropstart input_spec my-1">
                         <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Action
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="1" data-processs= "' . $data->procedures . '" data-id="' . $data->id . '" href="javascript:void(0);">Delivered</a></li>
+                            <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="1" data-processs= "' . $data->procedures . '" data-id="' . $data->id . '" href="javascript:void(0);">' . $this->procedure_text($data->procedures) . '</a></li>
                             <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                         </div> ';
 
-                }
+
 
 
 
@@ -146,6 +148,23 @@ class Aits_Messenger_Controller extends Controller
             ->rawColumns(['action', 'view_file_request', 'req_status', 'messenger_stat'])
             //ginagawa neto yung html char is ginagawa nyang html attr-> kapag dinakalagay magigign text lang yan.
             ->make(true);
+    }
+
+    public function procedure_text($procedure)
+    {
+        if ($procedure == 1) {
+            $stat = 'Deliver';
+        }
+
+        if ($procedure == 2) {
+            $stat = 'Collect';
+        }
+        if ($procedure == 3) {
+            $stat = 'Pick Up';
+        }
+
+
+        return $stat;
     }
 
     public function messenger_delivered(Request $request)
@@ -195,6 +214,7 @@ class Aits_Messenger_Controller extends Controller
                     ]);
                 }
                 $this->messenger_file_upload($request->id, 'AitsDelivery', $request->file('file'), $data->procedures);
+                AitsLogisticsResched::where('logistic_id', $request->id)->update(['status' => 0]);
             }
 
 
@@ -205,7 +225,7 @@ class Aits_Messenger_Controller extends Controller
                 'messenger_remarks' => $remarks,
             ]);
 
-            
+
             if ($request->process_val == 2) {
                 AitsLogisticsResched::create([
                     'logistic_id' => $request->id,
@@ -256,6 +276,34 @@ class Aits_Messenger_Controller extends Controller
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
 
+    }
+
+    public function test_pdf()
+    {
+        // $driver = AitsDriver::get();
+        // $hello = 'GG PARE';
+        // $html = view('test_pdf', compact('driver', 'hello'))->render();
+        // $pdfContent = GpdfFacade::generate($html);
+        // return response($pdfContent, 200, [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        // ]);
+
+
+        $driver = AitsDriver::get();
+        $hello = 'GG PARE';
+
+        // Render the Blade view to HTML
+        $html = view('test_pdf', compact('driver', 'hello'))->render();
+
+        // Generate PDF from HTML with landscape orientation
+        $pdfContent = GpdfFacade::generate($html);
+
+        // Return the generated PDF as a response
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        ]);
     }
 
 }

@@ -143,7 +143,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('email_template', function () {
     return view('emails.email');
 });
-
+Route::get('test_pdf', [Aits_Messenger_Controller::class, 'test_pdf'])->name('test_pdf');
 
 // role -> admin,driver('itenerary arrive'),messenger(''),user
 // Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');
