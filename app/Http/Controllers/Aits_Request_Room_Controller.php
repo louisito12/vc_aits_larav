@@ -118,6 +118,17 @@ class Aits_Request_Room_Controller extends Controller
                 $insert
             ]);
 
+            // $object = [
+            //     'user_id' => Auth::user()->id,
+            //     'page' => 'Request Room',
+            //     'description' => 'Request A Room',
+            //     'table_name' => 'aits_request_room_models',
+            //     'transact_id' => $data->id,
+            //     'status' => 1,
+            //     'date_created' => Carbon::now(),
+            // ];
+            
+
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',
                 'status' => 200,

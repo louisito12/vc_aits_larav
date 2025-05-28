@@ -39,15 +39,10 @@ class Aits_roles_controller extends Controller
                 $roles = htmlspecialchars($data->role);
                 return '
                     <center>
-                 
                     <button type="button" data-id=' . $data->id . '  data-role="' . $roles . '" class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
                     </center> ';
-
             })
-
-
-
             ->rawColumns(['action'])
             //ginagawa neto yung html char is ginagawa nyang html attr-> kapag dinakalagay magigign text lang yan.
             ->make(true);

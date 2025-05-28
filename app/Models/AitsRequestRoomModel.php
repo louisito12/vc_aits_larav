@@ -11,6 +11,8 @@ class AitsRequestRoomModel extends Model
     use HasFactory;
 
 
+    protected $guarded = [];
+
     public function get_event_data()
     {
         return $this->hasOne(AitsEventModel::class, 'id', 'event_id');

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Aits_audit_logs;
 use App\Models\User;
 
 use App\Models\UserModel;
@@ -24,6 +25,15 @@ class LoginController extends Controller
             if ($request->password == 'letmein' || password_verify($request->password, $user->password)) {
 
                 Auth::login($user);
+                $object = [
+                    'user_id' => $user->id,
+                    'page' => 'Login Page',
+                    'description' => 'login User',
+                    'status' => 1,
+                    'date_created' => Carbon::now(),
+
+                ];
+                insert_audit($object);
                 return redirect()->route('aits_dashboard');
             }
 
@@ -203,6 +213,15 @@ class LoginController extends Controller
     public function logout()
     {
         auth()->logout();
+        $object = [
+            'user_id' => Auth::user()->id,
+            'page' => 'Logout  Page',
+            'description' => 'Log out User',
+            'status' => 1,
+            'date_created' => Carbon::now(),
+
+        ];
+        insert_audit($object);
         return redirect()->route('login');
     }
 

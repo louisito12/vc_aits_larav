@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Aits_audit_logs;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -128,4 +129,9 @@ function add_messenger()
     //     'status' => 1,
     //     'date_created' => Carbon::now(),
     // ]);
+}
+
+function insert_audit($object)
+{
+    Aits_audit_logs::create($object);
 }
