@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class UserModel extends Authenticatable
 {
     use HasFactory;
-    protected $connection = 'ict_ticketing';
+    protected $connection = 'main_user';
     protected $table = 'users';
 
 

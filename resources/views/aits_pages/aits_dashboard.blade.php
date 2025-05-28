@@ -36,7 +36,7 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-primary rounded-pill">0</span>
+                                    <span class="badge bg-primary  rounded-pill">0</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Logistics Request
@@ -59,15 +59,15 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-warning rounded-pill">0</span>
+                                    <span class="badge bg-warning text-dark rounded-pill">0</span>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <li class="list-group-item d-flex  justify-content-between align-items-center">
                                     Logistics Request
-                                    <span class="badge bg-warning rounded-pill">0</span>
+                                    <span class="badge bg-warning text-dark  rounded-pill">0</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Shuttle Request
-                                    <span class="badge bg-warning rounded-pill">0</span>
+                                    <span class="badge bg-warning text-dark  rounded-pill">0</span>
                                 </li>
                             </ol>
                         </div>
@@ -82,15 +82,15 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-success rounded-pill">0</span>
+                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Logistics Request
-                                    <span class="badge bg-success rounded-pill">0</span>
+                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Shuttle Request
-                                    <span class="badge bg-success rounded-pill">0</span>
+                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
                                 </li>
                             </ol>
                         </div>

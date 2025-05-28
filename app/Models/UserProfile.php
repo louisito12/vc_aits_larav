@@ -9,8 +9,8 @@ class UserProfile extends Model
 {
     use HasFactory;
 
-    protected $connection = 'ict_ticketing';
-    protected $table = 'tbl_personal_data';
+    protected $connection = 'main_user';
+    protected $table = 'tbl_personal_datas';
 
 
     protected $guarded = [];

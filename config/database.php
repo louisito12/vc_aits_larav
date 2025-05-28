@@ -104,6 +104,18 @@ return [
             'prefix' => '',
         ],
 
+           'main_user' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST_Tickets', '192.170.11.58'),
+            'port' => env('DB_PORT_Tickets', '1433'),
+            'database' => env('DB_DATABASE_Tickets', 'another_database'),
+            'username' => env('DB_USERNAME_Tickets', 'another_user'),
+            'password' => env('DB_PASSWORD_Tickets', 'another_password'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+
         
         'sqlsrv_secondary' => [
             'driver' => 'sqlsrv',

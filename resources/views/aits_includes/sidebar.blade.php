@@ -79,7 +79,7 @@
                     ];
 
 
-
+                    $super_admin = ["aits_roles_view" => request::is('aits_roles_view')];
 
                 @endphp
 
@@ -249,9 +249,35 @@
 
 
 
+                    </ul>
+                </li>
 
+                <br>
 
+                <li class="slide has-sub {{in_array(true, $super_admin) ? 'open' : ''}}">
+                    <a href="javascript:void(0);"
+                        class="side-menu__item {{in_array(true, $super_admin) ? 'active' : ''}}">
+                        <!-- <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i> -->
+                        <i style="width:30px;" class="fa-solid fa-person-rifle"> </i>
 
+                        <span class="side-menu__label">Super Admin</span>
+                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide side-menu__label1 ">
+                            <a href="javascript:void(0);">Super Admin</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('aits_roles_view') }}"
+                                class="side-menu__item {{ Request::is('aits_roles_view') ? 'active' : '' }}">
+                                Roles</a>
+                        </li>
+
+                        <li class="slide">
+                            <a href="{{ route('aits_usermanagement') }}"
+                                class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
+                                User Management</a>
+                        </li>
 
 
 

@@ -294,7 +294,7 @@ class Aits_Messenger_Controller extends Controller
         $hello = 'GG PARE';
 
         // Render the Blade view to HTML
-        $html = view('test_pdf', compact('driver', 'hello'))->render();
+         $html = view('test_pdf', compact('driver', 'hello'))->render();
 
         // Generate PDF from HTML with landscape orientation
         $pdfContent = GpdfFacade::generate($html);

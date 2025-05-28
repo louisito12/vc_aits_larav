@@ -6,7 +6,9 @@ use App\Http\Controllers\Aits_logistics_approval;
 use App\Http\Controllers\Aits_Messenger_Controller;
 use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
+use App\Http\Controllers\Aits_roles_controller;
 use App\Http\Controllers\Aits_Transit_Controller;
+use App\Http\Controllers\Aits_User_Controller;
 use App\Http\Controllers\AitsDeliveryApprove;
 use App\Http\Controllers\AitsTransitApproval;
 use App\Http\Controllers\LoginController;
@@ -119,7 +121,20 @@ Route::controller(Aits_Messenger_Controller::class)->group(function () {
 });
 
 
+Route::controller(Aits_roles_controller::class)->group(function () {
 
+    Route::post('save_roles', 'save_roles')->name('save_roles');
+    Route::get('roles_data', 'roles_data')->name('roles_data');
+    Route::post('edit_roles', 'edit_roles')->name('edit_roles');
+    Route::get('role_delete/{id}', 'role_delete')->name('role_delete');
+});
+
+Route::controller(Aits_User_Controller::class)->group(function () {
+
+
+
+
+});
 
 
 
@@ -137,6 +152,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_collection_view', [Aits_Delivery_Controller::class, 'aits_collection_view'])->name('aits_collection_view');
     Route::get('aits_pick_up_view', [Aits_Delivery_Controller::class, 'aits_pick_up_view'])->name('aits_pick_up_view');
     Route::get('aits_messenger_view', [Aits_Messenger_Controller::class, 'aits_messenger_view'])->name('aits_messenger_view');
+
+    //superadmin
+    Route::get('aits_roles_view', [Aits_roles_controller::class, 'aits_roles_view'])->name('aits_roles_view');
+    Route::get('aits_usermanagement', [Aits_User_Controller::class, 'aits_usermanagement'])->name('aits_usermanagement');
 });
 
 
