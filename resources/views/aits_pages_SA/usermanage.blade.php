@@ -285,8 +285,8 @@
                         </div>
 
                         <!-- <div class="col-2">
-                                                                                                              <label>Passworod</label>
-                                                                                                             <input type="password" id="edit_password" class="form-control spec_input"></div> -->
+                                                                                                                                                      <label>Passworod</label>
+                                                                                                                                                     <input type="password" id="edit_password" class="form-control spec_input"></div> -->
 
                     </div>
                     <br><br>
@@ -400,7 +400,7 @@
                         }
 
 
-
+                        $('.get_role').prop('checked', false);
                         $('#add_users_modal').modal('hide');
                         $('#username').val('');
                         $('#user_email').val('');
@@ -432,6 +432,7 @@
 
             $(document).on('click', '.btn_edit', function () {
                 const data_id = $(this).data('id');
+                $('.update_role').prop('checked', false);
                 $.ajax({
                     url: "get_user_info/" + data_id,
                     type: "GET",
@@ -439,6 +440,17 @@
                         if (e['isValid'] == false) {
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
+                        }
+
+
+                        var selectedRoles = e['data']['role']; 
+                        for (let i = 0; i < selectedRoles.length; i++) {
+                            let roleId = selectedRoles[i];
+                            $('.update_role').each(function () {
+                                if (parseInt($(this).val()) === parseInt(roleId)) {
+                                    $(this).prop('checked', true);
+                                }
+                            });
                         }
                         $('#edit_users_modal').modal('show');
                         $('#edit_username').val(e['data']['username']);
@@ -516,6 +528,8 @@
                             return;
                         }
 
+
+                        $('.update_role').prop('checked', false);
                         $('#tbl_users').DataTable().ajax.reload();
                         Swal.fire({
                             title: "updated!",

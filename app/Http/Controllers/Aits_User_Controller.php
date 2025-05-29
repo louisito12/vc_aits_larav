@@ -281,6 +281,12 @@ class Aits_User_Controller extends Controller
         try {
 
             $data = UserModel::with(['get_user_data'])->find($id);
+
+            $roles = DB::table('aits_role_access')
+                ->where('user_id', $data->id)
+                ->where('status', 1)
+                ->pluck('role_id');
+            $data->role = $roles;
             return response()->json([
 
                 'msg' => 'successfully provided',
