@@ -157,9 +157,6 @@ class Aits_Request_Room_Controller extends Controller
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])
                 ->where('request_by', Auth::user()->id)->get();
-
-
-
             return $this->room_request_datatable($data);
 
         } catch (\Exception $e) {

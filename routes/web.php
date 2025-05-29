@@ -130,10 +130,11 @@ Route::controller(Aits_roles_controller::class)->group(function () {
 });
 
 Route::controller(Aits_User_Controller::class)->group(function () {
-
-
-
-
+    Route::post('show_users', 'show_users')->name('show_users');
+    Route::post('aits_save_user', 'aits_save_user')->name('aits_save_user');
+    Route::get('get_user_info/{id}', 'get_user_info')->name('get_user_info');
+    Route::post('aits_edit_user', 'aits_edit_user')->name('aits_edit_user');
+    Route::get('users_delete/{id}', 'users_delete')->name('users_delete');
 });
 
 

