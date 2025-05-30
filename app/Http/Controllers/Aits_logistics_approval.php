@@ -48,7 +48,7 @@ class Aits_logistics_approval extends Controller
                     return ' <h5> <span class="badge rounded-pill bg-danger">Cancelled</span></h5>';
                 }
                 $aits_deliver = new Aits_Delivery_Controller();
-                return $aits_deliver->status_html($data->request_status, $data->procedures,$data->if);
+                return $aits_deliver->status_html($data->request_status, $data->procedures, $data->if);
 
             })
 
@@ -110,7 +110,7 @@ class Aits_logistics_approval extends Controller
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Assign Messenger</a></li>
-                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
+                <li hidden><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
                 <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
             </ul>
              </div>  ';
@@ -158,8 +158,24 @@ class Aits_logistics_approval extends Controller
             ]);
 
 
-
             AitsDelivery::where('id', $request->id)->update($request->except(['id']));
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Admin Logistic Request',
+                'description' => 'Assign messenger logistics Request',
+                'table_name' => 'aits_deliveries',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+
+
+            insert_audit($object);
+
+
+
 
         } catch (\Exception $e) {
             return response()->json([

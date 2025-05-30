@@ -121,6 +121,18 @@ class Aits_Messenger_Controller extends Controller
                 $hidden = '';
                 $procedures = $data->procedures;
 
+                if ($data->request_status == 'Delivered') {
+                    return $html = '
+                       <div  class="btn-group dropstart input_spec my-1">
+                        <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+                        </ul>
+                        </div> ';
+                }
 
                 //for delivery action
                 $html = '
@@ -135,10 +147,6 @@ class Aits_Messenger_Controller extends Controller
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                         </div> ';
-
-
-
-
 
 
                 return $html;
@@ -239,6 +247,19 @@ class Aits_Messenger_Controller extends Controller
                 ]);
             }
 
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Messenger Approval',
+                'description' => $status . ' Request for logistics',
+                'table_name' => 'aits_deliveries',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
+
+
 
 
         } catch (\Exception $e) {
@@ -294,7 +315,7 @@ class Aits_Messenger_Controller extends Controller
         $hello = 'GG PARE';
 
         // Render the Blade view to HTML
-         $html = view('test_pdf', compact('driver', 'hello'))->render();
+        $html = view('test_pdf', compact('driver', 'hello'))->render();
 
         // Generate PDF from HTML with landscape orientation
         $pdfContent = GpdfFacade::generate($html);

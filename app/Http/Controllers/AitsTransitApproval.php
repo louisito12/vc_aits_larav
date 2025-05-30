@@ -35,7 +35,7 @@ class AitsTransitApproval extends Controller
 
     public function get_approval_transit()
     {
-        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])->where('is_transact', 1)
             ->get();
         $new_controller = new Aits_Transit_Controller();
         return $new_controller->transit_data_table($data);
@@ -63,6 +63,19 @@ class AitsTransitApproval extends Controller
                 "date_approved" => Carbon::now()
 
             ]);
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Admin Shuttle Request Module',
+                'description' => 'Approve Request Shuttle',
+                'table_name' => 'aits_shuttle_requests',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
@@ -77,11 +90,23 @@ class AitsTransitApproval extends Controller
 
     public function disapprove_shuttle($id)
     {
-        return AitsShuttleRequest::where('id', $id)->update([
+        AitsShuttleRequest::where('id', $id)->update([
             'approved_by' => Auth::user()->id,
             'request_status' => "Disapproved",
             "date_approved" => Carbon::now()
         ]);
+
+
+        $object = [
+            'user_id' => Auth::user()->id,
+            'page' => 'Admin Shuttle Request Module',
+            'description' => 'Disapprove Request Shuttle',
+            'table_name' => 'aits_shuttle_requests',
+            'transact_id' => $id,
+            'status' => 1,
+            'date_created' => Carbon::now(),
+        ];
+        insert_audit($object);
     }
 
     public function date_validation($date_from, $date_to, $car_id)

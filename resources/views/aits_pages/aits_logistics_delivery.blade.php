@@ -227,6 +227,8 @@
         </div>
     </div>
 
+
+
     <div class="modal fade" id="show_delivery_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -302,7 +304,43 @@
                             <label>Requestor</label>
                             <input type="text" disabled class="form-control" id="req_name">
                         </div>
+                    </div><br>
+                    <br>
+                    <!-- Admin -->
+                    <div class="row row_admin">
+                        <div class="col-3">
+                            <label>Assign By</label>
+                            <input type="text" disabled class="form-control" id="admin_name">
+                        </div>
+
+                        <div class="col-3">
+                            <label>Delivery Date</label>
+                            <input type="text" disabled class="form-control" id="delivery_date">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Messenger Name</label>
+                            <input type="text" disabled class="form-control" id="messenger_name">
+                        </div>
+
                     </div>
+
+                    <!-- Messenger -->
+                    <br><br>
+                    <div id="row_messenger" class="row">
+                        <div class="col-3">
+                            <label>Delivery remarks</label>
+                            <textarea class="form-control spec_input" disabled id="mess_remarks"></textarea>
+                        </div>
+
+                        <div class="col-3 file_column">
+                            <label>Files</label>
+                            <div id="messenger_file"></div>
+                        </div>
+
+                    </div>
+
+
 
 
                 </div>
@@ -476,7 +514,9 @@
             $(document).on('click', '.btn_show_data', function () {
 
                 $('#show_delivery_request_modal').modal('show');
-
+                $('.row_admin').attr('hidden', true)
+                $('#messenger_file').html('');
+                $('#row_messenger').addClass('d-none');
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
@@ -497,7 +537,26 @@
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
 
 
+                        if (e['data']['get_admin_data']) {
+                            //if admin has assign messenger
+                            $('.row_admin').removeAttr('hidden')
+                            $('#admin_name').val(e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname'])
+                            $('#delivery_date').val(e['data']['procedure_date'])
+                            $('#messenger_name').val(e['data']['get_messenger_name']['firstname'] + ' ' + e['data']['get_messenger_name']['lastname'])
 
+                        }
+
+
+
+                      
+
+                        if (e['data']['messenger_file'] == 'nofile') {
+                            return;
+                        }
+
+                        $('#row_messenger').removeClass('d-none');
+                        $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                        $('#mess_remarks').val(e['data']['messenger_remarks']);
 
                     }
                 })

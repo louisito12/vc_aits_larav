@@ -118,6 +118,22 @@ class Aits_Transit_Controller extends Controller
             $this->uploade_file_transit($data->id, "AitsShuttleRequest", 'aits_shuttle_file', $request->file('file'));
 
 
+            $latestRecord = AitsShuttleRequest::orderByDesc('id')->first();
+            $latest_id = $latestRecord ? $latestRecord->id : null;
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Shuttle Module',
+                'description' => 'Request Shuttle Service',
+                'table_name' => 'aits_shuttle_requests',
+                'transact_id' => $latest_id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
+
             return [
                 'msg' => 'Succesfully Inserted',
                 'data' => $data,
@@ -187,6 +203,14 @@ class Aits_Transit_Controller extends Controller
     {
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
+
+                if ($data->status == 0 || $data->request_status != 'Pending') {
+                    return '
+                    <center>
+                    <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
+                       </center> ';
+                }
+
 
                 return '
                     <center>
@@ -371,6 +395,18 @@ class Aits_Transit_Controller extends Controller
 
             AitsShuttleRequest::where('id', $id)->update(['status' => 0]);
 
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Shuttle Module',
+                'description' => 'Delete Shuttle Request',
+                'table_name' => 'aits_shuttle_requests',
+                'transact_id' => $id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => $e,
@@ -490,6 +526,17 @@ class Aits_Transit_Controller extends Controller
 
 
             }
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Shuttle Module',
+                'description' => 'Edit Request Shuttle',
+                'table_name' => 'aits_shuttle_requests',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
 
 
             return [

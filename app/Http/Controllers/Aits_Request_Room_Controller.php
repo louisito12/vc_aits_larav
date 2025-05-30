@@ -118,16 +118,20 @@ class Aits_Request_Room_Controller extends Controller
                 $insert
             ]);
 
-            // $object = [
-            //     'user_id' => Auth::user()->id,
-            //     'page' => 'Request Room',
-            //     'description' => 'Request A Room',
-            //     'table_name' => 'aits_request_room_models',
-            //     'transact_id' => $data->id,
-            //     'status' => 1,
-            //     'date_created' => Carbon::now(),
-            // ];
-            
+            $latestRecord = AitsRequestRoomModel::orderByDesc('id')->first();
+            $latest_id = $latestRecord ? $latestRecord->id : null;
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Room',
+                'description' => 'Request A Room',
+                'table_name' => 'aits_request_room_models',
+                'transact_id' => $latest_id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
 
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',
@@ -155,7 +159,7 @@ class Aits_Request_Room_Controller extends Controller
 
 
         try {
-            $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])
+            $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])->where('is_transact', 1)
                 ->where('request_by', Auth::user()->id)->get();
             return $this->room_request_datatable($data);
 
@@ -462,6 +466,17 @@ class Aits_Request_Room_Controller extends Controller
 
             $data_update = AitsRequestRoomModel::where('id', $request->id)->update($request->except(['id']));
 
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Room Module',
+                'description' => 'Update request room',
+                'table_name' => 'aits_request_room_models',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
 
         } catch (\Exception $e) {
             return response()->json([
@@ -477,6 +492,20 @@ class Aits_Request_Room_Controller extends Controller
     {
         try {
             AitsRequestRoomModel::where('id', $id)->update(['status' => 0]);
+
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Room Module',
+                'description' => 'Cancelled room',
+                'table_name' => 'aits_request_room_models',
+                'transact_id' => $id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
 
         } catch (\Exception $e) {
             return response()->json([

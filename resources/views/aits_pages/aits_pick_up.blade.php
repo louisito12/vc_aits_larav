@@ -237,7 +237,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="edit_header"> Show Pick Up Request
+                    <h6 class="modal-title" id="edit_header"> Show Delivery Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -262,9 +262,9 @@
                     <br>
                     <div class="row">
                         <div class="col-4">
-                            <label>Pick Up Type</label>
+                            <label>Delivery Type</label>
                             <select disabled id="show_delivery_type_id" class="form-control spec_input">
-                                <option value="">Select Pick Up Type</option>
+                                <option value="">Select Delivery Type</option>
                                 @foreach ($type as $types)
                                     <option value="{{ $types->id }}">{{ $types->del_type }}</option>
                                 @endforeach
@@ -307,7 +307,43 @@
                             <label>Requestor</label>
                             <input type="text" disabled class="form-control" id="req_name">
                         </div>
+                    </div><br>
+                    <br>
+                    <!-- Admin -->
+                    <div class="row row_admin">
+                        <div class="col-3">
+                            <label>Assign By</label>
+                            <input type="text" disabled class="form-control" id="admin_name">
+                        </div>
+
+                        <div class="col-3">
+                            <label>Delivery Date</label>
+                            <input type="text" disabled class="form-control" id="delivery_date">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Messenger Name</label>
+                            <input type="text" disabled class="form-control" id="messenger_name">
+                        </div>
+
                     </div>
+
+                    <!-- Messenger -->
+                    <br><br>
+                    <div id="row_messenger" class="row">
+                        <div class="col-3">
+                            <label>Delivery remarks</label>
+                            <textarea class="form-control spec_input" disabled id="mess_remarks"></textarea>
+                        </div>
+
+                        <div class="col-3 file_column">
+                            <label>Files</label>
+                            <div id="messenger_file"></div>
+                        </div>
+
+                    </div>
+
+
 
 
                 </div>
@@ -318,6 +354,7 @@
             </div>
         </div>
     </div>
+
 
 
 
@@ -398,7 +435,7 @@
                 form_data.append('contact_receiver', contact_receiver);
                 form_data.append('delivery_type_id', delivery_type_id);
                 form_data.append('area_id', area_id);
-     
+
                 form_data.append('complete_address', complete_address);
                 form_data.append('delivery_remarks', delivery_remarks);
                 form_data.append('file[]', file);
@@ -463,7 +500,9 @@
             $(document).on('click', '.btn_show_data', function () {
 
                 $('#show_delivery_request_modal').modal('show');
-
+                $('.row_admin').attr('hidden', true)
+                $('#messenger_file').html('');
+                $('#row_messenger').addClass('d-none');
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
@@ -484,6 +523,27 @@
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
 
 
+
+                        if (e['data']['get_admin_data']) {
+                            //if admin has assign messenger
+                            $('.row_admin').removeAttr('hidden')
+                            $('#admin_name').val(e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname'])
+                            $('#delivery_date').val(e['data']['procedure_date'])
+                            $('#messenger_name').val(e['data']['get_messenger_name']['firstname'] + ' ' + e['data']['get_messenger_name']['lastname'])
+
+                        }
+
+
+
+
+
+                        if (e['data']['messenger_file'] == 'nofile') {
+                            return;
+                        }
+
+                        $('#row_messenger').removeClass('d-none');
+                        $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                        $('#mess_remarks').val(e['data']['messenger_remarks']);
 
 
                     }

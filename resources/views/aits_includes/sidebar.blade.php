@@ -220,10 +220,10 @@
 
 
                             <!-- <li class="slide">
-                                <a href="{{ route('user_manage_view') }}"
-                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                    Users Management</a>
-                            </li> -->
+                                    <a href="{{ route('user_manage_view') }}"
+                                        class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                        Users Management</a>
+                                </li> -->
 
 
 
@@ -267,7 +267,7 @@
                 @endif
 
 
-                @if(in_array(1, $roles))
+                @if(in_array(1, $roles) || Auth::user()->id == 1)
                     <li class="slide has-sub {{in_array(true, $super_admin) ? 'open' : ''}}">
                         <a href="javascript:void(0);"
                             class="side-menu__item {{in_array(true, $super_admin) ? 'active' : ''}}">

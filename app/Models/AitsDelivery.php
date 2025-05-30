@@ -41,4 +41,9 @@ class AitsDelivery extends Model
         return $this->hasOne(UserProfile::class, 'user_id', 'assign_by');
     }
 
+    public function get_messenger_name()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'messenger_id');
+    }
+
 }

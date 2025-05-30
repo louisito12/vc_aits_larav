@@ -52,11 +52,26 @@ class Aits_Request_Room_approval_Controller extends Controller
 
             }
 
+    
+
+
             $query = AitsRequestRoomModel::where('id', $id)->update([
                 'approve_by' => Auth::user()->id,
                 'approve_date' => Carbon::now(),
                 'request_status' => $status,
             ]);
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Admin Request Module',
+                'description' => $status . ' Room',
+                'table_name' => 'aits_request_room_models',
+                'transact_id' => $id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
 
 
         } catch (\Exception $e) {

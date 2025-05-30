@@ -120,9 +120,24 @@ class Aits_Delivery_Controller extends Controller
 
 
             $this->uploade_file_transit($data->id, 'AitsDelivery', $request->file('file'), $request->procedures);
+            $latestRecord = AitsDelivery::orderByDesc('id')->first();
+
+            $latest_id = $latestRecord ? $latestRecord->id : null;
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Logistic Request',
+                'description' => 'Added Request',
+                'table_name' => 'aits_deliveries',
+                'transact_id' => $latest_id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+
+
+            insert_audit($object);
             // public function uploade_file_transit($id, $table_name, $files, $delivery)
             return response()->json([
-                'msg' => 'Successfully Inserted Request Room',
+                'msg' => 'Successfully Inserted Request For delivery',
                 'status' => 200,
                 'data' => $data,
                 "isValid" => true,
@@ -258,7 +273,7 @@ class Aits_Delivery_Controller extends Controller
         try {
 
 
-            $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_admin_data'])->find($id);
+            $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_admin_data', 'get_messenger_name'])->find($id);
             $procedure = $data->procedures;
             $stat = '';
             if ($procedure == 1) {
@@ -271,12 +286,30 @@ class Aits_Delivery_Controller extends Controller
                 $stat = 'For Pick Up';
             }
 
+            $direction = 'nofile';
+            $filename = '';
+            $messenge_file = AitsFileModel::where('table_name', 'AitsDelivery')
+                ->where('status', 1)
+                ->where('attachment_id', $id)
+                ->where('delivery_mess', 1)
+                ->first();
+
+            if ($messenge_file) {
+
+                $path = $messenge_file->folder_name . '/' . $messenge_file->year . '/' . $messenge_file->file_name;
+                $direction = dynamic_file($path);
+                $filename = $messenge_file->orig_file;
+            }
+
 
             $data->req_name = $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
             $data->req_stat = $stat;
             $data->request_number = request_number($data->request_no, $data->date_created);
             $data->date_requested = date_converter($data->date_created);
             $data->date_assign = date_converter($data->date_assign);
+            $data->procedure_date = date_converter($data->procedure_date);
+            $data->messenger_file = $direction;
+            $data->file_name = $filename;
 
 
             return response()->json([
@@ -357,6 +390,18 @@ class Aits_Delivery_Controller extends Controller
     {
         $data = AitsDelivery::where('id', $id)->update(['status' => 0]);
 
+        $object = [
+            'user_id' => Auth::user()->id,
+            'page' => 'Logistic Request',
+            'description' => 'Delete logistics Request',
+            'table_name' => 'aits_deliveries',
+            'transact_id' => $id,
+            'status' => 1,
+            'date_created' => Carbon::now(),
+        ];
+
+        insert_audit($object);
+
     }
 
     public function edit_delivery_request(Request $request)
@@ -413,6 +458,20 @@ class Aits_Delivery_Controller extends Controller
                 $this->uploade_file_transit($request->id, 'AitsDelivery', $request->file('file'), $request->procedures);
             }
             AitsDelivery::where('id', $request->id)->update($request->except(['id', 'file']));
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Logistic Request',
+                'description' => 'Edit logistics Request',
+                'table_name' => 'aits_deliveries',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+
+
+            insert_audit($object);
 
         } catch (\Exception $e) {
             return response()->json([
