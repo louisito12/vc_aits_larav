@@ -413,7 +413,7 @@
                         }
 
                         if (procedure == "show_data") {
-
+    
                             $('#show_shuttle_modal').modal('show');
                             $('#show_id').val(e['data']['id']);
                             $('#show_departure_date').val(e['data']['departure_date']);
@@ -430,10 +430,20 @@
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
                             $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                             $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
+                    
                             $('#show_req_stats').val(e['data']['request_status']);
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                                 + ' ' + e['data']['get_approver_data']['lastname'] : '');
                             $('#show_approve_date').val(e['data']['date_approved']);
+
+
+
+
+                            // if (e['data']['get_approver_data']) {
+                            //     $('#show_approver').val(e['data']['get_approver_data']['firstname'] + ' ' + e['data']['get_approver_data']['lastname']);
+                            //     $('#show_approve_date').val(e['data']['date_approved'])
+                            //     $('#show_req_stats').val(e['data']['request_status'])
+                            // }
                         }
 
 
@@ -600,6 +610,7 @@
             });
 
             $(document).on('click', '.btn_show_data', function () {
+
                 retrieve_shuttle($(this).data('id'), 'show_data')
 
             });

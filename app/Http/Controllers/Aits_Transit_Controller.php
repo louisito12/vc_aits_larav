@@ -25,8 +25,8 @@ class Aits_Transit_Controller extends Controller
             ->where('expiry_date', '>=', Carbon::now())
             ->get();
         $type = AitsShuttleType::where('status', 1)->get();
-        $manager = DB::connection('ict_ticketing')
-            ->table('tbl_personal_data')
+        $manager = DB::connection('main_user')
+            ->table('tbl_personal_datas')
             ->where('poslevel_id', 1003)
             ->get();
         return view('aits_pages.aits_transit_request_view', compact('vehicle', 'type', 'manager'));

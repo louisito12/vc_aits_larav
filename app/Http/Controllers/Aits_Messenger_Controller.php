@@ -311,20 +311,22 @@ class Aits_Messenger_Controller extends Controller
         // ]);
 
 
-        $driver = AitsDriver::get();
-        $hello = 'GG PARE';
+        // $driver = AitsDriver::get();
+        // $hello = 'GG PARE';
 
-        // Render the Blade view to HTML
-        $html = view('test_pdf', compact('driver', 'hello'))->render();
+        // // Render the Blade view to HTML
+        // $html = view('test_pdf', compact('driver', 'hello'))->render();
 
-        // Generate PDF from HTML with landscape orientation
-        $pdfContent = GpdfFacade::generate($html);
+        // // Generate PDF from HTML with landscape orientation
+        // $pdfContent = GpdfFacade::generate($html);
 
-        // Return the generated PDF as a response
-        return response($pdfContent, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="invoice.pdf"',
-        ]);
+        // // Return the generated PDF as a response
+        // return response($pdfContent, 200, [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        // ]);
+
+        return $url = url('/');
     }
 
 }
