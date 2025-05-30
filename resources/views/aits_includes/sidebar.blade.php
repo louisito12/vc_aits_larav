@@ -43,8 +43,12 @@
                 <!-- End::slide -->
 
 
-
                 @php
+                    $roles = DB::table('aits_role_access')
+                        ->where('user_id', Auth::user()->id)
+                        ->where('status', 1)
+                        ->pluck('role_id')
+                        ->toArray();
                     $romm_request = [
                         'request_room' => Request::is('request_room_view'),
                         'transit_request' => Request::is('transit_request_view'),
@@ -90,131 +94,70 @@
                 <!-- End::slide__category -->
 
                 <!-- Start::slide -->
-                <li class="slide has-sub {{in_array(true, $romm_request) ? 'open' : ''}}">
-                    <a href="javascript:void(0);"
-                        class="side-menu__item {{in_array(true, $romm_request) ? 'active' : ''}}">
-                        <i style="width:30px;" class="fa-solid fa-hotel"></i>
-                        <span class="side-menu__label">Service Request</span>
-                        <i class="fe fe-chevron-right side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1 ">
-                            <a href="javascript:void(0);">Service Request</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('request_room_view') }}"
-                                class="side-menu__item {{ Request::is('request_room_view') ? 'active' : '' }}">Room
-                                Reservation</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('transit_request_view') }}"
-                                class="side-menu__item {{ Request::is('transit_request_view') ? 'active' : '' }}">Shuttle
-                                Service Request
-                            </a>
-                        </li>
+                @if(in_array(3, $roles))
+                    <li class="slide has-sub {{in_array(true, $romm_request) ? 'open' : ''}}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{in_array(true, $romm_request) ? 'active' : ''}}">
+                            <i style="width:30px;" class="fa-solid fa-hotel"></i>
+                            <span class="side-menu__label">Service Request</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">Service Request</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('request_room_view') }}"
+                                    class="side-menu__item {{ Request::is('request_room_view') ? 'active' : '' }}">Room
+                                    Reservation</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('transit_request_view') }}"
+                                    class="side-menu__item {{ Request::is('transit_request_view') ? 'active' : '' }}">Shuttle
+                                    Service Request
+                                </a>
+                            </li>
 
 
 
-                    </ul>
-                </li>
-                <!-- End::slide -->
+                        </ul>
+                    </li>
+                    <!-- End::slide -->
 
 
-                <br>
-                <!-- Logistics Request -->
-                <li class="slide has-sub {{in_array(true, $logistics) ? 'open' : ''}}">
-                    <a href="javascript:void(0);"
-                        class="side-menu__item {{in_array(true, $logistics) ? 'active' : ''}}">
-                        <i style="width:30px;" class="fa-solid fa-truck-ramp-box"></i>
-                        <span class="side-menu__label">Logistics Request</span>
-                        <i class="fe fe-chevron-right side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1 ">
-                            <a href="javascript:void(0);">Logistics Request</a>
-                        </li>
+                    <br>
+                    <!-- Logistics Request -->
+                    <li class="slide has-sub {{in_array(true, $logistics) ? 'open' : ''}}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{in_array(true, $logistics) ? 'active' : ''}}">
+                            <i style="width:30px;" class="fa-solid fa-truck-ramp-box"></i>
+                            <span class="side-menu__label">Logistics Request</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">Logistics Request</a>
+                            </li>
 
 
-                        <li class="slide">
-                            <a href="{{ route('aits_delivery_view') }}"
-                                class="side-menu__item {{ Request::is('aits_delivery_view') ? 'active' : '' }}">
-                                Delivery Request</a>
-                        </li>
+                            <li class="slide">
+                                <a href="{{ route('aits_delivery_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_delivery_view') ? 'active' : '' }}">
+                                    Delivery Request</a>
+                            </li>
 
-                        <li class="slide">
-                            <a href="{{ route('aits_collection_view') }}"
-                                class="side-menu__item {{ Request::is('aits_collection_view') ? 'active' : '' }}">
-                                Collection Request</a>
-                        </li>
-
-
-                        <li class="slide">
-                            <a href="{{ route('aits_pick_up_view') }}"
-                                class="side-menu__item {{ Request::is('aits_pick_up_view') ? 'active' : '' }}">
-                                Pick Up Request</a>
-                        </li>
+                            <li class="slide">
+                                <a href="{{ route('aits_collection_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_collection_view') ? 'active' : '' }}">
+                                    Collection Request</a>
+                            </li>
 
 
-
-
-
-
-
-
-
-
-
-
-                    </ul>
-                </li>
-
-
-                <br>
-                <!-- Admin Slide -->
-                <li class="slide has-sub {{in_array(true, $admin) ? 'open' : ''}}">
-                    <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $admin) ? 'active' : ''}}">
-                        <i style="width:30px;" class="fa-solid fa-user-tie"></i>
-                        <span class="side-menu__label">Admin Approval</span>
-                        <i class="fe fe-chevron-right side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1 ">
-                            <a href="javascript:void(0);">Service Request</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('room_approval_view') }}"
-                                class="side-menu__item {{ Request::is('room_approval_view') ? 'active' : '' }}">Room
-                                Reservation</a>
-                        </li>
-
-                        <li class="slide">
-                            <a href="{{ route('aits_transit_approval_view') }}"
-                                class="side-menu__item {{ Request::is('aits_transit_approval_view') ? 'active' : '' }}">
-                                Shuttle Service Approval</a>
-                        </li>
-
-
-                        <li class="slide">
-                            <a href="{{ route('aits_deliver_assign') }}"
-                                class="side-menu__item {{ Request::is('aits_deliver_assign') ? 'active' : '' }}">
-                                Logistics Assigned Messenger</a>
-                        </li>
-
-
-
-
-                        <li class="slide">
-                            <a href="{{ route('aits_car_view') }}"
-                                class="side-menu__item {{ Request::is('aits_car_view') ? 'active' : '' }}">
-                                Car Management</a>
-                        </li>
-
-
-                        <!-- <li class="slide">
-                            <a href="{{ route('user_manage_view') }}"
-                                class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                Users Management</a>
-                        </li> -->
+                            <li class="slide">
+                                <a href="{{ route('aits_pick_up_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_pick_up_view') ? 'active' : '' }}">
+                                    Pick Up Request</a>
+                            </li>
 
 
 
@@ -223,70 +166,141 @@
 
 
 
-                    </ul>
-                </li>
-
-
-                <br>
-                <!-- Messenger Side -->
-                <li class="slide has-sub {{in_array(true, $messenger) ? 'open' : ''}}">
-                    <a href="javascript:void(0);"
-                        class="side-menu__item {{in_array(true, $messenger) ? 'active' : ''}}">
-                        <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i>
-
-                        <span class="side-menu__label">Messenger Logistics</span>
-                        <i class="fe fe-chevron-right side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1 ">
-                            <a href="javascript:void(0);">Service Request</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('aits_messenger_view') }}"
-                                class="side-menu__item {{ Request::is('aits_messenger_view') ? 'active' : '' }}">
-                                My Logisitics</a>
-                        </li>
-
-
-
-                    </ul>
-                </li>
-
-                <br>
-
-                <li class="slide has-sub {{in_array(true, $super_admin) ? 'open' : ''}}">
-                    <a href="javascript:void(0);"
-                        class="side-menu__item {{in_array(true, $super_admin) ? 'active' : ''}}">
-                        <!-- <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i> -->
-                        <i style="width:30px;" class="fa-solid fa-person-rifle"> </i>
-
-                        <span class="side-menu__label">Super Admin</span>
-                        <i class="fe fe-chevron-right side-menu__angle"></i>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1 ">
-                            <a href="javascript:void(0);">Super Admin</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('aits_roles_view') }}"
-                                class="side-menu__item {{ Request::is('aits_roles_view') ? 'active' : '' }}">
-                                Roles</a>
-                        </li>
-
-                        <li class="slide">
-                            <a href="{{ route('aits_usermanagement') }}"
-                                class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
-                                User Management</a>
-                        </li>
 
 
 
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endif
 
 
 
+
+                @if(in_array(2, $roles))
+                    <br>
+                    <!-- Admin Slide -->
+                    <li class="slide has-sub {{in_array(true, $admin) ? 'open' : ''}}">
+                        <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $admin) ? 'active' : ''}}">
+                            <i style="width:30px;" class="fa-solid fa-user-tie"></i>
+                            <span class="side-menu__label">Admin Approval</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">Service Request</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('room_approval_view') }}"
+                                    class="side-menu__item {{ Request::is('room_approval_view') ? 'active' : '' }}">Room
+                                    Reservation</a>
+                            </li>
+
+                            <li class="slide">
+                                <a href="{{ route('aits_transit_approval_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_transit_approval_view') ? 'active' : '' }}">
+                                    Shuttle Service Approval</a>
+                            </li>
+
+
+                            <li class="slide">
+                                <a href="{{ route('aits_deliver_assign') }}"
+                                    class="side-menu__item {{ Request::is('aits_deliver_assign') ? 'active' : '' }}">
+                                    Logistics Assigned Messenger</a>
+                            </li>
+
+
+
+
+                            <li class="slide">
+                                <a href="{{ route('aits_car_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_car_view') ? 'active' : '' }}">
+                                    Car Management</a>
+                            </li>
+
+
+                            <!-- <li class="slide">
+                                <a href="{{ route('user_manage_view') }}"
+                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                    Users Management</a>
+                            </li> -->
+
+
+
+
+
+
+
+
+                        </ul>
+                    </li>
+
+                @endif
+
+                @if(in_array(4, $roles))
+                    <br>
+                    <!-- Messenger Side -->
+                    <li class="slide has-sub {{in_array(true, $messenger) ? 'open' : ''}}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{in_array(true, $messenger) ? 'active' : ''}}">
+                            <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i>
+
+                            <span class="side-menu__label">Messenger Logistics</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">Service Request</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('aits_messenger_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_messenger_view') ? 'active' : '' }}">
+                                    My Logisitics</a>
+                            </li>
+
+
+
+                        </ul>
+                    </li>
+
+                    <br>
+                @endif
+
+
+                @if(in_array(1, $roles))
+                    <li class="slide has-sub {{in_array(true, $super_admin) ? 'open' : ''}}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{in_array(true, $super_admin) ? 'active' : ''}}">
+                            <!-- <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i> -->
+                            <i style="width:30px;" class="fa-solid fa-person-rifle"> </i>
+
+                            <span class="side-menu__label">Super Admin</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">Super Admin</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('aits_roles_view') }}"
+                                    class="side-menu__item {{ Request::is('aits_roles_view') ? 'active' : '' }}">
+                                    Roles</a>
+                            </li>
+
+                            <li class="slide">
+                                <a href="{{ route('aits_usermanagement') }}"
+                                    class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
+                                    User Management</a>
+                            </li>
+
+
+
+
+                        </ul>
+                    </li>
+
+
+                @endif
 
 
 

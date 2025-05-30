@@ -36,15 +36,18 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-primary  rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-primary  rounded-pill">{{ (int) $room_approve_counts + (int) $room_pending_counts }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Logistics Request
-                                    <span class="badge bg-primary rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-primary rounded-pill">{{ (int) $logistics_pending_counts + (int) $logistics_approve_counts }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Shuttle Request
-                                    <span class="badge bg-primary rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-primary rounded-pill">{{ (int) $shuttle_approve_counts + (int) $shuttle_pending_counts  }}</span>
                                 </li>
                             </ol>
                         </div>
@@ -59,15 +62,17 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-warning text-dark rounded-pill">0</span>
+                                    <span class="badge bg-warning text-dark rounded-pill">{{ $room_pending_counts }}</span>
                                 </li>
                                 <li class="list-group-item d-flex  justify-content-between align-items-center">
                                     Logistics Request
-                                    <span class="badge bg-warning text-dark  rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-warning text-dark  rounded-pill">{{(int) $logistics_pending_counts  }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Shuttle Request
-                                    <span class="badge bg-warning text-dark  rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-warning text-dark  rounded-pill">{{ (int) $shuttle_pending_counts  }}</span>
                                 </li>
                             </ol>
                         </div>
@@ -82,15 +87,17 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Room Reservation
-                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
+                                    <span class="badge bg-success text-dark  rounded-pill">{{ $room_approve_counts }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Logistics Request
-                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-success text-dark  rounded-pill">{{ (int) $logistics_approve_counts }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Shuttle Request
-                                    <span class="badge bg-success text-dark  rounded-pill">0</span>
+                                    <span
+                                        class="badge bg-success text-dark  rounded-pill">{{ (int) $shuttle_approve_counts }}</span>
                                 </li>
                             </ol>
                         </div>

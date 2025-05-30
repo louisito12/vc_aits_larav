@@ -285,8 +285,8 @@
                         </div>
 
                         <!-- <div class="col-2">
-                                                                                                                                                      <label>Passworod</label>
-                                                                                                                                                     <input type="password" id="edit_password" class="form-control spec_input"></div> -->
+                                                                                                                                                                                  <label>Passworod</label>
+                                                                                                                                                                                 <input type="password" id="edit_password" class="form-control spec_input"></div> -->
 
                     </div>
                     <br><br>
@@ -380,6 +380,11 @@
                 });
 
 
+                if (update_roles.length == 0) {
+                    roles_arr.error('<span style="color: white;">Please Select roles </span>');
+                    return;
+                }
+
 
 
                 $.ajax({
@@ -443,7 +448,7 @@
                         }
 
 
-                        var selectedRoles = e['data']['role']; 
+                        var selectedRoles = e['data']['role'];
                         for (let i = 0; i < selectedRoles.length; i++) {
                             let roleId = selectedRoles[i];
                             $('.update_role').each(function () {
@@ -498,6 +503,10 @@
                 });
 
 
+                if (update_roles.length == 0) {
+                    alertify.error('<span style="color: white;">Please Select roles </span>');
+                    return;
+                }
                 $.ajax({
                     url: "{{ route('aits_edit_user') }}",
                     type: "POST",
@@ -527,8 +536,7 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
-
-
+                        $('#edit_users_modal').modal('hide');
                         $('.update_role').prop('checked', false);
                         $('#tbl_users').DataTable().ajax.reload();
                         Swal.fire({
@@ -538,12 +546,9 @@
                         });
                     }
                 });
-
-
-
             })
 
-
+            
             $(document).on('click', '.btn_delete', function () {
                 Swal.fire({
                     title: "Are you sure?",
