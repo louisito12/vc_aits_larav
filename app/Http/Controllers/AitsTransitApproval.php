@@ -55,6 +55,9 @@ class AitsTransitApproval extends Controller
                     "isValid" => false,
                 ]);
             }
+
+
+            
             AitsShuttleRequest::where('id', $request->id)->update([
                 'car_id' => $request->car_id,
                 'driver_id' => $request->driver_id,
@@ -112,18 +115,29 @@ class AitsTransitApproval extends Controller
     public function date_validation($date_from, $date_to, $car_id)
     {
 
-        $fromDate = Carbon::parse($date_from)->format('Y-m-d H:i:s');
-        $toDate = Carbon::parse($date_to)->format('Y-m-d H:i:s');
+        // $fromDate = Carbon::parse($date_from)->format('Y-m-d H:i:s');
+        // $toDate = Carbon::parse($date_to)->format('Y-m-d H:i:s');
+
+        // $query = "
+        // SELECT COUNT(*) AS overlapping_count
+        // FROM aits_shuttle_requests    WHERE
+        // ((pick_up_date BETWEEN  '$fromDate' AND '$toDate')
+        // OR (departure_date BETWEEN  '$fromDate' AND '$toDate')
+        // OR ('$fromDate' BETWEEN pick_up_date AND departure_date)
+        // OR ('$toDate' BETWEEN pick_up_date AND departure_date) )
+        // AND request_status='Approved' AND car_id=$car_id;
+        // ";
+
+        $fromDate = Carbon::parse($date_from)->format('Y-m-d');
+        $toDate = Carbon::parse($date_to)->format('Y-m-d');
 
         $query = "
-        SELECT COUNT(*) AS overlapping_count
-        FROM aits_shuttle_requests    WHERE
-        ((pick_up_date BETWEEN  '$fromDate' AND '$toDate')
-        OR (departure_date BETWEEN  '$fromDate' AND '$toDate')
-        OR ('$fromDate' BETWEEN pick_up_date AND departure_date)
-        OR ('$toDate' BETWEEN pick_up_date AND departure_date) )
-        AND request_status='Approved' AND car_id=$car_id;
-        ";
+            SELECT COUNT(*) AS overlapping_count
+            FROM aits_shuttle_requests WHERE
+            CAST(departure_date AS DATE) = '$toDate'
+            AND request_status = 'Approved'
+            AND car_id = $car_id;";
+
 
 
         $data = DB::connection('sqlsrv')->select($query, []);
