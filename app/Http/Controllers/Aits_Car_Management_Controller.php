@@ -58,7 +58,8 @@ class Aits_Car_Management_Controller extends Controller
                                 Action
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"  data-id="' . $data->id . '" href="javascript:void(0);">Add</a></li>
+                                <li hidden
+                                ><a class="dropdown-item"  data-id="' . $data->id . '" href="javascript:void(0);">Add</a></li>
                                 <li><a class="dropdown-item btn_view "  data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                                 <li><a class="dropdown-item btn_edit" data-id="' . $data->id . '" href="javascript:void(0);">Edit</a></li>
                             </ul>
