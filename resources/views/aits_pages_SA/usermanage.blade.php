@@ -285,8 +285,8 @@
                         </div>
 
                         <!-- <div class="col-2">
-                                                                                                                                                                                  <label>Passworod</label>
-                                                                                                                                                                                 <input type="password" id="edit_password" class="form-control spec_input"></div> -->
+                                                                                                                                                                                      <label>Passworod</label>
+                                                                                                                                                                                     <input type="password" id="edit_password" class="form-control spec_input"></div> -->
 
                     </div>
                     <br><br>
@@ -308,6 +308,10 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -548,7 +552,7 @@
                 });
             })
 
-            
+
             $(document).on('click', '.btn_delete', function () {
                 Swal.fire({
                     title: "Are you sure?",

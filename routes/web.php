@@ -1,21 +1,22 @@
 <?php
 
-use App\Http\Controllers\Aits_Car_Management_Controller;
-use App\Http\Controllers\Aits_Delivery_Controller;
-use App\Http\Controllers\Aits_logistics_approval;
-use App\Http\Controllers\Aits_Messenger_Controller;
-use App\Http\Controllers\Aits_Request_Room_approval_Controller;
-use App\Http\Controllers\Aits_Request_Room_Controller;
-use App\Http\Controllers\Aits_roles_controller;
-use App\Http\Controllers\Aits_Transit_Controller;
-use App\Http\Controllers\Aits_User_Controller;
+use App\Models\AitsDelivery;
+use App\Models\AitsRoleList;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AitsDeliveryApprove;
 use App\Http\Controllers\AitsTransitApproval;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Aits_User_Controller;
+use App\Http\Controllers\Aits_roles_controller;
 use App\Http\Controllers\RequestRoomController;
-use App\Http\Controllers\UserController;
-use App\Models\AitsDelivery;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Aits_logistics_approval;
+use App\Http\Controllers\Aits_Transit_Controller;
+use App\Http\Controllers\Aits_Delivery_Controller;
+use App\Http\Controllers\Aits_Messenger_Controller;
+use App\Http\Controllers\Aits_Request_Room_Controller;
+use App\Http\Controllers\Aits_Car_Management_Controller;
+use App\Http\Controllers\Aits_Request_Room_approval_Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,35 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
+Route::get('registed_user', function () {
+    if (Auth::check()) {
+
+        return redirect()->route('aits_dashboard');
+    }
+
+    $gender = DB::connection('ict_ticketing')->table('ref_gender')->get();
+    $citizen = DB::connection('ict_ticketing')->table('ref_citizenship')->get();
+    $civil = DB::connection('ict_ticketing')->table('ref_civil_status')->get();
+    $department = DB::connection('ict_ticketing')->table('ref_departments')->get();
+    $suffix = DB::connection('ict_ticketing')->table('ref_suffix')->get();
+
+    $role = AitsRoleList::where('status', 1)->get();
+
+
+
+
+
+    return view('aits_user_reg', compact('gender', 'citizen', 'civil', 'department', 'role', 'suffix'));
+
+})->name('registed_user');
+
+
+Route::controller (UserController::class)->group(function(){
+
+    Route::post('register_user','register_user')->name('register_user');
+
+
+});
 
 
 Route::controller(LoginController::class)->group(function () {
@@ -69,6 +99,9 @@ Route::controller(Aits_Request_Room_approval_Controller::class)->group(function 
     Route::get('get_room_approval_data', 'get_room_approval_data')->name('get_room_approval_data');
     Route::get('approved_room_request/{id}/{approve}', 'approved_room_request')->name('approved_room_request');
 });
+
+
+
 
 
 Route::controller(Aits_Transit_Controller::class)->group(function () {
