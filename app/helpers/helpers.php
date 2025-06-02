@@ -90,7 +90,7 @@ function dynamic_file($path)
 {
 
     if (config('app.env') == 'local') {
-        return (url('/') . $path);
+        return (url('/') . '/' . $path);
     } else {
         return url(env('APP_ENV') . 'public/' . $path);
     }
