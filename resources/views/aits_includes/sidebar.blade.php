@@ -99,12 +99,12 @@
                         <a href="javascript:void(0);"
                             class="side-menu__item {{in_array(true, $romm_request) ? 'active' : ''}}">
                             <i style="width:30px;" class="fa-solid fa-hotel"></i>
-                            <span class="side-menu__label">Service Request</span>
+                            <span class="side-menu__label">Service/Room Request</span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
                         <ul class="slide-menu child1">
                             <li class="slide side-menu__label1 ">
-                                <a href="javascript:void(0);">Service Request</a>
+                                <a href="javascript:void(0);">Service/Room Request</a>
                             </li>
                             <li class="slide">
                                 <a href="{{ route('request_room_view') }}"
@@ -113,8 +113,8 @@
                             </li>
                             <li class="slide">
                                 <a href="{{ route('transit_request_view') }}"
-                                    class="side-menu__item {{ Request::is('transit_request_view') ? 'active' : '' }}">Shuttle
-                                    Service Request
+                                    class="side-menu__item {{ Request::is('transit_request_view') ? 'active' : '' }}">
+                                    Service Vehicle Request
                                 </a>
                             </li>
 
@@ -220,10 +220,10 @@
 
 
                             <!-- <li class="slide">
-                                        <a href="{{ route('user_manage_view') }}"
-                                            class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                            Users Management</a>
-                                    </li> -->
+                                            <a href="{{ route('user_manage_view') }}"
+                                                class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                Users Management</a>
+                                        </li> -->
 
 
 
@@ -293,10 +293,7 @@
                                     class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
                                     User Management</a>
                             </li>
-
-
-
-
+                            
                         </ul>
                     </li>
 

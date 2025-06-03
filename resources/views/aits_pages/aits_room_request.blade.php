@@ -1,4 +1,3 @@
-
 @extends('aits_main_page')
 
 
@@ -63,9 +62,6 @@
 
 
 
-
-    <!-- Modal -->
-
     <!-- add user -->
     <div class="modal fade" id="add_room_request" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -83,7 +79,6 @@
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="date_from"
                                 type="datetime-local" class="form-control spec_input">
                         </div>
-
                         <div class="col-6">
                             <label>Date To</label>
                             <input id="date_to" type="datetime-local"
@@ -101,7 +96,6 @@
                                 @foreach ($room as $rooms)
                                     <option value="{{ $rooms->id }}">{{ $rooms->room_name }}</option>
                                 @endforeach
-
                             </Select>
                         </div>
                         <div class="col-6">
@@ -190,7 +184,6 @@
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-4">
@@ -317,7 +310,6 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-
                     success: function (e) {
                         if (e['isValid'] == false) {
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
@@ -335,14 +327,10 @@
                         $('#date_to').val("");
                         $('#date_from').val("");
                         $('#purpose').val("");
-
                     }
 
                 });
-
-
             });
-
             $('#event_val').change(function () {
                 $('#purpose').val('');
                 if ($(this).val() == "remarks") {
@@ -416,14 +404,10 @@
                                 ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']
                                 : ''
                         );
-
                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
-
                         $('#show_data_approve_date').val(e['data']['approve_date']);
-
                     }
                 });
-
             });
 
             $(document).on('click', '.btn_edit ', function () {
@@ -435,7 +419,6 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
-
                         $('#hidden_id').val(e['data']['id']);
                         $('#edit_update_from').val(e['data']['date_from'])
                         $('#edit_update_to').val(e['data']['date_to'])
@@ -443,15 +426,12 @@
                         $('#edit_purpose').val(e['data']['remarks'])
                         $('#edit_event').val(e['data']['event_id'])
                         $('#update_room_request_modal').modal('show');
-
                     }
                 });
             });
 
 
             $(document).on('click', '.btn_delete ', function () {
-
-
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You want to delete this request?!",
@@ -462,7 +442,6 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-
                         $.ajax({
                             url: "delete_request/" + $(this).data('id'),
                             success: function (e) {
@@ -478,13 +457,10 @@
                                     icon: "success"
                                 });
                                 $('#room_request_tbl').DataTable().ajax.reload();
-
                             }
                         })
-
                     }
                 });
-
             })
 
 
@@ -495,8 +471,6 @@
                 const edit_room_id = $('#edit_room_id').val();
                 const edit_edit_purpose = $('#edit_purpose').val()
                 const edit_event = $('#edit_event').val();
-
-
                 $.ajax({
                     url: "{{ route('update_request_room') }}",
                     type: "POST",
@@ -524,7 +498,6 @@
                             icon: "success"
                         });
                         $('#room_request_tbl').DataTable().ajax.reload();
-
                     }
                 })
             });
@@ -535,13 +508,9 @@
                     $('#edit_purpose_row').removeAttr('hidden');
                 }
                 else {
-
                     $('#edit_purpose_row').attr('hidden', true);
                 }
             })
-
-
-
 
         })
     </script>

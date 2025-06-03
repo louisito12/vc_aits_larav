@@ -33,10 +33,10 @@ class Aits_Messenger_Controller extends Controller
     {
 
 
-
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
             ->where('is_transact', 1)
             ->where('messenger_id', Auth::user()->id)
+            ->whereNot('request_status', 'Delivered')
             ->orderBy('procedures', 'asc')
             ->get();
         return DataTables::of($data)

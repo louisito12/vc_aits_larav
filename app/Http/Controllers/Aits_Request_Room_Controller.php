@@ -25,8 +25,6 @@ class Aits_Request_Room_Controller extends Controller
 
         $room = AitsRoomModel::where('status', 1)->get();
         $event = AitsEventModel::where('status', 1)->get();
-
-
         return view('aits_pages.aits_room_request', compact(['room', 'event']));
 
     }
@@ -58,7 +56,7 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
             }
 
-
+            
             if ($request->event_id == "remarks") {
                 if ($request->remarks == "") {
                     return response()->json([

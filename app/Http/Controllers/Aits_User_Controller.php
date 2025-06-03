@@ -42,9 +42,34 @@ class Aits_User_Controller extends Controller
         $offset = $request->input('start', 0);
         $limit = $request->input('length', 10);
 
-        $sql_counts = "  SELECT COUNT(*) AS counts FROM users LEFT JOIN tbl_personal_datas ON users.id = tbl_personal_datas.user_id WHERE users.id NOT IN(654,535) AND users.isactive=1";
-        $data_counts = DB::connection('main_user')->select($sql_counts);
+
+        //query
+        // $sql_counts = "  SELECT COUNT(*) AS counts FROM users LEFT JOIN tbl_personal_datas ON users.id = tbl_personal_datas.user_id WHERE users.id NOT IN(654,535) AND users.isactive=1";
+        // $data_counts = DB::connection('main_user')->select($sql_counts);
+        // $total = $data_counts[0]->counts;
+
+
+
+        $sql_counts = "SELECT COUNT(*) AS counts
+               FROM aits_users.dbo.users AS users
+               LEFT JOIN aits_users.dbo.tbl_personal_datas AS tbl_personal_datas ON users.id = tbl_personal_datas.user_id
+               LEFT JOIN cenuser_db.dbo.ref_departments AS department ON tbl_personal_datas.deparment_id = department.id
+               WHERE users.id NOT IN(654,535) AND users.isactive=1";
+
+        if ($search) {
+            $sql_counts .= " AND (CONCAT(tbl_personal_datas.firstname, ' ', tbl_personal_datas.lastname) LIKE ? 
+                       OR users.username LIKE ? OR department.description LIKE ?)";
+        }
+
+        $data_counts = DB::connection('main_user')->select($sql_counts, [
+            '%' . $search . '%',
+            '%' . $search . '%',
+            '%' . $search . '%',
+        ]);
+
         $total = $data_counts[0]->counts;
+
+
         $query = "SELECT users.id AS User_id,
             CONCAT(tbl_personal_datas.firstname, ' ', tbl_personal_datas.lastname) AS fullname,
             users.username,department.description AS department
@@ -66,6 +91,10 @@ class Aits_User_Controller extends Controller
             '%' . $search . '%',
             '%' . $search . '%',
         ]);
+
+
+
+
 
         $data_val = [];
         foreach ($data as $datas) {
@@ -217,10 +246,13 @@ class Aits_User_Controller extends Controller
                 ]);
             }
 
+
             $users_validation = UserModel::where(
                 'username',
                 $request->username
             )->whereNot('id', $request->id)->first();
+
+
             if ($users_validation) {
                 return response()->json([
                     'msg' => 'The username that you entered is already in used',
@@ -228,7 +260,6 @@ class Aits_User_Controller extends Controller
                     "isValid" => false,
                 ]);
             }
-
 
             $profile = 'male_blank.jpg';
             if ($request->gender_id == '1002') {
@@ -323,8 +354,6 @@ class Aits_User_Controller extends Controller
 
     public function role_update($user_id, $roles)
     {
-
-
         $roles_acces = DB::table('aits_role_access')->where('user_id', $user_id)->update([
             'status' => 0
         ]);

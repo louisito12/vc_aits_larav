@@ -450,7 +450,6 @@
                             + ' ' + e['data']['get_approver_data']['lastname'] : '');
                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                         $('#show_approve_date').val(e['data']['date_approved']);
-
                         if (e['data']['get_approver_data']) {
                             $('#show_approver').val(e['data']['get_approver_data']['firstname'] + ' ' + e['data']['get_approver_data']['lastname']);
                             $('#show_approve_date').val(e['data']['date_approved'])

@@ -24,8 +24,6 @@
                 </ol>
             </nav>
         </div>
-
-
     </div>
 
 
@@ -36,9 +34,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">Shuttle Request</div>
                     <button id="add_request_btn" class="btn btn-success m-3 ">Add Request</button>
-
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="table-responsive">
@@ -46,7 +42,6 @@
                                 <thead>
                                     <tr>
                                         <th>Request #</th>
-
                                         <th>Date Requested</th>
                                         <th>Departure Date</th>
                                         <th>Appointment Date</th>
@@ -79,8 +74,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
-                    <div class="row purpose_row">
+                    < class="row purpose_row">
                         <div class="col-2 purpose_col">
                             <label>Departure Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
@@ -101,6 +95,7 @@
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
                                 class="spec_input form-control">
                         </div>
+
                         <div class="col-4 purpose_col">
                             <label>Purpose</label>
                             <select name="" class="form-control spec_input" id="purpose">
@@ -111,62 +106,62 @@
                                 <option value="remarks">Others</option>
                             </select>
                         </div>
-
                         <div hidden class="col-2 purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input type="text" id="other_purpose" class="form-control spec_input">
                         </div>
-
+                </div>
+                <br><br>
+                <div class="row">
+                    <div class="col-6">
+                        <label>Destination</label>
+                        <textarea class="form-control" name="" id="destination"></textarea>
                     </div>
-                    <br><br>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>Destination</label>
-                            <textarea class="form-control" name="" id="destination"></textarea>
-                        </div>
-                        <div class="col-6">
-                            <label>Remarks</label>
-                            <textarea class="form-control" name="" id="remarks"></textarea>
-                        </div>
-                    </div>
-                    <br><br>
-                    <div class="row">
-                        <div class="col-3">
-                            <label>Client Name</label>
-                            <input type="text" id="client_name" class="form-control spec_input">
-                        </div>
-                        <div class="col-3">
-                            <label>Number of Passengers</label>
-                            <input type="number" id="number_pass" class="form-control spec_input">
-                        </div>
-                        <div class="col-3">
-                            <label>Manager</label>
-                            <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
-                            <select name="" class="form-control" id="manager_app">
-                                <option value="">Select Manager</option>
-                                @foreach ($manager as $managers)
-                                    <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
-                                        {{ $managers->lastname }}
-                                    </option>
-
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <label>OB Form</label>
-                            <input type="file" id="ob_form_file" class="form-control spec_input">
-                        </div>
+                    <div class="col-6">
+                        <label>Remarks</label>
+                        <textarea class="form-control" name="" id="remarks"></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="save_shuttle_btn" class="btn btn-primary">Save changes</button>
+                <br><br>
+                <div class="row">
+                    <div class="col-3">
+                        <label>Client Name</label>
+                        <input type="text" id="client_name" class="form-control spec_input">
+                    </div>
+                    <div class="col-3">
+                        <label>Number of Passengers</label>
+                        <input type="number" id="number_pass" class="form-control spec_input">
+                    </div>
+                    <div class="col-3">
+                        <label>Manager</label>
+                        <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
+                        <select name="" class="form-control" id="manager_app">
+                            <option value="">Select Manager</option>
+                            @foreach ($manager as $managers)
+                                <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
+                                    {{ $managers->lastname }}
+                                </option>
+
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label>OB Form</label>
+                        <input type="file" id="ob_form_file" class="form-control spec_input">
+                    </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="save_shuttle_btn" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
+    </div>
 
 
+
+    
 
 
 
@@ -413,7 +408,6 @@
                         }
 
                         if (procedure == "show_data") {
-    
                             $('#show_shuttle_modal').modal('show');
                             $('#show_id').val(e['data']['id']);
                             $('#show_departure_date').val(e['data']['departure_date']);
@@ -430,7 +424,6 @@
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
                             $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                             $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
-                    
                             $('#show_req_stats').val(e['data']['request_status']);
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                                 + ' ' + e['data']['get_approver_data']['lastname'] : '');

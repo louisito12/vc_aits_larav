@@ -34,11 +34,7 @@ class Aits_Transit_Controller extends Controller
 
     public function aits_save_shuttle_request(Request $request)
     {
-
-
         try {
-
-            // AitsShuttleRequest::get();
             $validated = Validator::make(
                 $request->all(),
                 [
@@ -193,7 +189,6 @@ class Aits_Transit_Controller extends Controller
 
             ->where('user_id', Auth::user()->id)->get();
 
-
         return $this->transit_data_table($data);
 
 
@@ -210,7 +205,6 @@ class Aits_Transit_Controller extends Controller
                     <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
                        </center> ';
                 }
-
 
                 return '
                     <center>
@@ -371,8 +365,8 @@ class Aits_Transit_Controller extends Controller
         OR (departure_date BETWEEN  '$fromDate' AND '$toDate')
         OR ('$fromDate' BETWEEN pick_up_date AND departure_date)
         OR ('$toDate' BETWEEN pick_up_date AND departure_date) )
-        AND request_status='Approved';
-        ";
+        AND request_status='Approved';";
+
         $data = DB::connection('sqlsrv')->select($query, []);
 
 

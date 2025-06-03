@@ -24,7 +24,6 @@ class AitsTransitApproval extends Controller
             ->get();
 
         $type = AitsShuttleType::where('status', 1)->get();
-
         $driver = AitsDriver::where('status', 1)->get();
         return view(
             'aits_pages.aits_transit_approval',
@@ -35,7 +34,8 @@ class AitsTransitApproval extends Controller
 
     public function get_approval_transit()
     {
-        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])->where('is_transact', 1)
+        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+            ->where('is_transact', 1)
             ->get();
         $new_controller = new Aits_Transit_Controller();
         return $new_controller->transit_data_table($data);
@@ -56,8 +56,6 @@ class AitsTransitApproval extends Controller
                 ]);
             }
 
-
-            
             AitsShuttleRequest::where('id', $request->id)->update([
                 'car_id' => $request->car_id,
                 'driver_id' => $request->driver_id,
@@ -66,6 +64,7 @@ class AitsTransitApproval extends Controller
                 "date_approved" => Carbon::now()
 
             ]);
+
 
             $object = [
                 'user_id' => Auth::user()->id,
@@ -138,8 +137,6 @@ class AitsTransitApproval extends Controller
             AND request_status = 'Approved'
             AND car_id = $car_id;";
 
-
-
         $data = DB::connection('sqlsrv')->select($query, []);
 
 
@@ -148,8 +145,6 @@ class AitsTransitApproval extends Controller
         if ($data) {
             $count = $data[0]->overlapping_count;
         }
-
-
         return $count;
 
     }

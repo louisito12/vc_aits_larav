@@ -114,7 +114,6 @@
                                 @foreach ($civil as $civils)
                                     <option value="{{ $civils->id}}">{{ $civils->description }}</option>
                                 @endforeach
-
                             </select>
                         </div>
                     </div>
@@ -126,7 +125,6 @@
                                 <option value="">Please Select Gender</option>
                                 @foreach ($gender as $genders)
                                     <option value="{{ $genders->id }}">{{ $genders->description }}</option>
-
                                 @endforeach
                             </select>
                         </div>

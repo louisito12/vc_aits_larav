@@ -96,6 +96,7 @@ class Aits_Delivery_Controller extends Controller
                 $rules
             );
 
+            
 
             if ($validated->fails()) {
                 return response()->json([
@@ -119,9 +120,10 @@ class Aits_Delivery_Controller extends Controller
             $data = AitsDelivery::create($request->except(['file']));
 
 
+
+            
             $this->uploade_file_transit($data->id, 'AitsDelivery', $request->file('file'), $request->procedures);
             $latestRecord = AitsDelivery::orderByDesc('id')->first();
-
             $latest_id = $latestRecord ? $latestRecord->id : null;
             $object = [
                 'user_id' => Auth::user()->id,

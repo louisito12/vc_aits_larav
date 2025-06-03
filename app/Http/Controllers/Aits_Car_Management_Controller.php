@@ -101,7 +101,6 @@ class Aits_Car_Management_Controller extends Controller
         return '<center><h5>' . $stat . '</h5></center>';
     }
 
-
     public function get_car_details($id)
     {
 
@@ -131,7 +130,6 @@ class Aits_Car_Management_Controller extends Controller
     public function edit_vehicle(Request $request)
     {
 
-
         try {
 
             $data = AitsVehicleModel::find($request->id);
@@ -149,7 +147,6 @@ class Aits_Car_Management_Controller extends Controller
 
     public function vehicle_insert_logs($data)
     {
-
         AitsVehicleModel::create([
             'is_transact' => 0,
             'brand' => $data->brand,
@@ -164,8 +161,4 @@ class Aits_Car_Management_Controller extends Controller
 
         ]);
     }
-
-
-
-
 }

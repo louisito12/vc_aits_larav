@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Pms_Maintenance_Controller;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
 use Illuminate\Support\Facades\Route;
@@ -62,9 +63,9 @@ Route::get('registed_user', function () {
 })->name('registed_user');
 
 
-Route::controller (UserController::class)->group(function(){
+Route::controller(UserController::class)->group(function () {
 
-    Route::post('register_user','register_user')->name('register_user');
+    Route::post('register_user', 'register_user')->name('register_user');
 
 
 });
@@ -190,6 +191,8 @@ Route::middleware(['auth'])->group(function () {
     //superadmin
     Route::get('aits_roles_view', [Aits_roles_controller::class, 'aits_roles_view'])->name('aits_roles_view');
     Route::get('aits_usermanagement', [Aits_User_Controller::class, 'aits_usermanagement'])->name('aits_usermanagement');
+    //pms
+    Route::get('pms_page', [Pms_Maintenance_Controller::class, 'pms_page'])->name('pms_page');
 });
 
 
