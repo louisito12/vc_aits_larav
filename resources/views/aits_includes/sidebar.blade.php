@@ -49,10 +49,10 @@
                         ->where('status', 1)
                         ->pluck('role_id')
                         ->toArray();
+                        
                     $romm_request = [
                         'request_room' => Request::is('request_room_view'),
                         'transit_request' => Request::is('transit_request_view'),
-
 
                     ];
 
@@ -199,7 +199,7 @@
                             <li class="slide">
                                 <a href="{{ route('aits_transit_approval_view') }}"
                                     class="side-menu__item {{ Request::is('aits_transit_approval_view') ? 'active' : '' }}">
-                                    Shuttle Service Approval</a>
+                                    Vehicle Service Approval</a>
                             </li>
 
 

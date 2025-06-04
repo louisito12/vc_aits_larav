@@ -54,7 +54,7 @@ class Aits_User_Controller extends Controller
                FROM aits_users.dbo.users AS users
                LEFT JOIN aits_users.dbo.tbl_personal_datas AS tbl_personal_datas ON users.id = tbl_personal_datas.user_id
                LEFT JOIN cenuser_db.dbo.ref_departments AS department ON tbl_personal_datas.deparment_id = department.id
-               WHERE users.id NOT IN(654,535) AND users.isactive=1";
+               WHERE users.id NOT IN(654,535) AND users.isactive=1 AND tbl_personal_datas.is_users=1";
 
         if ($search) {
             $sql_counts .= " AND (CONCAT(tbl_personal_datas.firstname, ' ', tbl_personal_datas.lastname) LIKE ? 
@@ -76,7 +76,7 @@ class Aits_User_Controller extends Controller
             FROM aits_users.dbo.users AS users
             LEFT JOIN aits_users.dbo.tbl_personal_datas AS tbl_personal_datas ON users.id = tbl_personal_datas.user_id
             LEFT JOIN cenuser_db.dbo.ref_departments AS department ON tbl_personal_datas.deparment_id = department.id WHERE
-            (users.id NOT IN(654,535) AND users.isactive=1)";
+            (users.id NOT IN(654,535) AND users.isactive=1 AND tbl_personal_datas.is_users=1)";
 
         if ($search) {
             $query .= " AND (CONCAT(tbl_personal_datas.firstname, ' ', tbl_personal_datas.lastname) LIKE ? 

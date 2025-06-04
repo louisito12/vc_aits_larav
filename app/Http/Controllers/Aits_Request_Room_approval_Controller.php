@@ -23,12 +23,51 @@ class Aits_Request_Room_approval_Controller extends Controller
 
     }
 
-    public function get_room_approval_data()
+    public function get_room_approval_data(Request $request)
     {
 
         try {
 
-            $data = AitsRequestRoomModel::where('is_transact', 1)->get();
+            // $data = AitsRequestRoomModel::
+            //     where('is_transact', 1);
+            // if ($request->pending_all) {
+            //     $data->where('request_status', 'Pending');
+            // }
+            // $data = $data->get();
+            // $data = AitsRequestRoomModel::where('is_transact', 1)
+            //     ->when($request->pending_all, function ($query) {
+            //         return $query->where('request_status', 'Pending');
+            //     })
+            //     ->when($request->filter_Data, function ($query) use ($request) {
+            //         $filter = "Pending";
+            //         return $query->where('request_status', $filter);
+            //     })
+            //     ->get();
+
+
+            $filters_arr = [
+                'all pending' => 'Pending',
+                'all approved' => 'Approved',
+                'all disapproved' => 'Disapproved'
+            ];
+            $filters = 'Pending';
+
+
+
+            $data = AitsRequestRoomModel::where('is_transact', 1);
+            if ($request->pending_all) {
+                $data->where('request_status', 'Pending');
+            }
+            if ($request->filter_data) {
+                if ($request->filter_data != 'all') {
+                    $filters = $filters_arr[$request->filter_data];
+                    $data->where('request_status', $filters);
+                }
+            }
+            $data = $data->get();
+
+
+
             $controller = new Aits_Request_Room_Controller();
             return $controller->room_request_datatable($data);
 
@@ -41,7 +80,7 @@ class Aits_Request_Room_approval_Controller extends Controller
         }
     }
 
-    public function approved_room_request($id, $approve)
+    public function approved_room_request($id, $approve, $remarks)
     {
         try {
             if ($approve == 1) {
@@ -52,7 +91,20 @@ class Aits_Request_Room_approval_Controller extends Controller
 
             }
 
-    
+
+            $object = [
+                'attachment_id' => $id,
+                'remarks' => $remarks,
+                'procedures' => $status . ' of Room Request',
+                'table_name' => 'aits_request_room_models',
+                'users_id' => Auth::user()->id,
+                'status' => 1,
+                'ate_created' => Carbon::now(),
+
+            ];
+            process_remarks($object);
+
+
 
 
             $query = AitsRequestRoomModel::where('id', $id)->update([

@@ -26,6 +26,39 @@
         </div>
 
 
+
+
+        <div class="d-flex my-xl-auto right-content align-items-center">
+
+
+            <div class="mb-xl-0">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="filter_btn" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Filter Request
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                        <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
+                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">All Pending</a></li>
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a></li>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Disapproved</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            &nbsp;
+
+            <div class="pe-1 mb-xl-0">
+                <button id="filter_request" type="button" class="btn btn-success  btn-icon me-2"><i
+                        class="fa-solid fa-magnifying-glass-location"></i></button>
+            </div>
+        </div>
+
+
+
+
+
     </div>
 
 
@@ -215,6 +248,16 @@
                         </div>
                     </div>
                     <br>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Approve Remarks</label>
+                            <textarea class="form-control" id="remarks"></textarea>
+                        </div>
+                    </div>
+                    <br>
+
+
                     <div class="row">
                         <div class="col-6">
                             <label>Brand</label>
@@ -263,12 +306,8 @@
 
     <script>
         $(document).ready(function () {
-            $('#tbl_transit').DataTable({
-                ajax: {
-                    url: "{{ route('get_approval_transit') }}",
-
-                },
-                columns: [
+            function get_columns() {
+                return [
                     {
                         data: "request_no"
                     },
@@ -312,7 +351,26 @@
                     {
                         data: "admin_action"
                     },
-                ]
+                ];
+            }
+
+
+            $('#tbl_transit').DataTable({
+                destroy: true,
+                ajax: {
+                    url: "{{ route('get_approval_transit') }}",
+                    type: "POST",
+                    data: {
+                        pending_data: 1,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                },
+
+                columns: get_columns(),
+
             });
 
 
@@ -389,31 +447,59 @@
                 }
                 if ($(this).data('val') == 2) {
                     //dissapproved
-                    Swal.fire({
-                        title: "Are you sure?",
-                        text: "You want to disapprove this request?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
 
-                            $.ajax({
-                                url: "disapprove_shuttle/" + $(this).data('id'),
-                                success: function (e) {
-                                    Swal.fire({
-                                        title: "Disapproved!",
-                                        text: "Your Request has been Disapproved.",
-                                        icon: "success"
-                                    });
-                                    $('#tbl_transit').DataTable().ajax.reload();
-                                }
-                            })
+               
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "You want to Disapprove this request?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, Disapprove it!",
+                            input: 'textarea',
+                            inputPlaceholder: 'Reason for deletion?',
+                            inputAttributes: {
+                                'aria-label': 'Enter your remarks'
+                            },
+                            showLoaderOnConfirm: true,
+                            preConfirm: (remarks) => {
+                                return new Promise((resolve, reject) => {
+                                    if (!remarks || remarks.trim() === '') {
+                                        Swal.showValidationMessage('Remarks are required!');
+                                        reject('Remarks are required!');
+                                        Swal.hideLoading();
+                                    } else {
+                                        $.ajax({
+                                            url: "disapprove_shuttle/" + $(this).data('id') + '/' + remarks,
+                                            success: function (e) {
+                                                if (e['isValid'] == false) {
+                                                    alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                                    reject('Deletion failed');
+                                                }
 
-                        }
-                    });
+                                                Swal.fire({
+                                                    title: "Disapprove!",
+                                                    text: "Your request has been Disapproved.",
+                                                    icon: "success"
+                                                });
+                                                $('#tbl_transit').DataTable().ajax.reload();
+                                                resolve();
+
+                                            },
+
+                                        });
+                                    }
+                                });
+                            }
+                        })
+            
+
+
+
+
+
+
                 }
 
 
@@ -487,7 +573,7 @@
                 const car_id_approve = $('#car_id').val();
                 const driver_id_approve = $('#driver_id').val();
                 const approve_id_approve = $('#approve_id').val();
-
+                const approve_remarks = $('#remarks').val();
                 if (car_id_approve == "" || driver_id_approve == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
                     return;
@@ -500,6 +586,7 @@
                         car_id: car_id_approve,
                         driver_id: driver_id_approve,
                         id: approve_id_approve,
+                        remarks: approve_remarks,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -521,6 +608,7 @@
                         $('#brand').val('');
                         $('#driver_id').val('');
                         $('#car_id').val('');
+                        $('#remarks').val('');
 
                     }
 
@@ -532,6 +620,44 @@
 
 
 
+
+
+            $('.filter_data').on('click', function () {
+                var filterValue = $(this).text().toLowerCase();
+                $('#filter_btn').text($(this).text());
+            })
+
+
+            $('#filter_request').click(function () {
+                const filter_params = $('#filter_btn').text().toLowerCase();
+                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved'];
+
+                if (!filter_array.includes(filter_params)) {
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.set('notifier', 'delay', 5);
+                    alertify.error('<span style="color: white;">Please select filter</span>');
+                    return;
+                }
+
+                $('#tbl_transit').DataTable({
+                    destroy: true,
+                    ajax: {
+                        url: "{{ route('get_approval_transit') }}",
+                        type: "POST",
+                        data: {
+                            filter_data: filter_params
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    },
+                    columns: get_columns()
+                });
+
+                $('#filter_btn').text('Filter Request');
+
+
+            });
 
 
 

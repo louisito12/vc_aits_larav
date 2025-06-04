@@ -74,7 +74,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    < class="row purpose_row">
+                    <div class="row purpose_row">
                         <div class="col-2 purpose_col">
                             <label>Departure Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
@@ -110,58 +110,58 @@
                             <label for="manager_app">Other Purpose</label>
                             <input type="text" id="other_purpose" class="form-control spec_input">
                         </div>
-                </div>
-                <br><br>
-                <div class="row">
-                    <div class="col-6">
-                        <label>Destination</label>
-                        <textarea class="form-control" name="" id="destination"></textarea>
                     </div>
-                    <div class="col-6">
-                        <label>Remarks</label>
-                        <textarea class="form-control" name="" id="remarks"></textarea>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Destination</label>
+                            <textarea class="form-control" name="" id="destination"></textarea>
+                        </div>
+                        <div class="col-6">
+                            <label>Remarks</label>
+                            <textarea class="form-control" name="" id="remarks"></textarea>
+                        </div>
                     </div>
-                </div>
-                <br><br>
-                <div class="row">
-                    <div class="col-3">
-                        <label>Client Name</label>
-                        <input type="text" id="client_name" class="form-control spec_input">
-                    </div>
-                    <div class="col-3">
-                        <label>Number of Passengers</label>
-                        <input type="number" id="number_pass" class="form-control spec_input">
-                    </div>
-                    <div class="col-3">
-                        <label>Manager</label>
-                        <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
-                        <select name="" class="form-control" id="manager_app">
-                            <option value="">Select Manager</option>
-                            @foreach ($manager as $managers)
-                                <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
-                                    {{ $managers->lastname }}
-                                </option>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Client Name</label>
+                            <input type="text" id="client_name" class="form-control spec_input">
+                        </div>
+                        <div class="col-3">
+                            <label>Number of Passengers</label>
+                            <input type="number" id="number_pass" class="form-control spec_input">
+                        </div>
+                        <div class="col-3">
+                            <label>Manager</label>
+                            <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
+                            <select name="" class="form-control" id="manager_app">
+                                <option value="">Select Manager</option>
+                                @foreach ($manager as $managers)
+                                    <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
+                                        {{ $managers->lastname }}
+                                    </option>
 
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-3">
-                        <label>OB Form</label>
-                        <input type="file" id="ob_form_file" class="form-control spec_input">
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <label>OB Form</label>
+                            <input type="file" id="ob_form_file" class="form-control spec_input">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="save_shuttle_btn" class="btn btn-primary">Save changes</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="save_shuttle_btn" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-    </div>
 
 
 
-    
+
 
 
 
@@ -616,9 +616,40 @@
 
             });
 
-            $(document).on('click', '.btn_delete ', function () {
+            // $(document).on('click', '.btn_delete ', function () {
+            //     Swal.fire({
+            //         title: "Are you sure?",
+            //         text: "You want to delete this request?",
+            //         icon: "warning",
+            //         showCancelButton: true,
+            //         confirmButtonColor: "#3085d6",
+            //         cancelButtonColor: "#d33",
+            //         confirmButtonText: "Yes, delete it!"
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             $.ajax({
+            //                 url: "delete_shuttle_request/" + $(this).data('id'),
+            //                 success: function (e) {
+            //                     Swal.fire({
+            //                         title: "Deleted!",
+            //                         text: "Your request has been deleted.",
+            //                         icon: "success"
+            //                     });
+
+            //                     $('#tbl_transit').DataTable().ajax.reload();
+
+            //                 }
+            //             })
+
+            //         }
+            //     });
+
+            // });
 
 
+
+
+            $(document).on('click', '.btn_delete', function () {
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You want to delete this request?",
@@ -626,28 +657,48 @@
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "delete_shuttle_request/" + $(this).data('id'),
-                            success: function (e) {
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your request has been deleted.",
-                                    icon: "success"
+                    confirmButtonText: "Yes, delete it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Reason for deletion?',
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "delete_shuttle_request/" + $(this).data('id') + '/' + remarks,
+                                    success: function (e) {
+                                        if (e['isValid'] == false) {
+                                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                            reject('Deletion failed');
+                                        }
+
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            text: "Your request has been deleted.",
+                                            icon: "success"
+                                        });
+                                        $('#tbl_transit').DataTable().ajax.reload();
+                                        resolve();
+
+                                    },
+
                                 });
-
-                                $('#tbl_transit').DataTable().ajax.reload();
-
                             }
-                        })
-
+                        });
                     }
-                });
-
-
+                })
             });
+
+
+
+
 
 
 

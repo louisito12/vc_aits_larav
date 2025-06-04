@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Aits_audit_logs;
+use App\Models\AitsProcessRemarks;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -134,4 +135,11 @@ function add_messenger()
 function insert_audit($object)
 {
     Aits_audit_logs::create($object);
+}
+
+
+function process_remarks($object)
+{
+
+    AitsProcessRemarks::create($object);
 }

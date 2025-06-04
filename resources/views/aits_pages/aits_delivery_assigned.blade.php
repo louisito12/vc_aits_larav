@@ -15,6 +15,57 @@
             </nav>
         </div>
 
+
+
+        <div class="d-flex my-xl-auto right-content align-items-center">
+
+
+
+            <div class="mb-xl-0">
+                <div class="dropdown">
+                    <button class="btn btn-warning dropdown-toggle" type="button" id="log_btn" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Logistics Type
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                        <li><a class="dropdown-item log_types" value="2" href="javascript:void(0);">All</a></li>
+                        <li><a class="dropdown-item log_types" value="2" href="javascript:void(0);">For Delivery</a></li>
+                        <li><a class="dropdown-item log_types" value="3" href="javascript:void(0);">For Collection</a>
+                        </li>
+                        <li><a class="dropdown-item log_types" value="4" href="javascript:void(0);">For Pick Up</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            &nbsp;
+
+
+            <div class="mb-xl-0">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="filter_btn" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Filter Request
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                        <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
+                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">For Assign</a></li>
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a></li>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">Completed</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            &nbsp;
+
+            <div class="pe-1 mb-xl-0">
+                <button id="filter_request" type="button" class="btn btn-success  btn-icon me-2"><i
+                        class="fa-solid fa-magnifying-glass-location"></i></button>
+            </div>
+        </div>
+
+
     </div>
 
 
@@ -120,6 +171,13 @@
                                 type="datetime-local" id="process_date">
 
 
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Remarks</label>
+                            <textarea class="form-control" id="assign_remarks"></textarea>
                         </div>
                     </div>
 
@@ -242,11 +300,9 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $('#deliver_tbl').DataTable({
-                ajax: {
-                    url: "{{ route('get_logistics_request') }}"
-                },
-                columns: [
+
+            function get_columns() {
+                return [
                     {
                         data: "request_no"
                     },
@@ -290,7 +346,22 @@
                     {
                         data: "action",
                     },
-                ]
+                ];
+            }
+            $('#deliver_tbl').DataTable({
+                destroy: true,
+                ajax: {
+                    url: "{{ route('get_logistics_request') }}",
+                    type: "POST",
+                    data: {
+                        pending_data: 1,
+                    },
+
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                },
+                columns: get_columns(),
             });
 
             $(document).on('click', '.btn_approved', function () {
@@ -326,6 +397,7 @@
                 const logistics_id = $('#hidden_id').val();
                 const messenger_id = $('#messenger_id').val();
                 const process_date = $('#process_date').val();
+                const assign_remarks = $('#assign_remarks').val();
 
                 $.ajax({
                     url: "{{ route('assigned_messenger') }}",
@@ -334,6 +406,7 @@
                         id: logistics_id,
                         messenger_id: messenger_id,
                         procedure_date: process_date,
+                        assign_remarks: assign_remarks,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -348,6 +421,7 @@
                         $('#assigne_mess_modal').modal('hide');
                         $('#deliver_tbl').DataTable().ajax.reload();
                         Swal.fire('Success!', 'The request has been Process.', 'success');
+                        $('#assign_remarks').val('');
                     }
                 })
 
@@ -402,11 +476,58 @@
                     }
                 })
 
+            });
+
+
+            $('.filter_data').on('click', function () {
+                var filterValue = $(this).text().toLowerCase();
+                $('#filter_btn').text($(this).text());
+            })
+
+            $('.log_types').on('click', function () {
+                var log_value = $(this).text().toLowerCase();
+                $('#log_btn').text($(this).text());
+            })
 
 
 
+            $('#filter_request').click(function () {
+                const filt_params = $('#filter_btn').text().trim().toLowerCase();
+                const logs_params = $('#log_btn').text().trim().toLowerCase();
+                const filter_array = ['all', 'for assign', 'rescheduled', 'completed'];
+                const logs_array = ['all', 'for delivery', 'for collection', 'for pick up'];
+
+                if (!filter_array.includes(filt_params) || !logs_array.includes(logs_params)) {
+                    alertify.set('notifier', 'position', 'top-right');
+                    alertify.set('notifier', 'delay', 5);
+                    alertify.error('<span style="color: white;">Please select Logistics and Filter</span>');
+                    return;
+                }
+
+
+                $('#deliver_tbl').DataTable({
+                    destroy: true,
+                    ajax: {
+                        url: "{{ route('get_logistics_request') }}",
+                        type: "POST",
+                        data: {
+                            // filter_data: filter_params
+                            filt_params: filt_params,
+                            logs_params: logs_params,
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    },
+                    columns: get_columns()
+                });
+
+                $('#filter_btn').text('Filter Request');
+                $('#log_btn').text('Logistics Type')
 
             });
+
+
 
 
         });

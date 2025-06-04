@@ -96,7 +96,7 @@ class Aits_Delivery_Controller extends Controller
                 $rules
             );
 
-            
+
 
             if ($validated->fails()) {
                 return response()->json([
@@ -121,7 +121,7 @@ class Aits_Delivery_Controller extends Controller
 
 
 
-            
+
             $this->uploade_file_transit($data->id, 'AitsDelivery', $request->file('file'), $request->procedures);
             $latestRecord = AitsDelivery::orderByDesc('id')->first();
             $latest_id = $latestRecord ? $latestRecord->id : null;
@@ -388,9 +388,23 @@ class Aits_Delivery_Controller extends Controller
 
 
 
-    public function delete_delivery_request($id)
+    public function delete_delivery_request($id, $remarks)
     {
         $data = AitsDelivery::where('id', $id)->update(['status' => 0]);
+
+
+        $object = [
+            'attachment_id' => $id,
+            'remarks' => $remarks,
+            'procedures' => 'Delete Logistics Request',
+            'table_name' => 'aits_deliveries',
+            'users_id' => Auth::user()->id,
+            'status' => 1,
+            'ate_created' => Carbon::now(),
+
+        ];
+        process_remarks($object);
+
 
         $object = [
             'user_id' => Auth::user()->id,

@@ -162,7 +162,6 @@ class Aits_Transit_Controller extends Controller
             $fname = $item->getClientOriginalName();
             $year = Carbon::now()->year;
             $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
-
             AitsFileModel::create([
                 "table_name" => $table_name,
                 "attachment_id" => $id,
@@ -173,7 +172,6 @@ class Aits_Transit_Controller extends Controller
                 "status" => 1,
                 "date_created" => Carbon::now()
             ]);
-
 
             $item->move('aits_shuttle_file/' . $year . '/', $format_name . '.' . $ext);
         }
@@ -186,7 +184,6 @@ class Aits_Transit_Controller extends Controller
     {
 
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
-
             ->where('user_id', Auth::user()->id)->get();
 
         return $this->transit_data_table($data);
@@ -383,11 +380,28 @@ class Aits_Transit_Controller extends Controller
 
     }
 
-    public function delete_shuttle_request($id)
+    public function delete_shuttle_request($id, $remarks)
     {
         try {
 
             AitsShuttleRequest::where('id', $id)->update(['status' => 0]);
+
+
+
+
+            $object = [
+                'attachment_id' => $id,
+                'remarks' => $remarks,
+                'procedures' => 'Cancell Shuttle Request',
+                'table_name' => 'aits_shuttle_requests',
+                'users_id' => Auth::user()->id,
+                'status' => 1,
+                'ate_created' => Carbon::now(),
+
+            ];
+            process_remarks($object);
+
+
 
 
             $object = [

@@ -93,12 +93,12 @@ Route::controller(Aits_Request_Room_Controller::class)->group(function () {
     Route::get('get_request_data', 'get_request_data')->name('get_request_data');
     Route::get('retrieve_room_request/{id}', 'retrieve_room_request')->name('retrieve_room_request');
     Route::post('update_request_room', 'update_request_room')->name('update_request_room');
-    Route::get('delete_request/{id}', 'delete_request')->name('delete_request');
+    Route::get('delete_request/{id}/{remarks}', 'delete_request')->name('delete_request');
 });
 
 Route::controller(Aits_Request_Room_approval_Controller::class)->group(function () {
-    Route::get('get_room_approval_data', 'get_room_approval_data')->name('get_room_approval_data');
-    Route::get('approved_room_request/{id}/{approve}', 'approved_room_request')->name('approved_room_request');
+    Route::post('get_room_approval_data', 'get_room_approval_data')->name('get_room_approval_data');
+    Route::get('approved_room_request/{id}/{approve}/{remarks}', 'approved_room_request')->name('approved_room_request');
 });
 
 
@@ -109,7 +109,7 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
     Route::post('aits_save_shuttle_request', 'aits_save_shuttle_request')->name('aits_save_shuttle_request');
     Route::get('get_shuttel_request_data', 'get_shuttel_request_data')->name('get_shuttel_request_data');
     Route::get('retrieve_shuttle_request/{id}', 'retrieve_shuttle_request')->name('retrieve_shuttle_request');
-    Route::get('delete_shuttle_request/{id}', 'delete_shuttle_request')->name('delete_shuttle_request');
+    Route::get('delete_shuttle_request/{id}/{remarks}', 'delete_shuttle_request')->name('delete_shuttle_request');
     Route::post('update_shuttle_request', 'update_shuttle_request')->name('update_shuttle_request');
     Route::get('show_list_managers', 'show_list_managers')->name('show_list_managers');
 });
@@ -120,7 +120,7 @@ Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::get('show_delivery_request/{procedure}', 'show_delivery_request')->name('show_delivery_request');
     Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
     Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
-    Route::get('delete_delivery_request/{id}', 'delete_delivery_request')->name('delete_delivery_request');
+    Route::get('delete_delivery_request/{id}/{remarks}', 'delete_delivery_request')->name('delete_delivery_request');
     Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');
 
 });
@@ -135,13 +135,13 @@ Route::controller(Aits_Car_Management_Controller::class)->group(function () {
 
 
 Route::controller(AitsTransitApproval::class)->group(function () {
-    Route::Get('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
-    Route::Get('disapprove_shuttle/{id}', 'disapprove_shuttle')->name('disapprove_shuttle');
+    Route::post('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
+    Route::Get('disapprove_shuttle/{id}/{remarks}', 'disapprove_shuttle')->name('disapprove_shuttle');
     Route::post('approve_shuttle_request', 'approve_shuttle_request')->name('approve_shuttle_request');
 });
 
 Route::controller(Aits_logistics_approval::class)->group(function () {
-    Route::get('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
+    Route::post('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
     Route::post('assigned_messenger', 'assigned_messenger')->name('assigned_messenger');
 
 });

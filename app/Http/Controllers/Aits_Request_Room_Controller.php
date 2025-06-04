@@ -56,7 +56,7 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
             }
 
-            
+
             if ($request->event_id == "remarks") {
                 if ($request->remarks == "") {
                     return response()->json([
@@ -486,11 +486,31 @@ class Aits_Request_Room_Controller extends Controller
 
     }
 
-    public function delete_request($id)
+    public function delete_request($id, $remarks)
     {
         try {
             AitsRequestRoomModel::where('id', $id)->update(['status' => 0]);
 
+            $object = [
+                'attachment_id' => $id,
+                'remarks' => $remarks,
+                'procedures' => 'Cancel of Room Request',
+                'table_name' => 'aits_request_room_models',
+                'users_id' => Auth::user()->id,
+                'status' => 1,
+                'ate_created' => Carbon::now(),
+
+            ];
+            process_remarks($object);
+
+            // aits_process_remarks
+            // -attachment_id
+            // -remarks
+            // -users
+            // -procedures
+            // -table_name
+            // -status
+            // -date_created
 
 
             $object = [

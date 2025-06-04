@@ -548,7 +548,7 @@
 
 
 
-                      
+
 
                         if (e['data']['messenger_file'] == 'nofile') {
                             return;
@@ -562,37 +562,84 @@
                 })
             })
 
+            // $(document).on('click', '.btn_delete', function () {
+            //     Swal.fire({
+            //         title: "Are you sure?",
+            //         text: "You want to delete this request ?",
+            //         icon: "warning",
+            //         showCancelButton: true,
+            //         confirmButtonColor: "#3085d6",
+            //         cancelButtonColor: "#d33",
+            //         confirmButtonText: "Yes, delete it!"
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             $.ajax({
+            //                 url: "delete_delivery_request/" + $(this).data('id'),
+            //                 success: function (e) {
+            //                     $('#deliver_tbl').DataTable().ajax.reload();
+            //                     Swal.fire({
+            //                         title: "Deleted!",
+            //                         text: "Your request has been deleted.",
+            //                         icon: "success"
+            //                     });
+            //                 }
+            //             })
+
+
+            //         }
+            //     });
+
+            // })
+
+
+
             $(document).on('click', '.btn_delete', function () {
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "You want to delete this request ?",
+                    text: "You want to delete this request?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "delete_delivery_request/" + $(this).data('id'),
-                            success: function (e) {
-                                $('#deliver_tbl').DataTable().ajax.reload();
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your request has been deleted.",
-                                    icon: "success"
+                    confirmButtonText: "Yes, delete it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Reason for deletion?',
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "delete_delivery_request/" + $(this).data('id') + '/' + remarks,
+                                    success: function (e) {
+                                        if (e['isValid'] == false) {
+                                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                            reject('Deletion failed');
+                                        }
+
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            text: "Your request has been deleted.",
+                                            icon: "success"
+                                        });
+                                        $('#deliver_tbl').DataTable().ajax.reload();
+                                        resolve();
+
+                                    },
+
                                 });
                             }
-                        })
-
-
+                        });
                     }
-                });
+                })
+            });
 
-
-
-
-            })
 
             $('#edit_delivery').click(function () {
 

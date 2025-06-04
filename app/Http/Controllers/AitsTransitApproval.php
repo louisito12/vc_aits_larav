@@ -32,11 +32,35 @@ class AitsTransitApproval extends Controller
     }
 
 
-    public function get_approval_transit()
+    public function get_approval_transit(Request $request)
     {
+        $filters_arr = [
+            'all pending' => 'Pending',
+            'all approved' => 'Approved',
+            'all disapproved' => 'Disapproved'
+        ];
+        $filters = 'Pending';
+
+
+
+
+
+
+
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
-            ->where('is_transact', 1)
-            ->get();
+            ->where('is_transact', 1);
+        if ($request->pending_data) {
+            $data->where('request_status', 'Pending')->where('status', 1);
+        }
+        if ($request->filter_data) {
+            if ($request->filter_data != 'all') {
+                $filters = $filters_arr[$request->filter_data];
+                $data->where('request_status', $filters);
+            }
+        }
+
+
+        $data = $data->get();
         $new_controller = new Aits_Transit_Controller();
         return $new_controller->transit_data_table($data);
 
@@ -65,6 +89,21 @@ class AitsTransitApproval extends Controller
 
             ]);
 
+            $object = [
+                'attachment_id' => $request->id,
+                'remarks' => $request->remarks,
+                'procedures' => 'Approve- Shuttle Request',
+                'table_name' => 'aits_shuttle_requests',
+                'users_id' => Auth::user()->id,
+                'status' => 1,
+                'ate_created' => Carbon::now(),
+
+            ];
+            process_remarks($object);
+
+
+
+
 
             $object = [
                 'user_id' => Auth::user()->id,
@@ -90,13 +129,31 @@ class AitsTransitApproval extends Controller
 
 
 
-    public function disapprove_shuttle($id)
+    public function disapprove_shuttle($id, $remarks)
     {
         AitsShuttleRequest::where('id', $id)->update([
             'approved_by' => Auth::user()->id,
             'request_status' => "Disapproved",
             "date_approved" => Carbon::now()
         ]);
+
+
+        $object = [
+            'attachment_id' => $id,
+            'remarks' => $remarks,
+            'procedures' => 'Disapprove Shuttle Request',
+            'table_name' => 'aits_shuttle_requests',
+            'users_id' => Auth::user()->id,
+            'status' => 1,
+            'ate_created' => Carbon::now(),
+
+        ];
+        process_remarks($object);
+
+
+
+
+
 
 
         $object = [

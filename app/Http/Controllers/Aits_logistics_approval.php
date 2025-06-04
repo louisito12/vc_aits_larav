@@ -16,11 +16,59 @@ class Aits_logistics_approval extends Controller
 {
 
 
-    public function get_logistics_request()
+    public function get_logistics_request(Request $request)
     {
 
-        $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->where('is_transact', 1)
-            ->orderBy('procedures', 'asc')
+
+        $logistics_arr = [
+            'all' => 0,
+            'for delivery' => 1,
+            'for collection' => 2,
+            'for pick up' => 3,
+        ];
+
+        $filter = [
+            'all' => 0,
+            'for assign' => 'Pending',
+            'rescheduled' => 'Reschedule',
+            'completed' => 'Delivered'
+        ];
+
+
+
+
+
+
+        //  <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
+        //     <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">For Assign</a></li>
+        //     <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a></li>
+        //     <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">Completed</a>
+
+
+
+        $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
+            ->where('is_transact', 1);
+        if ($request->pending_data) {
+            $data->where('request_status', 'Pending');
+        }
+        if ($request->filt_params) {
+            $filters = $filter[$request->filt_params];
+            if ($filters != 0) {
+                $data->where('request_status', $filter);
+            }
+        }
+        if ($request->logs_params) {
+            $logistics = $logistics_arr[$request->logs_params];
+            if ($logistics != 0) {
+                $data->where('procedures', $logistics);
+            }
+        }
+
+
+
+
+
+        $data = $data->orderBy('procedures', 'asc')
             ->get();
         return DataTables::of($data)
             ->addColumn('request_no', function ($data) {
@@ -101,7 +149,6 @@ class Aits_logistics_approval extends Controller
             ->addColumn('action', function ($data) {
 
                 $hidden = $data->messenger_id != null ? 'hidden' : '';
-
                 return '
              <div  class="btn-group dropstart input_spec my-1">
             <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
@@ -135,6 +182,8 @@ class Aits_logistics_approval extends Controller
                         'required',
                     ],
                     'procedure_date' => ['required'],
+                    'assign_remarks' => ['required'],
+
 
                 ],
             );
