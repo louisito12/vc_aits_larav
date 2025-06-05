@@ -234,8 +234,6 @@ class LoginController extends Controller
                 'logistics_request' => 'aits_deliver_assign',
             ];
 
-
-
         }
 
 
@@ -243,21 +241,20 @@ class LoginController extends Controller
 
         $room_approve_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as approve_room FROM aits_request_room_models WHERE (is_transact=1 AND request_status ='Approved')$room_request ")[0]->approve_room;
 
-        $room_pending_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as pending_room FROM aits_request_room_models WHERE (is_transact=1 AND request_status !='Approved')$room_request")[0]->pending_room;
+        $room_pending_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as pending_room FROM aits_request_room_models WHERE (is_transact=1 AND request_status NOT IN ('Approved','Disapproved'))$room_request")[0]->pending_room;
 
 
         $logistics_pending_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as pending_logistics FROM aits_deliveries WHERE (is_transact=1 AND request_status !='Delivered')$user_id")[0]->pending_logistics;
 
+        
         $logistics_approve_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as approve_logistics FROM aits_deliveries WHERE (is_transact=1 AND request_status ='Delivered')$user_id")[0]->approve_logistics;
 
         $shuttle_approve_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as approve_shuttle FROM aits_shuttle_requests WHERE (is_transact=1 AND request_status ='Approved')$user_id")[0]->approve_shuttle;
 
-        $shuttle_pending_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as pending_shuttle FROM aits_shuttle_requests WHERE (is_transact=1 AND request_status !='Approved')$user_id")[0]->pending_shuttle;
+        
+        $shuttle_pending_counts = DB::connection('sqlsrv')->select("SELECT COUNT(*) as pending_shuttle FROM aits_shuttle_requests WHERE (is_transact=1 AND request_status NOT IN ('Approved','Disapproved'))$user_id")[0]->pending_shuttle;
 
-
-
-
-
+   
         return view('aits_pages.aits_dashboard', compact('room_approve_counts', 'room_pending_counts', 'logistics_pending_counts', 'logistics_approve_counts', 'shuttle_approve_counts', 'shuttle_pending_counts', 'is_admin', 'links'));
 
 

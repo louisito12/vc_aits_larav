@@ -49,7 +49,7 @@
                         ->where('status', 1)
                         ->pluck('role_id')
                         ->toArray();
-                        
+
                     $romm_request = [
                         'request_room' => Request::is('request_room_view'),
                         'transit_request' => Request::is('transit_request_view'),
@@ -84,6 +84,7 @@
 
 
                     $super_admin = ["aits_roles_view" => request::is('aits_roles_view')];
+                    $pms = ["pms_page" => request::is('pms_page')];
 
                 @endphp
 
@@ -220,10 +221,10 @@
 
 
                             <!-- <li class="slide">
-                                            <a href="{{ route('user_manage_view') }}"
-                                                class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                                Users Management</a>
-                                        </li> -->
+                                                                <a href="{{ route('user_manage_view') }}"
+                                                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                                    Users Management</a>
+                                                            </li> -->
 
 
 
@@ -293,13 +294,44 @@
                                     class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
                                     User Management</a>
                             </li>
-                            
+
                         </ul>
                     </li>
 
 
                 @endif
 
+
+
+
+                @if(Auth::user()->id == 1)
+                    <br>
+                    <!-- Messenger Side -->
+                    <li class="slide has-sub {{in_array(true,  $pms) ? 'open' : ''}}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{in_array(true,  $pms) ? 'active' : ''}}">
+                            <i style="width: 30px;" class="fa-solid fa-screwdriver-wrench"></i>
+
+                            <span class="side-menu__label">PMS Management</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">PMS Management</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('pms_page') }}"
+                                    class="side-menu__item {{ Request::is('pms_page') ? 'active' : '' }}">
+                                    PMS Management</a>
+                            </li>
+
+
+
+                        </ul>
+                    </li>
+
+
+                @endif
 
 
 

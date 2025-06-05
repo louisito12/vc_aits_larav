@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use DateTime;
+use Validator;
 use Carbon\Carbon;
+use App\Models\Pms_Details;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class Pms_Maintenance_Controller extends Controller
 {
@@ -87,5 +92,100 @@ class Pms_Maintenance_Controller extends Controller
     public function pms_page()
     {
         return view('pms_page.pms_sample');
+    }
+
+    public function save_pms_request(Request $request)
+    {
+
+        try {
+            $validated = Validator::make(
+                $request->all(),
+                [
+                    'pms_name' => [
+                        'required',
+                    ],
+                    'pms_description' => ['required'],
+                    'pms_date_types' => ['required'],
+                    'date_start' => ['required'],
+                ],
+            );
+
+            if ($validated->fails()) {
+                return response()->json([
+                    'msg' => 'All fields are required!',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
+            $request->merge([
+                'user_id' => Auth::user()->id,
+                'date_created' => Carbon::now(),
+            ]);
+
+
+            Pms_Details::create($request->all());
+            return response()->json([
+                'msg' => 'Successfully Inserted PMS',
+                'status' => 200,
+                "isValid" => true,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+
+    }
+
+
+    public function get_pms_data()
+    {
+
+        $data = Pms_Details::where('status', 1)->get();
+        return DataTables::of($data)
+            ->addColumn('action', function ($data) {
+                return '
+                    <center>
+                 
+                    <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
+                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
+                    </center> ';
+            })
+            ->addColumn('date_start', function ($data) {
+                return Carbon::parse($data->date_start)->format('M j, Y');
+
+            })
+            ->rawColumns(['action', 'status', 'admin_action'])
+            ->make(true);
+
+    }
+
+    public function get_pms_details($id)
+    {
+
+
+
+        try {
+
+            $data = Pms_Details::find($id);
+            $data->date_start = Carbon::parse($data->date_start)->format('Y-m-d');
+            return response()->json([
+                'msg' => 'Successfully Provided',
+                'data' => $data,
+                'status' => 200,
+                "isValid" => true,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
     }
 }

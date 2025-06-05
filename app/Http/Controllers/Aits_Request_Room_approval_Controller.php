@@ -56,7 +56,7 @@ class Aits_Request_Room_approval_Controller extends Controller
 
             $data = AitsRequestRoomModel::where('is_transact', 1);
             if ($request->pending_all) {
-                $data->where('request_status', 'Pending');
+                $data->where('request_status', 'Pending')->where('status', 1);
             }
             if ($request->filter_data) {
                 if ($request->filter_data != 'all') {

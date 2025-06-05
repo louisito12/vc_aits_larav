@@ -23,6 +23,11 @@
             text-align: center !important;
             vertical-align: middle;
         }
+
+
+        .alertify-logs {
+            z-index: 999999 !important;
+        }
     </style>
 
 
@@ -63,7 +68,7 @@
 
 
     <!-- add user -->
-    <div class="modal fade" id="add_room_request" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal fade" id="add_room_request" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -312,6 +317,8 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
+                            alertify.set('notifier', 'position', 'top-right');
+                            alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -416,6 +423,8 @@
                     type: "GET",
                     success: function (e) {
                         if (e['isValid'] == false) {
+                            alertify.set('notifier', 'position', 'top-right');
+                            alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -535,7 +544,9 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.set('notifier', 'position', 'top-right');
+                            alertify.set('notifier', 'delay', 5);
+                            alertify.error('<span class="custom-error-msg">' + e['msg'] + '</span>').setting('modal', true);
                             return;
                         }
                         $('#update_room_request_modal').modal('hide');

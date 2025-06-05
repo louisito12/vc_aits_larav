@@ -171,6 +171,12 @@ Route::controller(Aits_User_Controller::class)->group(function () {
     Route::get('users_delete/{id}', 'users_delete')->name('users_delete');
 });
 
+Route::controller(Pms_Maintenance_Controller::class)->group(function () {
+    Route::post('save_pms_request', 'save_pms_request')->name('save_pms_request');
+    Route::get('get_pms_data', 'get_pms_data')->name('get_pms_data');
+    Route::get('get_pms_details/{id}', 'get_pms_details')->name('get_pms_details');
+});
+
 
 
 //pages authentication

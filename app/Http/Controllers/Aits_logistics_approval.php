@@ -36,16 +36,6 @@ class Aits_logistics_approval extends Controller
 
 
 
-
-
-
-        //  <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
-        //     <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">For Assign</a></li>
-        //     <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a></li>
-        //     <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">Completed</a>
-
-
-
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
             ->where('is_transact', 1);
         if ($request->pending_data) {
@@ -54,8 +44,9 @@ class Aits_logistics_approval extends Controller
         if ($request->filt_params) {
             $filters = $filter[$request->filt_params];
             if ($filters != 0) {
-                $data->where('request_status', $filter);
+                $data->where('request_status', $filters);
             }
+
         }
         if ($request->logs_params) {
             $logistics = $logistics_arr[$request->logs_params];
@@ -65,6 +56,8 @@ class Aits_logistics_approval extends Controller
         }
 
 
+
+        
 
 
 

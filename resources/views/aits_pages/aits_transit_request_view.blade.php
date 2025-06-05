@@ -548,6 +548,8 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
+                            alertify.set('notifier', 'position', 'top-right');
+                            alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -675,6 +677,8 @@
                                     url: "delete_shuttle_request/" + $(this).data('id') + '/' + remarks,
                                     success: function (e) {
                                         if (e['isValid'] == false) {
+                                            alertify.set('notifier', 'position', 'top-right');
+                                            alertify.set('notifier', 'delay', 5);
                                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                                             reject('Deletion failed');
                                         }

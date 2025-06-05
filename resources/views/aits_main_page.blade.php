@@ -571,6 +571,47 @@
                 <!-- Dito lagay main content -->
                 @yield('content')
                 <!-- Dito lagay main content -->
+
+
+
+                <div class="modal fade" id="pms_modal" tabindex="-1" aria-labelledby="taskNotificationModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-warning text-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="taskNotificationModalLabel">Action Required PMS</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
+                                    Please complete the
+                                    following tasks:
+                                </p>
+                                <ul>
+                                    <li>Review the latest
+                                        project update.
+                                    </li>
+                                    <li> Submit your
+                                        timesheet for last week.
+                                    </li>
+                                    <li> Attend the team
+                                        meeting at 3 PM.
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
         <!-- Footer Start -->
@@ -595,6 +636,12 @@
     </script>
     @include('aits_includes.scripts')
     @yield('scripts')
+
+    <script>
+        $(document).ready(function () {
+            // $('#pms_modal').modal('show');
+        })
+    </script>
 </body>
 
 </html>
