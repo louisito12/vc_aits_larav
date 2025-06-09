@@ -44,7 +44,7 @@ class TransactJobs implements ShouldQueue
                     'schedule' => ucfirst($record->pms_date_types),
                 ];
 
-                Mail::to('louisitoojide@gmail.com')->send(new PmsMailer($data));
+                Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
                 $record->update(['is_email' => 0]);
             }
 
