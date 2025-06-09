@@ -90,7 +90,7 @@
             </table>
 
             <p>If you have any questions, feel free to reach out to our support team.</p>
-            <a href="#" class="btn btn-primary">View Details</a>
+         
         </div>
         <div class="email-footer">
             <p>&copy; 2025 Your Company. All rights reserved.</p>

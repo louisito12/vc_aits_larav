@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use DateTime;
 use Validator;
 use Carbon\Carbon;
+use App\Mail\PmsMailer;
+use App\Models\PmsFiles;
 use App\Models\Pms_Details;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class Pms_Maintenance_Controller extends Controller
 {
@@ -91,7 +94,19 @@ class Pms_Maintenance_Controller extends Controller
 
     public function pms_page()
     {
+        // $start_date = '2025-02-01';
+        // echo next_date_pms($start_date, 'monthly') . '===>';  
+        // echo next_date_pms($start_date, 'yearly') . '====>';    
+        // echo next_date_pms($start_date, 'quarterly') . '====>'; 
+        // Mail::to('ictsysdev@valuecarehealth.com')->send(new PmsMailer([]));
+
+        // $dateString = '2025-07-09 00:00:00.000';
+        // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
+        // echo $formattedDate; // Outputs: 2025-07-09
+
+
         return view('pms_page.pms_sample');
+
     }
 
     public function save_pms_request(Request $request)
@@ -123,8 +138,11 @@ class Pms_Maintenance_Controller extends Controller
                 'date_created' => Carbon::now(),
             ]);
 
+            $pms = Pms_Details::create($request->all());
+            $pms_id = $pms->id;
+            $start_date = next_date_pms($request->date_start, $request->pms_date_types);
+            $this->insert_pms_alert($pms_id, $start_date);
 
-            Pms_Details::create($request->all());
             return response()->json([
                 'msg' => 'Successfully Inserted PMS',
                 'status' => 200,
@@ -144,33 +162,57 @@ class Pms_Maintenance_Controller extends Controller
 
     public function get_pms_data()
     {
-
         $data = Pms_Details::where('status', 1)->get();
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
+                $pms_button = '';
+                $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
+                if ($pms_file) {
+                    $date1 = $pms_file->pms_date;
+                    $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                    $result = compare_dates($date1, $date2);
+                    if ($result == -1) {
+                        $pms_button = ' <button type="button" data-id=' . $data->id . ' class="btn btn-success btn-sm btn_pms spec_input"> <i  class="fa-solid fa-screwdriver-wrench"></i></button>';
+                    }
+                }
                 return '
                     <center>
-                 
                     <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
-                    </center> ';
+                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>'
+                    . $pms_button .
+                    ' </center> ';
             })
             ->addColumn('date_start', function ($data) {
                 return Carbon::parse($data->date_start)->format('M j, Y');
 
             })
-            ->rawColumns(['action', 'status', 'admin_action'])
+            ->addColumn('pms_status', function ($data) {
+                $stat = '';
+                $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
+                if ($pms_file) {
+                    $date1 = $pms_file->pms_date;
+                    $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                    $result = compare_dates($date1, $date2);
+                    if ($result === -1) {
+                        $stat = '<h6><span class="badge rounded-pill bg-danger">Need For PMS !</span></h6>';
+                    }
+
+                }
+
+
+                return $stat;
+
+            })
+            ->rawColumns(['action', 'status', 'admin_action', 'pms_status'])
             ->make(true);
+
 
     }
 
+
     public function get_pms_details($id)
     {
-
-
-
         try {
-
             $data = Pms_Details::find($id);
             $data->date_start = Carbon::parse($data->date_start)->format('Y-m-d');
             return response()->json([
@@ -188,4 +230,192 @@ class Pms_Maintenance_Controller extends Controller
             ]);
         }
     }
+
+    public function pms_edit_details(Request $request)
+    {
+        try {
+            $validated = Validator::make(
+                $request->all(),
+                [
+                    'pms_name' => [
+                        'required',
+                    ],
+                    'pms_description' => ['required'],
+                    'pms_date_types' => ['required'],
+                    'date_start' => ['required'],
+                ],
+            );
+
+            
+            if ($validated->fails()) {
+                return response()->json([
+                    'msg' => 'All fields are required!',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
+
+            Pms_Details::where('id', $request->id)->update($request->except(['id']));
+            $start_date = next_date_pms($request->date_start, $request->pms_date_types);
+            $this->insert_pms_alert($request->id, $start_date);
+
+
+            return response()->json([
+                'msg' => 'Successfully Updated PMS',
+                'status' => 200,
+                "isValid" => true,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+
+    }
+
+    public function delete_pms_request($id)
+    {
+        try {
+
+            Pms_Details::where('id', $id)->update([
+                'status' => 0,
+            ]);
+
+            PmsFiles::where('pms_id', $id)->update(['status' => 0]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+
+    }
+
+
+
+
+
+
+    public function insert_pms_alert($pms_id, $start_date)
+    {
+        try {
+
+            $update_pms = PmsFiles::where('pms_id', $pms_id)->update(['status' => 2]);
+
+            PmsFiles::create([
+                'pms_id' => $pms_id,
+                'pms_date' => $start_date,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ]);
+
+
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+
+
+
+
+    }
+
+
+
+
+    public function add_pms_remarks(Request $request)
+    {
+        try {
+
+            foreach ($request->file('file') as $item) {
+                $ext = $item->getClientOriginalExtension();
+                $fname = $item->getClientOriginalName();
+                $year = Carbon::now()->year;
+                $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
+                PmsFiles::where('pms_id', $request->pms_id)->whereNull('uploader_id')->where('status', 1)->update([
+                    "remarks" => $request->remarks,
+                    "orig" => $fname,
+                    "file_name" => $format_name . '.' . $ext,
+                    "folder" => "pms_files",
+                    "year" => Carbon::now()->year,
+                    "link" => url('/'),
+                    "status" => 3,
+                    "date_uploaded" => Carbon::now(),
+                    'uploader_id' => Auth::user()->id,
+                ]);
+                $item->move('pms_files/' . $year . '/', $format_name . '.' . $ext);
+            }
+
+            $pms_file = PmsFiles::whereNotNull('uploader_id')->where('status', 3)->orderByDesc('id')->first();
+            $pms_details = Pms_Details::find($pms_file->pms_id);
+            $dateString = $pms_file->pms_date;
+            $date_start = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
+            $start_date = next_date_pms($date_start, $pms_details->pms_date_types);
+            $this->insert_pms_alert($pms_file->pms_id, $start_date);
+
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+    }
+
+
+
+    // public function pms_uploade_remarks($pms_id, $files, $remarks, $next_date)
+    // {
+    //     foreach ($files as $item) {
+    //         $ext = $item->getClientOriginalExtension();
+    //         $fname = $item->getClientOriginalName();
+    //         $year = Carbon::now()->year;
+    //         $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
+    //         PmsFiles::where('pms_id', $pms_id)->update([
+    //             "remarks" => $remarks,
+    //             "orig" => $fname,
+    //             "file_name" => $format_name . '.' . $ext,
+    //             "folder" => "pms_files",
+    //             "year" => Carbon::now()->year,
+    //             "link" => url('/'),
+    //             "status" => 3,
+    //             "pms_date" => $next_date,
+    //             "date_uploaded" => Carbon::now(),
+    //             'uploader_id' => Auth::user()->id,
+    //         ]);
+
+    //         $item->move('pms_files/' . $year . '/', $format_name . '.' . $ext);
+    //     }
+    // }
+
+
+
+    //     public function test_dates()
+    // {
+    //     $date1 = Pms_Details::first()->date_start;
+    //     $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+    //     $result = compare_dates($date1, $date2);
+
+    //     if ($result === 1) {
+    //         // date_1 mas advance ng oras to
+    //         echo "$date1 is later.";
+    //     } elseif ($result === -1) {
+    //         //mas lamang yung ngayon
+    //         echo "$date2 is later.";
+    //     }
+    // }
+
 }

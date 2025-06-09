@@ -45,20 +45,14 @@ Route::get('registed_user', function () {
 
         return redirect()->route('aits_dashboard');
     }
-
     $gender = DB::connection('ict_ticketing')->table('ref_gender')->get();
     $citizen = DB::connection('ict_ticketing')->table('ref_citizenship')->get();
     $civil = DB::connection('ict_ticketing')->table('ref_civil_status')->get();
     $department = DB::connection('ict_ticketing')->table('ref_departments')->get();
     $suffix = DB::connection('ict_ticketing')->table('ref_suffix')->get();
-
     $role = AitsRoleList::where('status', 1)->get();
-
-
-
-
-
     return view('aits_user_reg', compact('gender', 'citizen', 'civil', 'department', 'role', 'suffix'));
+
 
 })->name('registed_user');
 
@@ -112,6 +106,7 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
     Route::get('delete_shuttle_request/{id}/{remarks}', 'delete_shuttle_request')->name('delete_shuttle_request');
     Route::post('update_shuttle_request', 'update_shuttle_request')->name('update_shuttle_request');
     Route::get('show_list_managers', 'show_list_managers')->name('show_list_managers');
+
 });
 
 
@@ -122,7 +117,6 @@ Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
     Route::get('delete_delivery_request/{id}/{remarks}', 'delete_delivery_request')->name('delete_delivery_request');
     Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');
-
 });
 
 
@@ -156,12 +150,12 @@ Route::controller(Aits_Messenger_Controller::class)->group(function () {
 
 
 Route::controller(Aits_roles_controller::class)->group(function () {
-
     Route::post('save_roles', 'save_roles')->name('save_roles');
     Route::get('roles_data', 'roles_data')->name('roles_data');
     Route::post('edit_roles', 'edit_roles')->name('edit_roles');
     Route::get('role_delete/{id}', 'role_delete')->name('role_delete');
 });
+
 
 Route::controller(Aits_User_Controller::class)->group(function () {
     Route::post('show_users', 'show_users')->name('show_users');
@@ -171,10 +165,15 @@ Route::controller(Aits_User_Controller::class)->group(function () {
     Route::get('users_delete/{id}', 'users_delete')->name('users_delete');
 });
 
+
 Route::controller(Pms_Maintenance_Controller::class)->group(function () {
     Route::post('save_pms_request', 'save_pms_request')->name('save_pms_request');
     Route::get('get_pms_data', 'get_pms_data')->name('get_pms_data');
     Route::get('get_pms_details/{id}', 'get_pms_details')->name('get_pms_details');
+    Route::post('pms_edit_details', 'pms_edit_details')->name('pms_edit_details');
+    Route::get('delete_pms_request/{id}', 'delete_pms_request')->name('delete_pms_request');
+    Route::get('test_dates', 'test_dates')->name('test_dates');
+    Route::post('add_pms_remarks', 'add_pms_remarks')->name('add_pms_remarks');
 });
 
 
@@ -193,7 +192,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_collection_view', [Aits_Delivery_Controller::class, 'aits_collection_view'])->name('aits_collection_view');
     Route::get('aits_pick_up_view', [Aits_Delivery_Controller::class, 'aits_pick_up_view'])->name('aits_pick_up_view');
     Route::get('aits_messenger_view', [Aits_Messenger_Controller::class, 'aits_messenger_view'])->name('aits_messenger_view');
-
     //superadmin
     Route::get('aits_roles_view', [Aits_roles_controller::class, 'aits_roles_view'])->name('aits_roles_view');
     Route::get('aits_usermanagement', [Aits_User_Controller::class, 'aits_usermanagement'])->name('aits_usermanagement');
@@ -202,9 +200,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+
 Route::get('email_template', function () {
     return view('emails.email');
 });
+
 Route::get('test_pdf', [Aits_Messenger_Controller::class, 'test_pdf'])->name('test_pdf');
 
 // role -> admin,driver('itenerary arrive'),messenger(''),user
