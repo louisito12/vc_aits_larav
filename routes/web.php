@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Pms_Maintenance_Controller;
+use App\Http\Controllers\PmsvalidationController;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
 use Illuminate\Support\Facades\Route;
@@ -176,7 +177,10 @@ Route::controller(Pms_Maintenance_Controller::class)->group(function () {
     Route::post('add_pms_remarks', 'add_pms_remarks')->name('add_pms_remarks');
 });
 
+Route::controller(PmsvalidationController::class)->group(function () {
+    Route::get('pms_alert', 'pms_alert')->name('pms_alert');
 
+});
 
 //pages authentication
 Route::middleware(['auth'])->group(function () {

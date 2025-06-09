@@ -280,7 +280,7 @@
                                                 <label for="edit_username">Username</label>
                                                 <input type="text"
                                                     class="form-control spec_input @error('username') is-invalid @enderror"
-                                                    id="edit_username" name="username" value="{{ old('username') }}">
+                                                    id="edit_username" name="username"  oninput="Convert_uppercase(this)" value="{{ old('username') }}">
                                                 @error('username')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror

@@ -587,18 +587,10 @@
                                 <p>
                                     <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
                                     Please complete the
-                                    following tasks:
+                                    following PMS:
                                 </p>
-                                <ul>
-                                    <li>Review the latest
-                                        project update.
-                                    </li>
-                                    <li> Submit your
-                                        timesheet for last week.
-                                    </li>
-                                    <li> Attend the team
-                                        meeting at 3 PM.
-                                    </li>
+                                <ul id="pms_body">
+
                                 </ul>
 
                             </div>
@@ -636,11 +628,35 @@
     </script>
     @include('aits_includes.scripts')
     @yield('scripts')
+    @php
+        $roles = DB::table('aits_role_access')
+            ->where('user_id', Auth::user()->id)
+            ->where('status', 1)
+            ->pluck('role_id')
+            ->toArray();
 
+    @endphp
+    
     <script>
-        $(document).ready(function () {
-            // $('#pms_modal').modal('show');
-        })
+        @if(in_array(5, $roles))
+            $(document).ready(function () {
+                $.ajax({
+                    url: "{{ route('pms_alert') }}",
+                    type: "GET",
+                    success: function (e) {
+                        if (e['count'] != 0) {
+                            $('#pms_modal').modal('show');
+                        }
+                        $('#pms_body').empty();
+                        $.each(e['data'], function (index, item) {
+                            if (item['get_pms_details'] && item['get_pms_details']['pms_name']) {
+                                $('#pms_body').append('<li>' + item['get_pms_details']['pms_name'] + '</li>');
+                            }
+                        });
+                    }
+                })
+            })
+        @endif
     </script>
 </body>
 
