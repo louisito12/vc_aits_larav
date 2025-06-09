@@ -53,14 +53,14 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
-                     
-                                <div class="d-flex justify-content-center py-4">
-                                    <a href="{{ route('login') }}" class="logo d-flex align-items-center w-auto">
-                                        <img src="{{ asset('new_assets/assets/img/vc_red2.png') }}" alt="">
-                                        <span class="d-none d-lg-block">VC-AITS </span>
-                                    </a>
-                                </div>
-                         
+
+                            <div class="d-flex justify-content-center py-4">
+                                <a href="{{ route('login') }}" class="logo d-flex align-items-center w-auto">
+                                    <img src="{{ asset('new_assets/assets/img/vc_red2.png') }}" alt="">
+                                    <span class="d-none d-lg-block">VC-AITS </span>
+                                </a>
+                            </div>
+
 
                             <div class="d-flex justify-content-center">
                                 <a href="{{ route('login') }}" class="logo d-flex align-items-center w-auto">
@@ -280,7 +280,8 @@
                                                 <label for="edit_username">Username</label>
                                                 <input type="text"
                                                     class="form-control spec_input @error('username') is-invalid @enderror"
-                                                    id="edit_username" name="username"  oninput="Convert_uppercase(this)" value="{{ old('username') }}">
+                                                    id="edit_username" name="username" oninput="Convert_uppercase(this)"
+                                                    value="{{ old('username') }}">
                                                 @error('username')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
