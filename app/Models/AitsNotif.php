@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AitsNotif extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

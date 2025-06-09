@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DepartmentModel;
 use Validator;
 use Carbon\Carbon;
 use App\Models\AitsArea;
+use App\Models\AitsNotif;
 use App\Models\UserModel;
 use App\Models\AitsDelivery;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
+use App\Models\DepartmentModel;
 use App\Models\AitsDeliveryType;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 
 class Aits_Delivery_Controller extends Controller
@@ -135,6 +136,15 @@ class Aits_Delivery_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
 
+
+            AitsNotif::create([
+                'aits_table' => "aits_deliveries",
+                'aits_id' => $latest_id,
+                'aits_process' => 'Request',
+                'send_to_user_id' => 'admin',
+                'date_created' => Carbon::now(),
+     
+            ]);
 
             insert_audit($object);
             // public function uploade_file_transit($id, $table_name, $files, $delivery)

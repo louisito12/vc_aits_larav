@@ -1,4 +1,32 @@
 @extends('aits_main_page')
+<style>
+    .input-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .clear-btn {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .clear-btn:focus {
+        outline: none;
+    }
+
+    textarea {
+        padding-right: 30px;
+        /* Space for the button */
+    }
+</style>
 @section('content')
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
@@ -97,6 +125,43 @@
 
                         </div>
                     </div>
+
+                    <br><br>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio_btn" type="radio" name="selection" id="email"
+                                    value="1">
+                                <label class="form-check-label" for="email">Email</label>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio_btn" type="radio" name="selection" id="system_only"
+                                    value="2">
+                                <label class="form-check-label" for="system_only">System Only</label>
+                                <input type="text" name="" hidden id="is_email">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row send_to_row">
+                        <div class="col-12">
+                            <label>Send to</label>
+                            <select id="send_to" class="form-control  select2" multiple="multiple">
+
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label>CC to</label>
+                            <select id="cc_to" class="form-control  select2" multiple="multiple">
+
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -149,6 +214,44 @@
 
                         </div>
                     </div>
+
+
+                    <br><br>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio_btn" type="radio" name="edit_selection" id="email"
+                                    value="1">
+                                <label class="form-check-label" for="email">Email</label>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input radio_btn" type="radio" name="edit_selection"
+                                    id="system_only" value="2">
+                                <label class="form-check-label" for="system_only">System Only</label>
+                                <input type="text" name="" hidden id="edit_is_email">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row edit_send_to_row">
+                        <div class="col-12">
+                            <label>Send to</label>
+                            <select id="edit_send_to" class="form-control  select2" multiple="multiple">
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label>CC to</label>
+                            <select id="edit_cc_to" class="form-control  select2" multiple="multiple">
+                            </select>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -210,10 +313,12 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+
             $('#add_pms_btn').click(function () {
                 $('#add_pms_modal').modal('show');
+                $('.send_to_row').attr('hidden', true);
+                $('#is_email').val('');
             });
-
 
             $('#tbl_pms').DataTable({
                 destroy: true,
@@ -246,12 +351,15 @@
                 ],
             });
 
-
             $('#add_pms_save').click(function () {
                 const pms_name = $('#pms_name').val();
                 const pms_start = $('#pms_start').val();
                 const pms_type = $('#pms_type').val();
                 const pms_description = $('#pms_description').val();
+                const send_to = $('#send_to').val();
+                const cc_to = $('#cc_to').val();
+
+                const is_email = $('#is_email').val();
 
 
                 $.ajax({
@@ -260,6 +368,7 @@
                     data: {
                         pms_name: pms_name, pms_description: pms_description,
                         pms_date_types: pms_type, date_start: pms_start,
+                        send_to: send_to, cc_to: cc_to, is_email,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -281,18 +390,23 @@
                         $('#add_pms_modal').modal('hide');
                         $('#tbl_pms').DataTable().ajax.reload();
                         Swal.fire('Success!', 'Your PMS has been successfully added.', 'success');
-
+                        $('#cc_to').val(null).trigger('change');
+                        $('#send_to').val(null).trigger('change');
+                        $('input[name="selection"]').prop('checked', false);
                     }
                 })
             });
 
             $(document).on('click', '.btn_edit', function () {
+                $('#edit_is_email').val("");
+                $('#edit_cc_to').val(null).trigger('change');
+                $('#edit_send_to').val(null).trigger('change');
+                $('.edit_send_to_row').attr('hidden', true);
                 $.ajax({
                     url: "get_pms_details/" + $(this).data('id'),
                     type: "GET",
                     success: function (e) {
                         if (e['isValid'] == false) {
-
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
@@ -305,10 +419,48 @@
                         $('#edit_pms_date_types').val(e['data']['pms_date_types']);
                         $('#edit_pms_description').val(e['data']['pms_description']);
                         $('#edit_date_start').val(e['data']['date_start']);
+
+
+                        var send_to = e['data']['send_to'];
+                        var cc_to = e['data']['cc_to'];
+                        // var send_to_arr = send_to.split(",");
+
+                        var send_to_diff = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
+                        $('#edit_send_to').prepend(send_to_diff).trigger('change');
+
+
+                        var cc_def_option = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
+                        $('#edit_cc_to').prepend(cc_def_option).trigger('change');
+
+
+                        if (e['data']['is_email'] == 1) {
+                            $('#edit_cc_to').val(null).trigger('change');
+                            $('#edit_send_to').val(null).trigger('change');
+                            send_to.forEach(function (email) {
+                                var newOption = new Option(email, email, true, true);
+                                $('#edit_send_to').append(newOption).trigger('change');
+                            });
+
+                            cc_to.forEach(function (email) {
+                                var newOption = new Option(email, email, true, true);
+                                $('#edit_cc_to').append(newOption).trigger('change');
+                            });
+                            $('#edit_is_email').val(1);
+                            $('.edit_send_to_row').removeAttr('hidden');
+
+                        }
+
+                        var isEmail = e['data']['is_email'];
+                        $('input[name="edit_selection"]').prop('checked', false);
+                        $('input[name="edit_selection"][value="' + isEmail + '"]').prop('checked', true);
+
+
+
+
+
                     }
                 })
             });
-
 
             $(document).on('click', '.btn_pms', function () {
                 $('#add_pms_remarks_modal').modal('show');
@@ -333,13 +485,16 @@
                 })
             });
 
-
             $('#edit_pms_btn').click(function () {
                 const edit_id = $('#edit_id').val();
                 const edit_pms_name = $('#edit_pms_name').val();
                 const edit_date_start = $('#edit_date_start').val();
                 const edit_pms_date_types = $('#edit_pms_date_types').val();
                 const edit_pms_description = $('#edit_pms_description').val();
+                const edit_is_email = $('#edit_is_email').val();
+                const edit_cc_to = $('#edit_cc_to').val();
+                const edit_send_to = $('#edit_send_to').val();
+
 
                 $.ajax({
                     url: "{{ route('pms_edit_details') }}",
@@ -347,7 +502,8 @@
                     data: {
                         id: edit_id, pms_name: edit_pms_name,
                         date_start: edit_date_start, pms_date_types: edit_pms_date_types,
-                        pms_description: edit_pms_description,
+                        pms_description: edit_pms_description, is_email: edit_is_email,
+                        cc_to: edit_cc_to, send_to: edit_send_to,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -366,7 +522,6 @@
                     },
                 })
             });
-
 
             $(document).on('click', '.btn_delete', function () {
                 Swal.fire({
@@ -403,7 +558,6 @@
 
 
             });
-
 
             $('#save_remarks_pms').click(function () {
                 const pms_remarks = $('#pms_remarks').val();
@@ -469,6 +623,65 @@
 
 
             })
+
+            $('input[name="selection"]').change(function () {
+                var select_radio = $(this).val();
+                $('#is_email').val('');
+                if (select_radio == 1) {
+                    $('#is_email').val(1);
+                    $('.send_to_row').removeAttr('hidden');
+                }
+                else {
+                    $('#is_email').val(0);
+                    $('.send_to_row').attr('hidden', true);
+                }
+
+
+                $('#cc_to').val(null).trigger('change');
+                $('#send_to').val(null).trigger('change');
+
+                var send_opt = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
+                $('#send_to').prepend(send_opt).trigger('change');
+
+
+                var cc_def_opt = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
+                $('#cc_to').prepend(cc_def_opt).trigger('change');
+            });
+
+            $('input[name="edit_selection"]').change(function () {
+                var select_radio = $(this).val();
+                if (select_radio == 1) {
+                    $('#edit_is_email').val(1);
+                    $('.edit_send_to_row').removeAttr('hidden');
+                }
+                else {
+                    $('#edit_is_email').val(0);
+                    $('.edit_send_to_row').attr('hidden', true);
+                }
+            });
+
+            $('#send_to').select2({
+                tags: true,
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#cc_to').select2({
+                tags: true,
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#edit_send_to').select2({
+                tags: true,
+                tokenSeparators: [',', ' ']
+            });
+
+            $('#edit_cc_to').select2({
+                tags: true,
+                tokenSeparators: [',', ' ']
+            });
+
+
+
         });
 
     </script>

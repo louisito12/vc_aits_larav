@@ -1,4 +1,3 @@
-
 <script src="{{asset('aits_asset/assets/libs/@popperjs/core/umd/popper.min.js')}}"></script>
 
 
@@ -48,4 +47,7 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.15.10/sweetalert2.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.4.1/alertify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.4.1/alertify.min.js"></script>
+
+<!-- select 2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AitsDelivery;
-use App\Models\AitsMessenger;
+use Validator;
 use Carbon\Carbon;
+use App\Models\AitsNotif;
+use App\Models\AitsDelivery;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
+use App\Models\AitsMessenger;
 use App\Models\DepartmentModel;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
-use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class Aits_logistics_approval extends Controller
 {
@@ -57,7 +58,7 @@ class Aits_logistics_approval extends Controller
 
 
 
-        
+
 
 
 
@@ -212,6 +213,18 @@ class Aits_logistics_approval extends Controller
                 'status' => 1,
                 'date_created' => Carbon::now(),
             ];
+
+
+            AitsNotif::create([
+                'aits_table' => "aits_shuttle_requests",
+                'aits_id' => $request->id,
+                'aits_process' => 'assign_messenger',
+                'send_to_user_id' => $request->messenger_id,
+                'date_created' => Carbon::now(),
+                'remarks' => $request->assign_remarks,
+            ]);
+
+
 
 
             insert_audit($object);

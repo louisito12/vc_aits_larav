@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AitsDriver;
-use App\Models\AitsLogisticsResched;
 use Validator;
 use Carbon\Carbon;
 use App\Models\AitsArea;
+use App\Models\AitsNotif;
+use App\Models\AitsDriver;
 use App\Models\AitsDelivery;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
 use App\Models\DepartmentModel;
 use App\Models\AitsDeliveryType;
 use Yajra\DataTables\DataTables;
+use App\Models\AitsLogisticsResched;
 use Illuminate\Support\Facades\Auth;
 use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
 
@@ -258,9 +259,14 @@ class Aits_Messenger_Controller extends Controller
             ];
             insert_audit($object);
 
-
-
-
+            AitsNotif::create([
+                'aits_table' => "aits_deliveries",
+                'aits_id' => $request->id,
+                'aits_process' => $status . ' messenger',
+                'send_to_user_id' => $data->user_id,
+                'date_created' => Carbon::now(),
+                'remarks' => $remarks,
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([

@@ -304,7 +304,7 @@
 
 
 
-                @if(Auth::user()->id == 1)
+                @if(in_array(5, $roles))
                     <br>
                     <!-- Messenger Side -->
                     <li class="slide has-sub {{in_array(true,  $pms) ? 'open' : ''}}">

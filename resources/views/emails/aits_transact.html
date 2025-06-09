@@ -115,37 +115,81 @@
     <div class="email-container">
 
         <div class="email-body">
-            <p>Good day!</p>
-            <p>We wanted to inform you that there will be a Preventive Maintenance.</p>
+            <b>
+                <p>Email Notification from Admin Information Tracking System</p>
+            </b>
+            <br>
 
             <table>
                 <tbody>
                     <tr>
-                        <th>PMS</th>
+                        <th>Request Number</th>
                         <td>{{ $mail_data['pms_name'] }}</td>
                     </tr>
                     <tr>
-                        <th>Date Started</th>
+                        <th>Requestor</th>
                         <td>{{ $mail_data['date_start'] }}</td>
                     </tr>
                     <tr>
-                        <th>Description</th>
+                        <th>Room</th>
                         <td>{{ $mail_data['pms_description'] }}</td>
                     </tr>
                     <tr>
-                        <th>PMS Schedule</th>
+                        <th>Schedule From</th>
+                        <td>{{ $mail_data['schedule'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schedule To</th>
+                        <td>{{ $mail_data['schedule'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Request Status</th>
                         <td>{{ $mail_data['schedule'] }}</td>
                     </tr>
                 </tbody>
             </table>
-
+            <br><br><br>
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Request Number</th>
+                        <td>{{ $mail_data['pms_name'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Requestor</th>
+                        <td>{{ $mail_data['date_start'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Room</th>
+                        <td>{{ $mail_data['pms_description'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schedule From</th>
+                        <td>{{ $mail_data['schedule'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schedule To</th>
+                        <td>{{ $mail_data['schedule'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Request Status</th>
+                        <td>{{ $mail_data['schedule'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
             <p>If you have any questions, feel free to reach out to our support team.</p>
+
 
         </div>
 
+
+
+
+
+
         <div class="email-footer">
-            <p>&copy; 2025 Your Company. All rights reserved.</p>
-            <p><a href="#">Unsubscribe</a> | <a href="#">Privacy Policy</a></p>
+            <p>&copy; 2025 Valucare. All rights reserved.</p>
+
         </div>
     </div>
 

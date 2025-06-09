@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Carbon\Carbon;
+use App\Models\AitsNotif;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
 use App\Models\AitsShuttleType;
@@ -113,6 +114,14 @@ class Aits_Transit_Controller extends Controller
             $data = AitsShuttleRequest::create($request->except(['file']));
             $this->uploade_file_transit($data->id, "AitsShuttleRequest", 'aits_shuttle_file', $request->file('file'));
 
+
+            AitsNotif::create([
+                'aits_table' => "aits_shuttle_requests",
+                'aits_id' => $data->id,
+                'aits_process' => 'Request',
+                'send_to_user_id' => 'admin',
+                'date_created' => Carbon::now(),
+            ]);
 
             $latestRecord = AitsShuttleRequest::orderByDesc('id')->first();
             $latest_id = $latestRecord ? $latestRecord->id : null;

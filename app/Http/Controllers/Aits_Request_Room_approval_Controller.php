@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\AitsNotif;
 use Illuminate\Http\Request;
 use App\Models\AitsRoomModel;
 use App\Models\AitsEventModel;
@@ -104,7 +105,16 @@ class Aits_Request_Room_approval_Controller extends Controller
             ];
             process_remarks($object);
 
+            $request_room_details = AitsRequestRoomModel::where('id', $id)->first();
 
+            AitsNotif::create([
+                'aits_table' => "aits_request_room_models",
+                'aits_id' => $id,
+                'aits_process' => $status,
+                'send_to_user_id' => $request_room_details->request_by,
+                'date_created' => Carbon::now(),
+                'remarks' => $remarks,
+            ]);
 
 
             $query = AitsRequestRoomModel::where('id', $id)->update([

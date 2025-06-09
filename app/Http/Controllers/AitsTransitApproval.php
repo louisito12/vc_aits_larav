@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\AitsNotif;
 use App\Models\AitsDriver;
 use Illuminate\Http\Request;
 use App\Models\AitsShuttleType;
@@ -103,6 +104,15 @@ class AitsTransitApproval extends Controller
 
 
 
+            AitsNotif::create([
+                'aits_table' => "aits_shuttle_requests",
+                'aits_id' => $request->id,
+                'aits_process' => 'Approve',
+                'send_to_user_id' => $data->user_id,
+                'date_created' => Carbon::now(),
+                'remarks' => $request->remarks,
+            ]);
+
 
 
             $object = [
@@ -149,8 +159,16 @@ class AitsTransitApproval extends Controller
 
         ];
         process_remarks($object);
+        $data = AitsShuttleRequest::where('id', $id)->first();
 
-
+        AitsNotif::create([
+            'aits_table' => "aits_shuttle_requests",
+            'aits_id' => $id,
+            'aits_process' => 'Disapprove',
+            'send_to_user_id' => $data->user_id,
+            'date_created' => Carbon::now(),
+            'remarks' => $remarks,
+        ]);
 
 
 

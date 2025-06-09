@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <br>
-                    <div id="purpose_row" hidden class="row">
+                    <div id="purpose_row"  class="row">
                         <div class="col-12">
                             <label>Purpose</label>
                             <textarea class="form-control" id="purpose"></textarea>
@@ -338,16 +338,16 @@
 
                 });
             });
-            $('#event_val').change(function () {
-                $('#purpose').val('');
-                if ($(this).val() == "remarks") {
-                    $('#purpose_row').removeAttr('hidden');
-                }
-                else {
+            // $('#event_val').change(function () {
+            //     $('#purpose').val('');
+            //     if ($(this).val() == "remarks") {
+            //         $('#purpose_row').removeAttr('hidden');
+            //     }
+            //     else {
 
-                    $('#purpose_row').attr('hidden', true);
-                }
-            })
+            //         $('#purpose_row').attr('hidden', true);
+            //     }
+            // })
 
             $('#room_request_tbl').DataTable({
                 ajax: {
@@ -561,15 +561,15 @@
                 })
             });
 
-            $('#edit_event').change(function () {
-                $('#edit_purpose').val('');
-                if ($(this).val() == "remarks") {
-                    $('#edit_purpose_row').removeAttr('hidden');
-                }
-                else {
-                    $('#edit_purpose_row').attr('hidden', true);
-                }
-            })
+            // $('#edit_event').change(function () {
+            //     $('#edit_purpose').val('');
+            //     if ($(this).val() == "remarks") {
+            //         $('#edit_purpose_row').removeAttr('hidden');
+            //     }
+            //     else {
+            //         $('#edit_purpose_row').attr('hidden', true);
+            //     }
+            // })
 
         })
     </script>

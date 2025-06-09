@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserModel;
 use DateTime;
 use Validator;
 use Carbon\Carbon;
@@ -123,7 +124,11 @@ class Pms_Maintenance_Controller extends Controller
                     'pms_date_types' => ['required'],
                     'date_start' => ['required'],
                 ],
+
             );
+
+            // echo count($request->send_to);
+            // return;
 
             if ($validated->fails()) {
                 return response()->json([
@@ -133,9 +138,20 @@ class Pms_Maintenance_Controller extends Controller
                 ]);
             }
 
+            if ($request->is_email == 1) {
+                if ($request->send_to == "" || $request->cc_to == "") {
+                    return response()->json([
+                        'msg' => 'Send to and CC to is required',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                }
+            }
             $request->merge([
                 'user_id' => Auth::user()->id,
                 'date_created' => Carbon::now(),
+                'send_to' => implode(',', $request->send_to),
+                'cc_to' => implode(',', $request->cc_to)
             ]);
 
             $pms = Pms_Details::create($request->all());
@@ -148,6 +164,7 @@ class Pms_Maintenance_Controller extends Controller
                 'status' => 200,
                 "isValid" => true,
             ]);
+
 
         } catch (\Exception $e) {
             return response()->json([
@@ -215,12 +232,18 @@ class Pms_Maintenance_Controller extends Controller
         try {
             $data = Pms_Details::find($id);
             $data->date_start = Carbon::parse($data->date_start)->format('Y-m-d');
+            $data->send_to = explode(',', $data->send_to);
+            $data->cc_to = explode(',', $data->cc_to);
+
+
             return response()->json([
                 'msg' => 'Successfully Provided',
                 'data' => $data,
                 'status' => 200,
                 "isValid" => true,
             ]);
+
+
 
         } catch (\Exception $e) {
             return response()->json([
@@ -246,7 +269,7 @@ class Pms_Maintenance_Controller extends Controller
                 ],
             );
 
-            
+
             if ($validated->fails()) {
                 return response()->json([
                     'msg' => 'All fields are required!',
@@ -256,10 +279,26 @@ class Pms_Maintenance_Controller extends Controller
             }
 
 
+            if ($request->is_email == 1) {
+                if ($request->send_to == "" || $request->cc_to == "") {
+                    return response()->json([
+                        'msg' => 'Send to and CC to is required',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                }
+            }
+
+
+            $request->merge([
+                'send_to' => implode(',', $request->send_to),
+                'cc_to' => implode(',', $request->cc_to)
+            ]);
+
+
             Pms_Details::where('id', $request->id)->update($request->except(['id']));
             $start_date = next_date_pms($request->date_start, $request->pms_date_types);
             $this->insert_pms_alert($request->id, $start_date);
-
 
             return response()->json([
                 'msg' => 'Successfully Updated PMS',

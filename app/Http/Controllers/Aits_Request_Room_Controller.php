@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsNotif;
 use App\Models\DepartmentModel;
 use App\Models\UserProfile;
 use Auth;
@@ -44,6 +45,7 @@ class Aits_Request_Room_Controller extends Controller
                     'event_id' => ['required'],
                     'date_to' => ['required'],
                     'date_from' => ['required'],
+                    'remarks' => ['required'],
                 ],
             );
 
@@ -57,15 +59,15 @@ class Aits_Request_Room_Controller extends Controller
             }
 
 
-            if ($request->event_id == "remarks") {
-                if ($request->remarks == "") {
-                    return response()->json([
-                        'msg' => 'Purpose is required!',
-                        'status' => 402,
-                        "isValid" => false,
-                    ]);
-                }
-            }
+            // if ($request->event_id == "remarks") {
+            //     if ($request->remarks == "") {
+            //         return response()->json([
+            //             'msg' => 'Purpose is required!',
+            //             'status' => 402,
+            //             "isValid" => false,
+            //         ]);
+            //     }
+            // }
 
 
             $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
@@ -105,6 +107,7 @@ class Aits_Request_Room_Controller extends Controller
             ]);
 
 
+
             $insert = $request->all();
             if ($request->event_id == "remarks") {
                 $insert = $request->except(['event_id']);
@@ -130,6 +133,15 @@ class Aits_Request_Room_Controller extends Controller
             ];
             insert_audit($object);
 
+
+
+            AitsNotif::create([
+                'aits_table' => "aits_request_room_models",
+                'aits_id' => $latest_id,
+                'aits_process' => 'Request',
+                'send_to_user_id' => 'Admin',
+                'date_created' => Carbon::now(),
+            ]);
 
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',
@@ -396,6 +408,8 @@ class Aits_Request_Room_Controller extends Controller
                     'event_id' => ['required'],
                     'date_to' => ['required'],
                     'date_from' => ['required'],
+
+                    'remarks' => ['required'],
                 ],
             );
 
@@ -407,15 +421,15 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
             }
 
-            if ($request->event_id == "remarks") {
-                if ($request->remarks == "") {
-                    return response()->json([
-                        'msg' => 'Purpose is required!',
-                        'status' => 402,
-                        "isValid" => false,
-                    ]);
-                }
-            }
+            // if ($request->event_id == "remarks") {
+            //     if ($request->remarks == "") {
+            //         return response()->json([
+            //             'msg' => 'Purpose is required!',
+            //             'status' => 402,
+            //             "isValid" => false,
+            //         ]);
+            //     }
+            // }
 
             $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $dateTo = $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d H:i:s.u');
