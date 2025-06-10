@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserModel;
 use DateTime;
 use Validator;
 use Carbon\Carbon;
 use App\Mail\PmsMailer;
 use App\Models\PmsFiles;
+use App\Models\AitsNotif;
+use App\Models\UserModel;
 use App\Models\Pms_Details;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -106,7 +108,11 @@ class Pms_Maintenance_Controller extends Controller
         // echo $formattedDate; // Outputs: 2025-07-09
 
 
-        return view('pms_page.pms_sample');
+      
+  
+
+
+ 
 
     }
 
@@ -186,7 +192,7 @@ class Pms_Maintenance_Controller extends Controller
                 $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
                 if ($pms_file) {
                     $date1 = $pms_file->pms_date;
-                    $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                    $date2 = Carbon::now()->subWeek()->format('Y-m-d H:i:s.u');
                     $result = compare_dates($date1, $date2);
                     if ($result == -1) {
                         $pms_button = ' <button type="button" data-id=' . $data->id . ' class="btn btn-success btn-sm btn_pms spec_input"> <i  class="fa-solid fa-screwdriver-wrench"></i></button>';
@@ -208,7 +214,8 @@ class Pms_Maintenance_Controller extends Controller
                 $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
                 if ($pms_file) {
                     $date1 = $pms_file->pms_date;
-                    $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                    // $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                    $date2 = Carbon::now()->subWeek()->format('Y-m-d H:i:s.u');
                     $result = compare_dates($date1, $date2);
                     if ($result === -1) {
                         $stat = '<h6><span class="badge rounded-pill bg-danger">Need For PMS !</span></h6>';
@@ -225,6 +232,71 @@ class Pms_Maintenance_Controller extends Controller
 
 
     }
+    public function get_pms_sched_table($year)
+    {
+
+        $data = Pms_Details::where('status', 1)
+            ->whereYear('date_start', '<=', $year)
+            ->get();
+        $rows = [];
+
+        foreach ($data as $pms) {
+            $row = [];
+            $row[] = htmlspecialchars($pms->pms_name);
+            $row[] = ucfirst($pms->pms_date_types);
+            $start = Carbon::parse($pms->date_start);
+            $schedule = strtolower($pms->pms_date_types);
+            for ($m = 1; $m <= 12; $m++) {
+                $highlight = false;
+                if ($schedule == 'monthly') {
+                    if ($start->year < $year || ($start->year == $year && $start->month <= $m)) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'quarterly') {
+                    $quarterMonths = [];
+                    $firstMonth = $start->month;
+                    for ($i = 0; $i < 4; $i++) {
+                        $month = (($firstMonth - 1) + ($i * 3)) % 12 + 1;
+                        $quarterYear = $start->year + intval(($firstMonth - 1 + $i * 3) / 12);
+                        if ($quarterYear == $year) {
+                            $quarterMonths[] = $month;
+                        }
+                    }
+                    if (in_array($m, $quarterMonths)) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'yearly') {
+                    if ($start->month == $m) {
+                        $highlight = true;
+                    }
+                }
+                $row[] = $highlight
+                    ? '<td style="background:#6f6f6f !important;color:#6f6f6f "></td>'
+                    : '<td></td>';
+            }
+
+            $rows[] = $row;
+        }
+
+        $tbody_html = '';
+        foreach ($rows as $row) {
+            $tbody_html .= '<tr>';
+            $tbody_html .= '<td>' . $row[0] . '</td>'; // PMS Name
+            $tbody_html .= '<td>' . $row[1] . '</td>'; // Schedule
+            for ($i = 2; $i < count($row); $i++) {
+                $tbody_html .= $row[$i];
+            }
+            $tbody_html .= '</tr>';
+        }
+
+        return response()->json([
+            'tbody_html' => $tbody_html,
+            'status' => 200,
+            'msg' => 'Successfully Provided',
+            'isValid' => true,
+        ]);
+    }
+
 
 
     public function get_pms_details($id)

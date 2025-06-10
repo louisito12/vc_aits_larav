@@ -170,6 +170,7 @@ Route::controller(Aits_User_Controller::class)->group(function () {
 Route::controller(Pms_Maintenance_Controller::class)->group(function () {
     Route::post('save_pms_request', 'save_pms_request')->name('save_pms_request');
     Route::get('get_pms_data', 'get_pms_data')->name('get_pms_data');
+    Route::get('get_pms_sched_table/{year}', 'get_pms_sched_table')->name('get_pms_sched_table');
     Route::get('get_pms_details/{id}', 'get_pms_details')->name('get_pms_details');
     Route::post('pms_edit_details', 'pms_edit_details')->name('pms_edit_details');
     Route::get('delete_pms_request/{id}', 'delete_pms_request')->name('delete_pms_request');
