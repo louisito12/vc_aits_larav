@@ -2,12 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Mail\RequestMail;
 use Carbon\Carbon;
 use App\Mail\PmsMailer;
+use App\Mail\RequestMail;
 use App\Models\AitsNotif;
 use App\Models\Pms_Details;
 use Illuminate\Bus\Queueable;
+use App\Models\AitsShuttleRequest;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
@@ -58,55 +59,109 @@ class TransactJobs implements ShouldQueue
                 ->where('status', 1)
                 ->get();
             $data_req = [];
+            if (count($request) > 0) {
+                foreach ($request as $req) {
 
-            foreach ($request as $req) {
+
+                    $aits_data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor', 'get_requestor_data'])->find($req->aits_id);
+                    $number = $aits_data->request_no;
+                    $request_number = sprintf('%03d', $number);
+                    $req_number = Carbon::parse($aits_data->date_created)->format('Y-m-d') . '-' . $request_number;
+                    $date_from = date_converter($aits_data->date_from);
+                    $date_to = date_converter($aits_data->date_to);
+                    $status = "";
+                    if ($req->aits_process == "Request") {
+                        $status = 'For Approval';
+                    }
+
+                    if ($req->aits_process == "Approved") {
+                        $status = 'The Request is Approved';
+                    }
+                    if ($req->aits_process == "Disapproved") {
+                        $status = 'the Request is Disapproved';
+                    }
 
 
-                $aits_data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor', 'get_requestor_data'])->find($req->aits_id);
-                $number = $aits_data->request_no;
-                $request_number = sprintf('%03d', $number);
-                $req_number = Carbon::parse($aits_data->date_created)->format('Y-m-d') . '-' . $request_number;
-                $date_from = date_converter($aits_data->date_from);
-                $date_to = date_converter($aits_data->date_to);
-                $status = "";
-                if ($req->aits_process == "Request") {
-                    $status = 'For Approval';
+                    $data_req = [
+                        'request_no' => $req_number,
+                        'requestor' => $aits_data->get_requestor_data->firstname . ' ' . $aits_data->get_requestor_data->lastname,
+                        'room_name' => $aits_data->get_room_data->room_name,
+                        'event_name' => $aits_data->get_event_data->event,
+                        'schedule_from' => $date_from,
+                        'schedule_to' => $date_to,
+                        'process' => $status,
+                        "trans_process" => 1,
+
+                    ];
+                    Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($data_req));
+
+                    AitsNotif::where('id', $req->id)->update([
+                        'notif' => 1,
+                    ]);
+
                 }
-
-                if ($req->aits_process == "Approved") {
-                    $status = 'The Request is Approved';
-                }
-                if ($req->aits_process == "Disapproved") {
-                    $status = 'the Request is Disapproved';
-                }
-
-
-                $data_req = [
-                    'request_no' => $req_number,
-                    'requestor' => $aits_data->get_requestor_data->firstname . ' ' . $aits_data->get_requestor_data->lastname,
-                    'room_name' => $aits_data->get_room_data->room_name,
-                    'event_name' => $aits_data->get_event_data->event,
-                    'schedule_from' => $date_from,
-                    'schedule_to' => $date_to,
-                    'process' => $status
-
-                ];
-                Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($data_req));
-
-                AitsNotif::where('id', $req->id)->update([
-                    'notif' => 1,
-                ]);
 
             }
 
+            // aits_shuttle_requests
 
 
+            $transit = AitsNotif::where('aits_table', 'aits_shuttle_requests')
+                ->where('notif', 0)
+                ->where('status', 1)
+                ->get();
+
+            $transit_data = [];
+
+            foreach ($transit as $transits) {
 
 
+                $transit_data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+                    ->where('id', $transits->aits_id)->first();
 
+                $number = $transit_data->request_no;
+                $request_number = sprintf('%03d', $number);
+                $transit_req_no = Carbon::parse($transit_data->date_created)->format('Y-m-d') . '-' . $request_number;
+
+
+                $status = "";
+                if ($transits->aits_process == "Request") {
+                    $status = 'For Approval';
+                }
+
+
+                if ($transits->aits_process == "Approve") {
+                    $status = 'Request is Approved';
+                }
+
+                if ($transits->aits_process == "Disapprove") {
+                    $status = 'Request is Disapproved';
+                }
+
+
+                $transit_data = [
+                    'requestor' => $transit_data['get_requestor_data']['firstname'] . ' ' . $transit_data['get_requestor_data']['lastname'],
+                    'destination' => $transit_data['destination'],
+                    'request_number' => $transit_req_no,
+                    'appointment_date' => date_converter($transit_data->appointment_date),
+                    'date_requested' => date_converter($transit_data->date_created),
+                    'remarks' => $transit_data->remarks,
+                    'client_name' => $transit_data->client_name,
+                    'status' => $status,
+                    "trans_process" => 2,
+                ];
+
+
+                Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($transit_data));
+
+                AitsNotif::where('id', $transits->id)->update([
+                    'notif' => 1,
+                ]);
+
+
+            }
 
             sleep(5);
-
 
         }
     }

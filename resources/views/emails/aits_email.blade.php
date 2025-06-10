@@ -120,34 +120,72 @@
             </b>
             <br>
 
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Request Number</th>
-                        <td>{{ $mail_data['request_no'] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Requestor</th>
-                        <td>{{ $mail_data['requestor'] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Room</th>
-                        <td>{{ $mail_data['room_name'] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Schedule From</th>
-                        <td>{{ $mail_data['schedule_from'] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Schedule To</th>
-                        <td>{{ $mail_data['schedule_to'] }}</td>
-                    </tr>
-                    <tr>
-                        <th>Request Status</th>
-                        <td>{{ $mail_data['process'] }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            @if($mail_data['trans_process'] == 1)
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Request Number</th>
+                            <td>{{ $mail_data['request_no'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Requestor</th>
+                            <td>{{ $mail_data['requestor'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Room</th>
+                            <td>{{ $mail_data['room_name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Schedule From</th>
+                            <td>{{ $mail_data['schedule_from'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Schedule To</th>
+                            <td>{{ $mail_data['schedule_to'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Request Status</th>
+                            <td>{{ $mail_data['process'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            @endif
+
+            @if($mail_data['trans_process'] == 2)
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Request Number</th>
+                            <td>{{ $mail_data['request_number'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Requestor</th>
+                            <td>{{ $mail_data['requestor'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Destination</th>
+                            <td>{{ $mail_data['destination'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Appointment Date</th>
+                            <td>{{ $mail_data['appointment_date'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date Requested</th>
+                            <td>{{ $mail_data['date_requested'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Client Name</th>
+                            <td>{{ $mail_data['client_name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Request for</th>
+                            <td>{{ $mail_data['status'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            @endif
             <br><br><br>
 
             <p>If you have any questions, feel free to reach out to our support team.</p>

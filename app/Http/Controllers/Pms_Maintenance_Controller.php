@@ -12,6 +12,7 @@ use App\Models\UserModel;
 use App\Models\Pms_Details;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\AitsShuttleRequest;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -106,6 +107,11 @@ class Pms_Maintenance_Controller extends Controller
         // $dateString = '2025-07-09 00:00:00.000';
         // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
         // echo $formattedDate; // Outputs: 2025-07-09
+
+
+
+
+    
         return view('pms_page.pms_sample');
 
 
