@@ -1,5 +1,11 @@
 <div class="header-element header-theme-mode">
     <!-- Start::header-link|layout-setting -->
+
+
+
+
+
+
     <a href="javascript:void(0);" class="header-link layout-setting">
         <span class="light-layout">
             <!-- Start::header-link-icon -->
@@ -22,8 +28,6 @@
     </a>
     <!-- End::header-link|layout-setting -->
 </div>
-
-
 
 
 <div class="header-element headerProfile-dropdown">
@@ -51,7 +55,7 @@
         <li><a class="dropdown-item d-flex border-block-end" href="mail.html"><i
                     class="bx bxs-inbox fs-18 me-2 op-7"></i>Inbox</a></li>
         <li><a class="dropdown-item d-flex" href="chat.html"><i class="bx bx-envelope fs-18 me-2 op-7"></i>Messages</a> </li>-->
-<!-- 
+        <!-- 
         <li><a class="dropdown-item d-flex border-block-end" href="editprofile.html"><i
                     class="bx bx-slider-alt fs-18 me-2 op-7"></i>Account Settings</a></li> -->
         <li><a class="dropdown-item d-flex" href="{{route('logout')}}"><i class="bx bx-log-out fs-18 me-2 op-7"></i>Sign

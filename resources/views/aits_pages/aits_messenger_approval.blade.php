@@ -236,21 +236,23 @@
                     { data: "req_status" },
                     { data: "action" },
                 ],
-                dom: 'Bfrtip',
-                buttons: [
 
-                    'excel',
-                    {
-                        extend: 'pdfHtml5',
-                        orientation: 'landscape',
-                        pageSize: 'A4',
-                        text: 'PDF',
-                        title: 'Messenger Logistics Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    }
-                ]
+                
+                // dom: 'Bfrtip',
+                // buttons: [
+
+                //     'excel',
+                //     {
+                //         extend: 'pdfHtml5',
+                //         orientation: 'landscape',
+                //         pageSize: 'A4',
+                //         text: 'PDF',
+                //         title: 'Messenger Logistics Report',
+                //         exportOptions: {
+                //             columns: ':visible'
+                //         }
+                //     }
+                // ]
             });
 
             $(document).on('click', '.btn_deliver', function () {

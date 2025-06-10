@@ -106,13 +106,9 @@ class Pms_Maintenance_Controller extends Controller
         // $dateString = '2025-07-09 00:00:00.000';
         // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
         // echo $formattedDate; // Outputs: 2025-07-09
+        return view('pms_page.pms_sample');
 
 
-      
-  
-
-
- 
 
     }
 

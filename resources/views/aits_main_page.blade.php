@@ -513,6 +513,9 @@
             <!-- Start::main-header-container -->
             <div class="main-header-container container-fluid">
 
+
+
+
                 <!-- Start::header-content-left -->
                 <div class="header-content-left">
 
@@ -521,6 +524,24 @@
                     <!-- End::header-element logo -->
 
 
+
+
+                    <div class="row">
+                        <div class="col-12 mx-auto text-center">
+                            <h4>
+                                <span></span>
+                            </h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12 mx-auto text-center">
+                        <h4>
+                            <span>Admin Information Tracking System
+                            </span>
+                        </h4>
+                    </div>
                 </div>
                 <!-- End::header-content-left -->
 
@@ -636,7 +657,7 @@
             ->toArray();
 
     @endphp
-    
+
     <script>
         @if(in_array(5, $roles))
             $(document).ready(function () {

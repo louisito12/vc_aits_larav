@@ -1,10 +1,14 @@
+<style>
+    .app-sidebar .main-sidebar-header {
+        height: 8rem !important;
+    }
+</style>
 <aside class="app-sidebar sticky" id="sidebar">
-
     <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header">
         <a href="index.html" class="header-logo">
-            <img style="width: 250px; object-fit: cover;"
-                src="{{asset('aits_asset/assets/images/brand-logos/vcnew.png')}}" alt="logo" class="desktop-logo">
+            <img style="width: 180px; height:80px; object-fit: cover;"
+                src="{{asset('aits_asset/assets/images/aits_logo.png')}}" alt="logo" class="desktop-logo">
 
             <img src="{{asset('aits_asset/assets/images/brand-logos/vc_icon.png')}}" alt="logo" class="toggle-logo">
 
@@ -27,6 +31,7 @@
             </div>
             <ul class="main-menu">
                 <!-- Start::slide__category -->
+                <br><br>
                 <li class="slide__category"><span class="category-name">Main</span></li>
                 <!-- End::slide__category -->
 
@@ -221,10 +226,10 @@
 
 
                             <!-- <li class="slide">
-                                                                <a href="{{ route('user_manage_view') }}"
-                                                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                                                    Users Management</a>
-                                                            </li> -->
+                                                                    <a href="{{ route('user_manage_view') }}"
+                                                                        class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                                        Users Management</a>
+                                                                </li> -->
 
 
 
@@ -307,9 +312,8 @@
                 @if(in_array(5, $roles))
                     <br>
                     <!-- Messenger Side -->
-                    <li class="slide has-sub {{in_array(true,  $pms) ? 'open' : ''}}">
-                        <a href="javascript:void(0);"
-                            class="side-menu__item {{in_array(true,  $pms) ? 'active' : ''}}">
+                    <li class="slide has-sub {{in_array(true, $pms) ? 'open' : ''}}">
+                        <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $pms) ? 'active' : ''}}">
                             <i style="width: 30px;" class="fa-solid fa-screwdriver-wrench"></i>
 
                             <span class="side-menu__label">PMS Management</span>
