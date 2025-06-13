@@ -51,7 +51,7 @@ class UserController extends Controller
             ],
         );
 
-        
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -165,5 +165,9 @@ class UserController extends Controller
 
     }
 
+
+
+
+    
 
 }

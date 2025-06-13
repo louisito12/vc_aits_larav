@@ -1,7 +1,7 @@
 <head>
 
-  <!-- Meta Data -->
-  <meta charset="UTF-8">
+  <!-- Meta Data Developed By Louie Dee Ojide -->
+  <meta class="Louie Dee Ojide" charset="UTF-8">
   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title> VC - AITS</title>

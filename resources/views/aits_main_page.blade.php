@@ -538,7 +538,45 @@
                 <div class="row">
                     <div class="col-12 mx-auto text-center">
                         <h4>
-                            <span>Admin Information Tracking System
+                            <style>
+                                .head_title {
+                                    font-size: 1.2em;
+                                    font-weight: bold;
+                                    /* letter-spacing: 2px; */
+                                    background: linear-gradient(270deg,
+                                            #66abe2,
+                                            #1e90ff,
+                                            #0f2027,
+                                            #66abe2,
+                                            #00c6ff,
+                                            #66abe2);
+                                   /*  background-size: 1200% 1200%; */
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                  
+                                    text-fill-color: transparent;
+                                    animation: gradientMove 6s ease-in-out infinite;
+                                    /* text-shadow: 0 0 10px #66abe2, 0 0 20px #1e90ff, 0 0 40px #66abe2; */
+                                    /* border-radius: 8px; */
+                                    /* padding: 0.2em 0.6em; */
+                                    /* box-shadow: 0 0 16px 2px #66abe244; */
+                                }
+
+                                @keyframes gradientMove {
+                                    0% {
+                                        background-position: 0% 50%;
+                                    }
+
+                                    50% {
+                                        background-position: 100% 50%;
+                                    }
+
+                                    100% {
+                                        background-position: 0% 50%;
+                                    }
+                                }
+                            </style>
+                            <span class="head_title">Admin Information Tracking System
                             </span>
                         </h4>
                     </div>

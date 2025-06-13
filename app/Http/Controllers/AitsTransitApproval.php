@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsRequestCloser;
 use Carbon\Carbon;
 use App\Models\AitsNotif;
 use App\Models\AitsDriver;
@@ -24,11 +25,23 @@ class AitsTransitApproval extends Controller
             ->where('status', 1)
             ->get();
 
+        $close_req = AitsRequestCloser::where('status', 1)->first();
+        $close_params = 0;
+
+        if ($close_req) {
+            $close_params = 1;
+        }
+
         $type = AitsShuttleType::where('status', 1)->get();
         $driver = AitsDriver::where('status', 1)->get();
+
+        $req_date = AitsRequestCloser::where('status', 1)->first();
+
+
+
         return view(
             'aits_pages.aits_transit_approval',
-            compact('car', 'driver', 'type')
+            compact('car', 'driver', 'type', 'close_params')
         );
     }
 
@@ -52,6 +65,9 @@ class AitsTransitApproval extends Controller
             ->where('is_transact', 1);
         if ($request->pending_data) {
             $data->where('request_status', 'Pending');
+        }
+        if ($request->apt_date) {
+            $data->whereDate('appointment_date', $request->apt_date);
         }
         if ($request->filter_data) {
             if ($request->filter_data != 'all') {

@@ -1,19 +1,19 @@
 <style>
     .app-sidebar .main-sidebar-header {
-        height: 8rem !important;
+        height: 6rem !important;
     }
 </style>
 <aside class="app-sidebar sticky" id="sidebar">
     <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header">
-        <a href="index.html" class="header-logo">
+        <a href="{{ route('aits_dashboard') }}" class="header-logo">
             <img style="width: 180px; height:80px; object-fit: cover;"
                 src="{{asset('aits_asset/assets/images/aits_logo.png')}}" alt="logo" class="desktop-logo">
 
             <img src="{{asset('aits_asset/assets/images/brand-logos/vc_icon.png')}}" alt="logo" class="toggle-logo">
 
-            <img style="width: 250px; object-fit: cover;"
-                src="{{ asset('aits_asset/assets/images/brand-logos/vcnew.png') }}" alt="logo" class="desktop-white">
+            <img style="width: 180px; height:80px;" src="{{ asset('aits_asset/assets/images/aits_logo.png') }}"
+                alt="logo" class="desktop-white">
             <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo" class="toggle-white">
         </a>
     </div>
@@ -31,7 +31,8 @@
             </div>
             <ul class="main-menu">
                 <!-- Start::slide__category -->
-                <br><br>
+                <!-- <br><br> -->
+                 <br>
                 <li class="slide__category"><span class="category-name">Main</span></li>
                 <!-- End::slide__category -->
 
@@ -72,7 +73,6 @@
                         "aits_transit_approval_view" => Request::is('aits_transit_approval_view'),
                         "user_manage_view" => Request::is('user_manage_view'),
                         "aits_deliver_assign" => Request::is('aits_deliver_assign'),
-
                     ];
 
                     $logistics = [
@@ -164,23 +164,9 @@
                                     class="side-menu__item {{ Request::is('aits_pick_up_view') ? 'active' : '' }}">
                                     Pick Up Request</a>
                             </li>
-
-
-
-
-
-
-
-
-
-
-
-
                         </ul>
                     </li>
                 @endif
-
-
 
 
                 @if(in_array(2, $roles))
@@ -208,14 +194,11 @@
                                     Vehicle Service Approval</a>
                             </li>
 
-
                             <li class="slide">
                                 <a href="{{ route('aits_deliver_assign') }}"
                                     class="side-menu__item {{ Request::is('aits_deliver_assign') ? 'active' : '' }}">
                                     Logistics Assigned Messenger</a>
                             </li>
-
-
 
 
                             <li class="slide">
@@ -226,17 +209,10 @@
 
 
                             <!-- <li class="slide">
-                                                                    <a href="{{ route('user_manage_view') }}"
-                                                                        class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                                                        Users Management</a>
-                                                                </li> -->
-
-
-
-
-
-
-
+                                                                                <a href="{{ route('user_manage_view') }}"
+                                                                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                                                    Users Management</a>
+                                                                            </li> -->
 
                         </ul>
                     </li>

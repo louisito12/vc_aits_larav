@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use App\Models\PmsFiles;
 use App\Models\Pms_Details;
 use Illuminate\Http\Request;
+use App\Models\AitsRequestCloser;
+use Illuminate\Support\Facades\Auth;
 
 class PmsvalidationController extends Controller
 {
@@ -60,6 +62,44 @@ class PmsvalidationController extends Controller
                 "isValid" => false,
             ]);
         }
+
+    }
+
+
+    public function save_cancellation_request($date)
+    {
+
+        AitsRequestCloser::where('status', 1)->update([
+            'status' => 0
+        ]);
+
+        $date_time = Carbon::parse($date)->format('Y-m-d H:i:s.v');
+
+
+        AitsRequestCloser::create([
+            'date_start' => Carbon::now(),
+            'date_end' => $date_time,
+            'date_created' => Carbon::now(),
+            'user_id' => Auth::user()->id,
+            'table_name' => 'aits_shuttle_requests'
+        ]);
+    }
+
+    public function get_close_schedule()
+    {
+        $data = AitsRequestCloser::where('status', 1)->first();
+
+
+        $data->close_date = date_coverters_transit($data->date_end);
+
+        return $data;
+    }
+    public function save_open_req()
+    {
+
+        AitsRequestCloser::where('status', 1)->update([
+            'status' => 0
+        ]);
 
     }
 }

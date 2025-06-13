@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Aits_Dashboard;
 use App\Http\Controllers\Pms_Maintenance_Controller;
 use App\Http\Controllers\PmsvalidationController;
 use App\Models\AitsDelivery;
@@ -63,6 +64,8 @@ Route::controller(UserController::class)->group(function () {
     Route::post('register_user', 'register_user')->name('register_user');
 
 
+
+
 });
 
 
@@ -97,6 +100,14 @@ Route::controller(Aits_Request_Room_approval_Controller::class)->group(function 
 });
 
 
+Route::controller(Aits_Dashboard::class)->group(function () {
+    Route::get('room_request_dash/{params}', 'room_request_dash')->name('room_request_dash');
+    Route::get('aits_dashboard_counts', 'aits_dashboard_counts')->name('aits_dashboard_counts');
+    Route::get('transit_request_dash/{params}', 'transit_request_dash')->name('transit_request_dash');
+    Route::get('aits_dashboard_logistics/{params}/{procedure}', 'aits_dashboard_logistics')->name('aits_dashboard_logistics');
+
+
+});
 
 
 
@@ -147,6 +158,8 @@ Route::controller(Aits_logistics_approval::class)->group(function () {
 Route::controller(Aits_Messenger_Controller::class)->group(function () {
     Route::get('aits_messenger_logistics', 'aits_messenger_logistics')->name('aits_messenger_logistics');
     Route::post('messenger_delivered', 'messenger_delivered')->name('messenger_delivered');
+
+    Route::get('get_doctors_hospitals', 'get_doctors_hospitals')->name('get_doctors_hospitals');
 });
 
 
@@ -180,6 +193,10 @@ Route::controller(Pms_Maintenance_Controller::class)->group(function () {
 
 Route::controller(PmsvalidationController::class)->group(function () {
     Route::get('pms_alert', 'pms_alert')->name('pms_alert');
+    Route::get('save_cancellation_request/{date}', 'save_cancellation_request')->name('save_cancellation_request');
+    Route::get('get_close_schedule', 'get_close_schedule')->name('get_close_schedule');
+    Route::get('save_open_req', 'save_open_req')->name('save_open_req');
+
 
 });
 
@@ -205,7 +222,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
 Route::get('email_template', function () {
     return view('emails.email');
 });
@@ -214,3 +230,17 @@ Route::get('test_pdf', [Aits_Messenger_Controller::class, 'test_pdf'])->name('te
 
 // role -> admin,driver('itenerary arrive'),messenger(''),user
 // Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');
+
+
+
+
+// SELECT * 
+// FROM your_table 
+// WHERE DATE(created_at) > '2025-06-10';
+
+
+// use Carbon\Carbon;
+
+// YourModel::where('created_at', '>', Carbon::parse('2025-06-10'))->get();
+
+// YourModel::where('created_at', '>', '2025-06-10 00:00:00')->get();

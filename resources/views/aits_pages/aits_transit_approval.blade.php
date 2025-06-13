@@ -30,6 +30,22 @@
 
         <div class="d-flex my-xl-auto right-content align-items-center">
 
+            <div class="mb-xl-2">
+                <div class="row">
+                    <div class="col-12">
+
+                        <label class="">Search Date</label>
+                        <input type="date" id="apt_date" class="form-control ">
+                    </div>
+                </div>
+
+            </div>
+
+
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp;
+
+
 
             <div class="mb-xl-0">
                 <div class="dropdown">
@@ -59,6 +75,10 @@
 
 
 
+
+
+
+
     </div>
 
 
@@ -67,12 +87,20 @@
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
-                    <div class="card-title m-1 p-3">Shuttle Request</div>
+                    <div class="card-title m-1 p-3">Vehicle Request</div>
+                    @if($close_params == 1)
+                        <button id="open_reqeust_btn" class="btn btn-success m-3 ">Open Request</button>
 
+                    @else
+                        <button id="close_request_btn" class="btn btn-danger m-3 ">Close Request</button>
+
+                    @endif
 
                 </div>
 
                 <div class="card-body">
+
+
                     <div class="table-responsive">
                         <div class="table-responsive">
                             <table id="tbl_transit" class="table table-bordered text-nowrap w-100">
@@ -293,8 +321,62 @@
             </div>
         </div>
     </div>
-    <!-- Modal end -->
 
+
+    <div class="modal fade" id="close_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id=""> Close Shuttle Request
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Date and Time</label>
+                            <input type="datetime-local" class="form-control spec_input" id="cancellation_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="save_close_request" class="btn btn-primary">Save</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="open_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id=""> Open Vehicle Request
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>The request is close until</label>
+                            <input type="datetime-local" class="form-control spec_input" readonly id="until_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="save_open_btn" class="btn btn-primary">Open</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal end -->
 
 
 
@@ -448,52 +530,52 @@
                 if ($(this).data('val') == 2) {
                     //dissapproved
 
-               
-                        Swal.fire({
-                            title: "Are you sure?",
-                            text: "You want to Disapprove this request?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Yes, Disapprove it!",
-                            input: 'textarea',
-                            inputPlaceholder: 'Reason for deletion?',
-                            inputAttributes: {
-                                'aria-label': 'Enter your remarks'
-                            },
-                            showLoaderOnConfirm: true,
-                            preConfirm: (remarks) => {
-                                return new Promise((resolve, reject) => {
-                                    if (!remarks || remarks.trim() === '') {
-                                        Swal.showValidationMessage('Remarks are required!');
-                                        reject('Remarks are required!');
-                                        Swal.hideLoading();
-                                    } else {
-                                        $.ajax({
-                                            url: "disapprove_shuttle/" + $(this).data('id') + '/' + remarks,
-                                            success: function (e) {
-                                                if (e['isValid'] == false) {
-                                                    alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                                                    reject('Deletion failed');
-                                                }
 
-                                                Swal.fire({
-                                                    title: "Disapprove!",
-                                                    text: "Your request has been Disapproved.",
-                                                    icon: "success"
-                                                });
-                                                $('#tbl_transit').DataTable().ajax.reload();
-                                                resolve();
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You want to Disapprove this request?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, Disapprove it!",
+                        input: 'textarea',
+                        inputPlaceholder: 'Reason for deletion?',
+                        inputAttributes: {
+                            'aria-label': 'Enter your remarks'
+                        },
+                        showLoaderOnConfirm: true,
+                        preConfirm: (remarks) => {
+                            return new Promise((resolve, reject) => {
+                                if (!remarks || remarks.trim() === '') {
+                                    Swal.showValidationMessage('Remarks are required!');
+                                    reject('Remarks are required!');
+                                    Swal.hideLoading();
+                                } else {
+                                    $.ajax({
+                                        url: "disapprove_shuttle/" + $(this).data('id') + '/' + remarks,
+                                        success: function (e) {
+                                            if (e['isValid'] == false) {
+                                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                                reject('Deletion failed');
+                                            }
 
-                                            },
+                                            Swal.fire({
+                                                title: "Disapprove!",
+                                                text: "Your request has been Disapproved.",
+                                                icon: "success"
+                                            });
+                                            $('#tbl_transit').DataTable().ajax.reload();
+                                            resolve();
 
-                                        });
-                                    }
-                                });
-                            }
-                        })
-            
+                                        },
+
+                                    });
+                                }
+                            });
+                        }
+                    })
+
 
 
 
@@ -632,6 +714,7 @@
                 const filter_params = $('#filter_btn').text().toLowerCase();
                 const filter_array = ['all', 'all pending', 'all approved', 'all disapproved'];
 
+                const apt_date = $('#apt_date').val();
                 if (!filter_array.includes(filter_params)) {
                     alertify.set('notifier', 'position', 'top-right');
                     alertify.set('notifier', 'delay', 5);
@@ -645,7 +728,7 @@
                         url: "{{ route('get_approval_transit') }}",
                         type: "POST",
                         data: {
-                            filter_data: filter_params
+                            filter_data: filter_params, apt_date
                         },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -655,11 +738,76 @@
                 });
 
                 $('#filter_btn').text('Filter Request');
-
+                $('#apt_date').val('');
 
             });
 
 
+            $('#close_request_btn').click(function () {
+                $('#close_request_modal').modal('show');
+            })
+
+
+            $('#save_close_request').click(function () {
+                const cancellation_date = $('#cancellation_date').val();
+
+                if (cancellation_date == "") {
+                    alertify.error('<span style="color: white;"> Cancellation Date is Required</span>');
+                    return;
+                }
+
+
+                $.ajax({
+                    url: "save_cancellation_request/" + cancellation_date,
+                    type: "Get",
+                    success: function (e) {
+                        $('#cancellation_date').val('');
+                        Swal.fire({
+                            title: "Closed!",
+                            text: "The request for vehicle is now closed.",
+                            icon: "success"
+                        });
+                        $('#close_request_modal').modal('hide');
+
+
+                        location.reload();
+                    }
+                })
+            })
+
+
+
+            $('#open_reqeust_btn').click(function () {
+                $('#open_request_modal').modal('show');
+
+                $.ajax({
+                    url: "{{ route('get_close_schedule') }}",
+                    type: "GET",
+                    success: function (e) {
+                        $('#until_date').val(e['close_date']);
+                    }
+                })
+            });
+
+            $('#save_open_btn').click(function () {
+                $.ajax({
+                    url: "{{ route('save_open_req') }}",
+                    type: "GET",
+                    success: function (e) {
+
+                        $('#open_request_modal').modal('hide');
+
+                        Swal.fire({
+                            title: "Open!",
+                            text: "The request for vehicle is now Open.",
+                            icon: "success"
+                        });
+                        $('#close_request_modal').modal('hide');
+
+                        location.reload();
+                    }
+                })
+            })
 
         })
     </script>

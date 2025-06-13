@@ -209,7 +209,15 @@ function compare_dates($date1, $date2)
     }
 }
 
+function roles_array($user_id)
+{
+    return $roles = DB::table('aits_role_access')
+        ->where('user_id', $user_id)
+        ->where('status', 1)
+        ->pluck('role_id')
+        ->toArray();
 
+}
 
 // $dateString = '2025-07-09 00:00:00.000';
 // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');

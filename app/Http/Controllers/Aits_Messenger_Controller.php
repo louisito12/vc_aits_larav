@@ -13,6 +13,7 @@ use App\Models\AitsFileModel;
 use App\Models\DepartmentModel;
 use App\Models\AitsDeliveryType;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Models\AitsLogisticsResched;
 use Illuminate\Support\Facades\Auth;
 use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
@@ -335,4 +336,53 @@ class Aits_Messenger_Controller extends Controller
         return $url = url('/');
     }
 
+
+    // public function get_doctors_hospitals()
+    // {
+
+    //     // doc_city
+    //     // 382
+
+
+
+    //     $query = "
+    //             SELECT doc_id,doc_address,doc_city FROM Doctors WHERE doc_id NOT IN (  SELECT d.doc_id
+    //             FROM Doctors d
+    //             JOIN cities c ON d.doc_address LIKE '%' + c.city_name + '%')  AND (doc_address IS NOT NULL OR doc_address = '') AND doc_id != doc_city ";
+
+
+    //     $results = DB::connection('sqlsrv_secondary')->select($query, [
+
+
+    //     ]);
+    //     $data = [];
+
+    //     foreach ($results as $result) {
+    //         if ($result->doc_address == "" && $result->doc_city != 0) {
+    //             if ($result->doc_city != 1101) {
+    //                 $data[] = $result->doc_id;
+    //             }
+    //         }
+    //     }
+
+
+    //     $doc_id = implode(',', $data);
+    //     $query_2 = "
+    //       SELECT doc_id,doc_city,doc_address FROM Doctors WHERE doc_id IN($doc_id)";
+
+
+    //    $data_2 = DB::connection('sqlsrv_secondary')->select($query_2);
+
+    
+    //     // foreach ($data_2 as $data_update) {
+    //     //     $city = DB::connection('sqlsrv_secondary')
+    //     //         ->select('SELECT city_name FROM cities WHERE city_id = :city_id', ['city_id' => $data_update->doc_city]);
+
+
+    //     //     DB::connection('sqlsrv_secondary')->table('Doctors')->where('doc_id', $data_update->doc_id)->update([
+    //     //         'doc_address' => $city[0]->city_name ?? 'nocity',
+    //     //     ]);
+    //     // }
+
+    // }
 }
