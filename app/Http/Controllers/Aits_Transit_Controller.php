@@ -10,6 +10,7 @@ use App\Models\AitsFileModel;
 use App\Models\AitsShuttleType;
 use App\Models\AitsVehicleModel;
 use Yajra\DataTables\DataTables;
+use App\Models\AitsRequestCloser;
 use GuzzleHttp\Psr7\UploadedFile;
 use App\Models\AitsShuttleRequest;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,19 @@ class Aits_Transit_Controller extends Controller
             //     ]);
             // }
 
+            $closer_request = AitsRequestCloser::
+                where('date_end', '<', Carbon::now())
+                ->where('status', 1)
+                ->get();
+
+            if ($closer_request) {
+                return response()->json([
+                    'msg' => 'The current system is close for request for vehicle service',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
 
             $request->merge([
                 'status' => 1,
@@ -137,6 +151,10 @@ class Aits_Transit_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
+
+            AitsRequestCloser::where('status', 1)->update([
+                'status' => 0
+            ]);
 
 
             return [
@@ -503,6 +521,20 @@ class Aits_Transit_Controller extends Controller
             //     ]);
             // }
 
+
+            $closer_request = AitsRequestCloser::
+                where('date_end', '<', Carbon::now())
+                ->where('status', 1)
+                ->get();
+
+            if ($closer_request) {
+                return response()->json([
+                    'msg' => 'The current system is close for updating data',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
             $request->merge([
                 'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'appointment_date' => Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d h:i A'),
@@ -554,6 +586,12 @@ class Aits_Transit_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
+
+
+            AitsRequestCloser::where('status', 1)->update([
+                'status' => 0
+            ]);
+
 
 
             return [

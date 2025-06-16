@@ -215,14 +215,14 @@ class Aits_logistics_approval extends Controller
             ];
 
 
-            AitsNotif::create([
-                'aits_table' => "aits_shuttle_requests",
-                'aits_id' => $request->id,
-                'aits_process' => 'assign_messenger',
-                'send_to_user_id' => $request->messenger_id,
-                'date_created' => Carbon::now(),
-                'remarks' => $request->assign_remarks,
-            ]);
+            // AitsNotif::create([
+            //     'aits_table' => "aits_shuttle_requests",
+            //     'aits_id' => $request->id,
+            //     'aits_process' => 'assign_messenger',
+            //     'send_to_user_id' => $request->messenger_id,
+            //     'date_created' => Carbon::now(),
+            //     'remarks' => $request->assign_remarks,
+            // ]);
 
 
 
@@ -243,6 +243,78 @@ class Aits_logistics_approval extends Controller
 
     }
 
+
+
+
+
+
+    public function get_data_email()
+    {
+
+
+        $request_logistic = AitsNotif::where('aits_table', 'aits_deliveries')
+            ->where('notif', 0)
+            ->where('status', 1)
+            ->get();
+
+
+        $data = [];
+
+        foreach ($request_logistic as $email_logistic) {
+            $data_log = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->where('id', $email_logistic->aits_id)->first();
+
+            if ($data_log) {
+                $number = $data_log->request_no ?: 0;
+                $request_number = sprintf('%03d', $number);
+                $req_number = Carbon::parse($email_logistic->date_created)->format('Y-m-d') . '-' . $request_number;
+                $procedure = $data_log->procedures;
+
+                if ($procedure == 1) {
+                    $stat = 'For Delivery';
+                }
+                if ($procedure == 2) {
+                    $stat = 'For Collection';
+                }
+                if ($procedure == 3) {
+                    $stat = 'For Pick Up';
+                }
+
+                $subject = 'Notification for Logisitic Request' . ' ' . $stat . ' Request#' . ' ' . $req_number;
+
+                $process = "";
+                if ($email_logistic->aits_process == 'Delivered messenger') {
+                    $process = $stat . ' ' . 'is completed';
+                }
+                if ($email_logistic->aits_process == 'Request') {
+                    $process = 'Request is for Assigning';
+                }
+
+                if ($email_logistic->aits_process == 'Reschedule messenger') {
+                    $process = $stat . ' ' . 'is rescheduled';
+                }
+                $data= [
+                    'requestor' => $data_log['get_requestor_fullname']['firstname'] . ' ' . $data_log['get_requestor_fullname']['lastname'],
+                    // 'request_number' => $req_number,
+                    'type' => $data_log['get_delivery_type']['del_type'],
+                    'reqeust_for' => $stat,
+                    'date_requested' => date_converter($email_logistic->date_created),
+                    'area' => $data_log['get_area_request']['area'],
+                    'company_name' => $data_log->company_name,
+                    'address' => $data_log->complete_address,
+                    "trans_process" => 3,
+                    'process' => $process,
+                    "subject" => $subject,
+                ];
+
+            }
+
+        }
+
+
+        return $data;
+
+
+    }
 }
 
 

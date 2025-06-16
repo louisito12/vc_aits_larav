@@ -37,6 +37,18 @@ class AitsTransitApproval extends Controller
 
         $req_date = AitsRequestCloser::where('status', 1)->first();
 
+        $closer = AitsRequestCloser::where('status', 1)
+            ->first();
+
+        if ($closer) {
+            $closer_date = $closer->date_end;
+            if ($closer_date < Carbon::now()) {
+                AitsRequestCloser::where('status', 1)->update([
+                    'status' => 0,
+                ]);
+            }
+        }
+
 
 
         return view(

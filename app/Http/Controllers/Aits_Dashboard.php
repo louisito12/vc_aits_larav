@@ -171,7 +171,7 @@ class Aits_Dashboard extends Controller
             ]);
 
 
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
@@ -182,6 +182,73 @@ class Aits_Dashboard extends Controller
 
     }
 
+    public function aits_dashboard_counts_messenger()
+    {
+
+        try {
+
+            $user_id = Auth::user()->id;
+            $logistics_query = "
+              SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
+              WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
+              END AS procedure_status,SUM(CASE WHEN request_status = 'Pending' AND messenger_id IS NULL THEN 1 ELSE 0 END) AS pending_counts,
+	          SUM (CASE WHEN request_status !='Delivered' AND messenger_id=$user_id THEN 1 ELSE 0 END) On_going,
+	          SUM(CASE WHEN request_status ='Delivered' AND messenger_id=$user_id THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1)   GROUP BY procedures ";
+
+
+            $logistics_count = DB::connection('sqlsrv')->select(
+                $logistics_query,
+                []
+            );
+
+            //  var for_delivery = "For Delivery";
+            //         // var index = -1;
+            //         var for_collection = "For Collection"
+            //         // var collection_index = -1;
+            //         var for_pick_up = "For Pick Up";
+            //         // var pick_up_index = -1;
+
+            // $logistics_count = [
+            //     [
+            //         'procedure_status' => 'For Delivery',
+            //         'pending_counts' => 1,
+            //         'On_going' => 2,
+            //         'Approved' => 4,
+
+            //     ],
+
+            // [
+            //     'procedure_status' => 'For Collection',
+            //     'pending_counts' => 1,
+            //     'On_going' => 2,
+            //     'Approved' => 4,
+
+            // ],
+
+            //     [
+            //         'procedure_status' => 'For Pick Up',
+            //         'pending_counts' => 1,
+            //         'On_going' => 2,
+            //         'Approved' => 4,
+
+            //     ],
+            // ];
+
+
+
+            return response()->json([
+                'logistics_request_messenger' => $logistics_count,
+            ]);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
+                'status' => 402,
+                "isValid" => false,
+            ]);
+        }
+    }
 
     public function aits_dashboard_logistics($params, $procedure)
     {
@@ -217,6 +284,42 @@ class Aits_Dashboard extends Controller
         return $db_tbl;
 
 
+
+    }
+
+
+    public function aits_dashboard_logistics_mess($params, $procedure)
+    {
+
+
+        $roles = roles_array(Auth::user()->id);
+
+        $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
+            ->where('procedures', $procedure)
+            ->where('status', 1);
+
+        if ($params == 1) {
+            $data->where('request_status', 'Pending')->whereNull('messenger_id');
+        }
+
+        if ($params == 2) {
+            $data->where('messenger_id', Auth::user()->id)->whereNot('request_status', 'Delivered');
+        }
+        if ($params == 3) {
+            $data->where('request_status', 'Delivered')->where('messenger_id', Auth::user()->id);
+        }
+
+        // if (!in_array(2, $roles)) {
+        //     $data->where('user_id', Auth::user()->id);
+        // }
+
+        $data = $data->get();
+
+
+
+
+        $db_tbl = $this->logistics_datatable($data, $procedure);
+        return $db_tbl;
 
     }
 

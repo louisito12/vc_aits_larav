@@ -30,7 +30,9 @@ class RequestMail extends Mailable
             $subject = 'This notification is for AITS Vehicle Request No #' . $this->record['request_number'];
         }
 
-
+        if ($this->record['trans_process'] == 3) {
+            $subject = $this->record['subject'];
+        }
 
         $this->subject($subject)
             ->view('emails.testmail')

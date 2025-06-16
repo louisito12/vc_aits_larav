@@ -186,6 +186,51 @@
                 </table>
 
             @endif
+
+            @if($mail_data['trans_process'] == 3)
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Request Number</th>
+                            <td>{{ $mail_data['request_number'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Requestor</th>
+                            <td>{{ $mail_data['requestor'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td>{{ $mail_data['type'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Area</th>
+                            <td>{{ $mail_data['area'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date Requested</th>
+                            <td>{{ $mail_data['date_requested'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Company Name</th>
+                            <td>{{ $mail_data['company_name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ $mail_data['address'] }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Logistic Type</th>
+                            <td>{{ $mail_data['request_for'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Request for</th>
+                            <td>{{ $mail_data['process'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            @endif
             <br><br><br>
 
             <p>If you have any questions, feel free to reach out to our support team.</p>

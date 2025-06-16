@@ -105,7 +105,11 @@ Route::controller(Aits_Dashboard::class)->group(function () {
     Route::get('aits_dashboard_counts', 'aits_dashboard_counts')->name('aits_dashboard_counts');
     Route::get('transit_request_dash/{params}', 'transit_request_dash')->name('transit_request_dash');
     Route::get('aits_dashboard_logistics/{params}/{procedure}', 'aits_dashboard_logistics')->name('aits_dashboard_logistics');
+    Route::get('aits_dashboard_logistics_mess/{params}/{procedure}', 'aits_dashboard_logistics_mess')->name('aits_dashboard_logistics_mess');
 
+
+
+    Route::get('aits_dashboard_counts_messenger', 'aits_dashboard_counts_messenger')->name('aits_dashboard_counts_messenger');
 
 });
 
@@ -150,6 +154,7 @@ Route::controller(Aits_logistics_approval::class)->group(function () {
     Route::post('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
     Route::post('assigned_messenger', 'assigned_messenger')->name('assigned_messenger');
 
+    Route::get('get_data_email', 'get_data_email')->name('get_data_email');
 });
 
 

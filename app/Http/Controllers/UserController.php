@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsMessenger;
 use Validator;
 use Carbon\Carbon;
 use App\Models\UserModel;
@@ -103,6 +104,17 @@ class UserController extends Controller
             'citizenship_id' => $request->citizenship_id,
 
         ]);
+        if (in_array(4, $request->input('roles'))) {
+
+            AitsMessenger::insert([
+                'fname' => $request->firstname,
+                'mname' => $request->middlename,
+                'lname' => $request->lastname,
+                'cen_user_id' => $last_id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ]);
+        }
 
         $roles = $request->input('roles');
         $this->role_update($last_id, $roles);
@@ -168,6 +180,6 @@ class UserController extends Controller
 
 
 
-    
+
 
 }
