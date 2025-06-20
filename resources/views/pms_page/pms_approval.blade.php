@@ -48,7 +48,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">PMS Management</div>
                     <div class="col d-flex justify-content-end">
-                        <div class="input-group input-group-sm w-25">
+                        <div hidden class="input-group input-group-sm w-25">
                             <button id="view_tbl_pms" class="btn  btn-info">View PMS</button>
                             <select name="" id="pms_year" class="form-select ">
                                 <!-- options from now minu 10 years and plus 1 from year now -->
@@ -84,6 +84,11 @@
                                             <th class="text-center">PMS Description</th>
                                             <th class="text-center">PMS Scheudle</th>
                                             <th class="text-center">PMS Start</th>
+                                            <th class="text-center">Conducted By</th>
+                                            <th class="text-center">Noted By</th>
+                                            <th class="text-center">
+                                                PMS Action
+                                            </th>
                                             <th class="text-center">
                                                 PMS Status
                                             </th>
@@ -139,11 +144,20 @@
                     </div>
                     <br>
                     <div class="row">
+                        <di class="col-6">
+                            <label>Noted By</label>
+                            <select id="noted_by" class="form-control spec_input"></select>
+                        </di>
+                        <div class="col-6">
+                            <label>Conducted By</label>
+                            <input id="conducted_by" type="text" class="form-control spec_input">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
                         <div class="col-12">
                             <label>PMS Description</label>
-
                             <textarea class="form-control spec_input" id="pms_description"></textarea>
-
                         </div>
                     </div>
 
@@ -236,7 +250,11 @@
                         </div>
                     </div>
 
-                    <br><br>
+                    <br>
+
+
+
+                    <br>
                     <div class="row">
                         <div class="col-6">
                             <div class="form-check">
@@ -435,17 +453,10 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-
-            $('#add_pms_btn').click(function () {
-                $('#add_pms_modal').modal('show');
-                $('.send_to_row').attr('hidden', true);
-                $('#is_email').val('');
-            });
-
             $('#tbl_pms').DataTable({
                 destroy: true,
                 ajax: {
-                    url: "{{ route('get_pms_data') }}",
+                    url: "{{ route('get_pms_approval') }}",
                 },
 
 
@@ -465,370 +476,90 @@
                         data: "date_start"
                     },
                     {
+                        data: "conducted_by"
+                    },
+                    {
+                        data: "noted_by"
+                    },
+                    {
                         data: "pms_status"
                     },
                     {
-                        data: "action"
+                        data: "pms_status_badge"
+                    },
+                    {
+                        data: "approval_action"
                     },
                 ],
             });
 
-            $('#add_pms_save').click(function () {
-                const pms_name = $('#pms_name').val();
-                const pms_start = $('#pms_start').val();
-                const pms_type = $('#pms_type').val();
-                const pms_description = $('#pms_description').val();
-                const send_to = $('#send_to').val();
-                const cc_to = $('#cc_to').val();
 
-                const is_email = $('#is_email').val();
+            $(document).on('click', '.btn_approved', function () {
 
 
-                $.ajax({
-                    url: "{{ route('save_pms_request') }}",
-                    type: "POST",
-                    data: {
-                        pms_name: pms_name, pms_description: pms_description,
-                        pms_date_types: pms_type, date_start: pms_start,
-                        send_to: send_to, cc_to: cc_to, is_email,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (e) {
-                        if (e['isValid'] == false) {
+                if ($(this).data('val') == 1) {
+                    var approve = 'Approve';
+                }
+                else {
+                    var approve = 'Disapprove';
 
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-
-                        $('#pms_name').val('');
-                        $('#pms_start').val('');
-                        $('#pms_type').val('');
-                        $('#pms_description').val('');
-                        $('#add_pms_modal').modal('hide');
-                        $('#tbl_pms').DataTable().ajax.reload();
-                        Swal.fire('Success!', 'Your PMS has been successfully added.', 'success');
-                        $('#cc_to').val(null).trigger('change');
-                        $('#send_to').val(null).trigger('change');
-                        $('input[name="selection"]').prop('checked', false);
-                    }
-                })
-            });
-
-            $(document).on('click', '.btn_edit', function () {
-                $('#edit_is_email').val("");
-                $('#edit_cc_to').val(null).trigger('change');
-                $('#edit_send_to').val(null).trigger('change');
-                $('.edit_send_to_row').attr('hidden', true);
-                $.ajax({
-                    url: "get_pms_details/" + $(this).data('id'),
-                    type: "GET",
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-                        $('#edit_pms_modal').modal('show');
-                        $('#edit_pms_name').val(e['data']['pms_name']);
-                        $('#edit_id').val(e['data']['id']);
-                        $('#edit_pms_date_types').val(e['data']['pms_date_types']);
-                        $('#edit_pms_description').val(e['data']['pms_description']);
-                        $('#edit_date_start').val(e['data']['date_start']);
-
-
-                        var send_to = e['data']['send_to'];
-                        var cc_to = e['data']['cc_to'];
-                        // var send_to_arr = send_to.split(",");
-
-                        var send_to_diff = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
-                        $('#edit_send_to').prepend(send_to_diff).trigger('change');
-
-
-                        var cc_def_option = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
-                        $('#edit_cc_to').prepend(cc_def_option).trigger('change');
-
-
-                        if (e['data']['is_email'] == 1) {
-                            $('#edit_cc_to').val(null).trigger('change');
-                            $('#edit_send_to').val(null).trigger('change');
-                            send_to.forEach(function (email) {
-                                var newOption = new Option(email, email, true, true);
-                                $('#edit_send_to').append(newOption).trigger('change');
-                            });
-
-                            cc_to.forEach(function (email) {
-                                var newOption = new Option(email, email, true, true);
-                                $('#edit_cc_to').append(newOption).trigger('change');
-                            });
-                            $('#edit_is_email').val(1);
-                            $('.edit_send_to_row').removeAttr('hidden');
-
-                        }
-
-                        var isEmail = e['data']['is_email'];
-                        $('input[name="edit_selection"]').prop('checked', false);
-                        $('input[name="edit_selection"][value="' + isEmail + '"]').prop('checked', true);
-
-
-
-
-
-                    }
-                })
-            });
-
-            $(document).on('click', '.btn_pms', function () {
-                $('#add_pms_remarks_modal').modal('show');
-
-                $.ajax({
-                    url: "get_pms_details/" + $(this).data('id'),
-                    type: "GET",
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-
-                        $('#pms_text_header').text('Add Remarks to ' + e['data']['pms_name']);
-                        $('#pms_hid_id').val(e['data']['id']);
-
-                    }
-                })
-            });
-
-            $('#edit_pms_btn').click(function () {
-                const edit_id = $('#edit_id').val();
-                const edit_pms_name = $('#edit_pms_name').val();
-                const edit_date_start = $('#edit_date_start').val();
-                const edit_pms_date_types = $('#edit_pms_date_types').val();
-                const edit_pms_description = $('#edit_pms_description').val();
-                const edit_is_email = $('#edit_is_email').val();
-                const edit_cc_to = $('#edit_cc_to').val();
-                const edit_send_to = $('#edit_send_to').val();
-
-
-                $.ajax({
-                    url: "{{ route('pms_edit_details') }}",
-                    type: "POST",
-                    data: {
-                        id: edit_id, pms_name: edit_pms_name,
-                        date_start: edit_date_start, pms_date_types: edit_pms_date_types,
-                        pms_description: edit_pms_description, is_email: edit_is_email,
-                        cc_to: edit_cc_to, send_to: edit_send_to,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-                        $('#edit_pms_modal').modal('hide');
-                        $('#tbl_pms').DataTable().ajax.reload();
-                        Swal.fire('Updated!', 'Your PMS has been updated successfully .', 'success');
-                    },
-                })
-            });
-
-            $(document).on('click', '.btn_delete', function () {
+                }
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    text: "You want to " + approve + " this request?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "delete_pms_request/" + $(this).data('id'),
-                            type: "GET",
-                            success: function (e) {
-                                if (e['isValid'] == false) {
-                                    alertify.set('notifier', 'position', 'top-right');
-                                    alertify.set('notifier', 'delay', 5);
-                                    alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                                    return;
-                                }
-                                $('#tbl_pms').DataTable().ajax.reload();
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your PMS has been deleted.",
-                                    icon: "success"
+                    confirmButtonText: "Yes," + approve + " it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Remarks of ' + approve,
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "approved_pms/" + $(this).data('id') + "/" + $(this).data('val') + '/' + remarks,
+                                    success: function (e) {
+                                        if (e['isValid'] == false) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                html: '<span style="color: white;">' + e['msg'] + '</span>',
+                                                background: '#f27474',
+                                                timer: 5000,
+                                                showConfirmButton: false,
+                                                timerProgressBar: true,
+                                                toast: false,
+                                            })
+                                            reject('Deletion failed');
+                                        }
+                                        else {
+                                            Swal.fire({
+                                                title: approve + '!',
+                                                text: "Your request has been " + approve,
+                                                icon: "success"
+                                            });
+                                            $('#tbl_pms').DataTable().ajax.reload();
+                                            resolve();
+                                        }
+
+                                    },
+
                                 });
                             }
-                        })
-
-                    }
-                });
-
-
-            });
-
-            $('#save_remarks_pms').click(function () {
-                const pms_remarks = $('#pms_remarks').val();
-                const pms_files = $('#pms_files')[0].files[0];
-                const pms_hid_id = $('#pms_hid_id').val();
-                const pms_data = new FormData();
-
-                pms_data.append('file[]', pms_files);
-                pms_data.append('remarks', pms_remarks);
-                pms_data.append('pms_id', pms_hid_id);
-
-
-
-
-                if (pms_files == "" || pms_files == undefined) {
-                    alertify.set('notifier', 'position', 'top-right');
-                    alertify.set('notifier', 'delay', 5);
-                    alertify.error('<span style="color: white;"> Please Upload File For PMS</span>');
-                    return;
-                }
-
-                if (pms_remarks == "") {
-                    alertify.set('notifier', 'position', 'top-right');
-                    alertify.set('notifier', 'delay', 5);
-                    alertify.error('<span style="color: white;"> PMS Remarks is Required</span>');
-                    return;
-                }
-
-
-                $.ajax({
-                    url: "{{ route('add_pms_remarks') }}",
-                    type: "POST",
-                    processData: false,
-                    contentType: false,
-                    data: pms_data,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }, beforeSend: function () {
-
-                    },
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-
-                        $('#tbl_pms').DataTable().ajax.reload();
-                        Swal.fire({
-                            title: "Uploaded!",
-                            text: "Your PMS remarks has been added.",
-                            icon: "success"
                         });
-
-                        $('#add_pms_remarks_modal').modal('hide');
-                        $('#pms_remarks').val("");
-                        $('#pms_files').val("");
-
                     }
                 })
 
 
-
             })
-
-            $('input[name="selection"]').change(function () {
-                var select_radio = $(this).val();
-                $('#is_email').val('');
-                if (select_radio == 1) {
-                    $('#is_email').val(1);
-                    $('.send_to_row').removeAttr('hidden');
-                }
-                else {
-                    $('#is_email').val(0);
-                    $('.send_to_row').attr('hidden', true);
-                }
-
-
-                $('#cc_to').val(null).trigger('change');
-                $('#send_to').val(null).trigger('change');
-
-                var send_opt = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
-                $('#send_to').prepend(send_opt).trigger('change');
-
-
-                var cc_def_opt = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
-                $('#cc_to').prepend(cc_def_opt).trigger('change');
-            });
-
-            $('input[name="edit_selection"]').change(function () {
-                var select_radio = $(this).val();
-                if (select_radio == 1) {
-                    $('#edit_is_email').val(1);
-                    $('.edit_send_to_row').removeAttr('hidden');
-                }
-                else {
-                    $('#edit_is_email').val(0);
-                    $('.edit_send_to_row').attr('hidden', true);
-                }
-            });
-
-            $('#send_to').select2({
-                tags: true,
-                tokenSeparators: [',', ' ']
-            });
-
-            $('#cc_to').select2({
-                tags: true,
-                tokenSeparators: [',', ' ']
-            });
-
-            $('#edit_send_to').select2({
-                tags: true,
-                tokenSeparators: [',', ' ']
-            });
-
-            $('#edit_cc_to').select2({
-                tags: true,
-                tokenSeparators: [',', ' ']
-            });
-
-            $('#view_tbl_pms').click(function () {
-
-                const pms_year = $('#pms_year').val();
-                // create me a ajax for pms_sched_table tbody   public function get_pms_sched_table($year) 
-                $.ajax({
-                    url: 'get_pms_sched_table/' + pms_year,
-                    data: {
-                        pms_year: pms_year,
-                    },
-                    type: "GET",
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-                        $('#pms_sched_table tbody').empty();
-                        $('#pms_sched_table tbody').html(e['tbody_html']);
-                        $('#view_pms_data').modal('show');
-
-                        pms_year
-                    }
-                });
-            });
-
-        });
-
+        })
     </script>
 @endsection

@@ -79,13 +79,13 @@
                             <label>Departure Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="departure_date"
-                                class="spec_input form-control ">
+                                class="spec_input form-control date_time_input ">
                         </div>
                         <div class="col-2 purpose_col">
                             <label>Appointment Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="appointment_date"
-                                class="spec_input form-control">
+                                class="spec_input form-control date_time_input">
                         </div>
                         <div class="col-2 purpose_col">
                             <label>Pick Up Date</label>
@@ -93,7 +93,7 @@
                             <input type="datetime-local" id="pickup_date"
                                 min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
-                                class="spec_input form-control">
+                                class="spec_input form-control date_time_input">
                         </div>
 
                         <div class="col-4 purpose_col">
@@ -548,8 +548,8 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
+                            // alertify.set('notifier', 'position', 'top-right');
+                            // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -677,8 +677,8 @@
                                     url: "delete_shuttle_request/" + $(this).data('id') + '/' + remarks,
                                     success: function (e) {
                                         if (e['isValid'] == false) {
-                                            alertify.set('notifier', 'position', 'top-right');
-                                            alertify.set('notifier', 'delay', 5);
+                                            // alertify.set('notifier', 'position', 'top-right');
+                                            // alertify.set('notifier', 'delay', 5);
                                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                                             reject('Deletion failed');
                                         }
@@ -690,7 +690,6 @@
                                         });
                                         $('#tbl_transit').DataTable().ajax.reload();
                                         resolve();
-
                                     },
 
                                 });

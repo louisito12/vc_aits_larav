@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PmsScheduleType;
 use DateTime;
 use Validator;
 use Carbon\Carbon;
@@ -10,9 +11,11 @@ use App\Models\PmsFiles;
 use App\Models\AitsNotif;
 use App\Models\UserModel;
 use App\Models\Pms_Details;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Models\AitsShuttleRequest;
+use Illuminate\Support\Facades\DB;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -103,17 +106,13 @@ class Pms_Maintenance_Controller extends Controller
         // echo next_date_pms($start_date, 'yearly') . '====>';    
         // echo next_date_pms($start_date, 'quarterly') . '====>'; 
         // Mail::to('ictsysdev@valuecarehealth.com')->send(new PmsMailer([]));
-
         // $dateString = '2025-07-09 00:00:00.000';
         // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
         // echo $formattedDate; // Outputs: 2025-07-09
 
+        $schedule = PmsScheduleType::where('status', 1)->get();
 
-
-
-    
-        return view('pms_page.pms_sample');
-
+        return view('pms_page.pms_management', compact('schedule'));
 
 
     }
@@ -131,6 +130,10 @@ class Pms_Maintenance_Controller extends Controller
                     'pms_description' => ['required'],
                     'pms_date_types' => ['required'],
                     'date_start' => ['required'],
+                    'is_email' => ['required'],
+                    'conducted_by' => ['required'],
+                    'noted_by' => ['required'],
+
                 ],
 
             );
@@ -165,7 +168,7 @@ class Pms_Maintenance_Controller extends Controller
             $pms = Pms_Details::create($request->all());
             $pms_id = $pms->id;
             $start_date = next_date_pms($request->date_start, $request->pms_date_types);
-            $this->insert_pms_alert($pms_id, $start_date);
+            $this->insert_pms_alert($pms_id, $request->date_start);
 
             return response()->json([
                 'msg' => 'Successfully Inserted PMS',
@@ -187,17 +190,27 @@ class Pms_Maintenance_Controller extends Controller
 
     public function get_pms_data()
     {
-        $data = Pms_Details::where('status', 1)->get();
+        $data = Pms_Details::with(['get_noted_by'])->where('status', 1)->get();
+        return $this->pms_datatable($data);
+
+    }
+
+
+
+    public function pms_datatable($data)
+    {
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
                 $pms_button = '';
                 $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
-                if ($pms_file) {
-                    $date1 = $pms_file->pms_date;
-                    $date2 = Carbon::now()->subWeek()->format('Y-m-d H:i:s.u');
-                    $result = compare_dates($date1, $date2);
-                    if ($result == -1) {
-                        $pms_button = ' <button type="button" data-id=' . $data->id . ' class="btn btn-success btn-sm btn_pms spec_input"> <i  class="fa-solid fa-screwdriver-wrench"></i></button>';
+                if ($data->pms_status == 'Approved') {
+                    if ($pms_file) {
+                        $date1 = $pms_file->pms_date;
+                        $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
+                        $result = compare_dates($date1, $date2);
+                        if ($result == -1) {
+                            $pms_button = ' <button type="button" data-id=' . $data->id . ' class="btn btn-success btn-sm btn_pms spec_input"> <i  class="fa-solid fa-screwdriver-wrench"></i></button>';
+                        }
                     }
                 }
                 return '
@@ -211,26 +224,73 @@ class Pms_Maintenance_Controller extends Controller
                 return Carbon::parse($data->date_start)->format('M j, Y');
 
             })
+
+            ->addColumn('approval_action', function ($data) {
+                $hidden = $data->pms_status != 'Pending' ? 'hidden' : '';
+
+                return '
+                        <div  class="btn-group dropstart input_spec my-1">
+                            <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Action
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
+                                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
+                                
+                            </ul>
+                        </div>';
+
+            })
             ->addColumn('pms_status', function ($data) {
                 $stat = '';
                 $pms_file = PmsFiles::where('pms_id', $data->id)->where('status', 1)->first();
                 if ($pms_file) {
                     $date1 = $pms_file->pms_date;
-                    // $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
-                    $date2 = Carbon::now()->subWeek()->format('Y-m-d H:i:s.u');
+                    $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
                     $result = compare_dates($date1, $date2);
-                    if ($result === -1) {
-                        $stat = '<h6><span class="badge rounded-pill bg-danger">Need For PMS !</span></h6>';
+                    if ($data->pms_status == 'Approved') {
+                        if ($result == -1) {
+                            $stat = '<h6><span class="badge rounded-pill bg-danger">Need For PMS !</span></h6>';
+                        }
+
                     }
 
                 }
-
-
                 return $stat;
 
             })
-            ->rawColumns(['action', 'status', 'admin_action', 'pms_status'])
+            ->addColumn('noted_by', function ($data) {
+                return $data['get_noted_by']['firstname'] . ' ' . $data['get_noted_by']['lastname'];
+            })
+            ->addColumn('pms_status_badge', function ($data) {
+                return $this->pms_status($data->pms_status);
+            })
+            ->rawColumns(['action', 'status', 'admin_action', 'pms_status', 'pms_status_badge', 'approval_action'])
             ->make(true);
+
+
+
+    }
+
+
+    public function pms_status($status)
+    {
+
+        if ($status == "Pending") {
+            $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
+        } else if ($status == "Approved") {
+            $stat = '<span class="badge rounded-pill bg-success">Approved</span>';
+
+        } else if ($status == "Disapproved") {
+            $stat = '<span class="badge rounded-pill bg-danger">Disapproved</span>  ';
+
+        } else {
+            $stat = '<span class="badge rounded-pill bg-danger">Error</span> ';
+        }
+
+        return '<h5>' . $stat . '</h5>';
+
 
 
     }
@@ -304,7 +364,7 @@ class Pms_Maintenance_Controller extends Controller
     public function get_pms_details($id)
     {
         try {
-            $data = Pms_Details::find($id);
+            $data = Pms_Details::with(['get_noted_by'])->find($id);
             $data->date_start = Carbon::parse($data->date_start)->format('Y-m-d');
             $data->send_to = explode(',', $data->send_to);
             $data->cc_to = explode(',', $data->cc_to);
@@ -328,6 +388,26 @@ class Pms_Maintenance_Controller extends Controller
         }
     }
 
+
+
+    public function get_noted_by(Request $request)
+    {
+        $data = UserProfile::on('main_user')
+            ->select('tbl_personal_datas.user_id', 'tbl_personal_datas.firstname', 'tbl_personal_datas.lastname')
+            ->where(DB::raw("CONCAT(firstname, ' ', lastname)"), 'LIKE', '%' . $request->searchTerm . '%')
+            ->leftJoin(DB::raw('users'), 'tbl_personal_datas.user_id', '=', 'users.id')
+            ->where('users.isactive', 1)
+            ->limit(400)
+            ->get();
+        $data_new = [];
+        foreach ($data as $dt) {
+            $data_new[] = array("id" => $dt->user_id, "text" => $dt->firstname . ' ' . $dt->lastname);
+        }
+        return $data_new;
+    }
+
+
+
     public function pms_edit_details(Request $request)
     {
         try {
@@ -340,6 +420,8 @@ class Pms_Maintenance_Controller extends Controller
                     'pms_description' => ['required'],
                     'pms_date_types' => ['required'],
                     'date_start' => ['required'],
+                    'conducted_by' => ['required'],
+                    'noted_by' => ['required'],
                 ],
             );
 
@@ -372,7 +454,7 @@ class Pms_Maintenance_Controller extends Controller
 
             Pms_Details::where('id', $request->id)->update($request->except(['id']));
             $start_date = next_date_pms($request->date_start, $request->pms_date_types);
-            $this->insert_pms_alert($request->id, $start_date);
+            $this->insert_pms_alert($request->id, $request->date_start);
 
             return response()->json([
                 'msg' => 'Successfully Updated PMS',
@@ -487,6 +569,8 @@ class Pms_Maintenance_Controller extends Controller
             ]);
         }
     }
+
+
 
 
 

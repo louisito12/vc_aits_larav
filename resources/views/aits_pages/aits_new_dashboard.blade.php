@@ -79,7 +79,7 @@
                     <div class="card border-primary shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-4">
-                                <i class="fa-solid fa-pen-to-square me-2"></i>ON GOING REQUEST
+                                <i class="fa-solid fa-pen-to-square me-2"></i>APPROVED REQUEST TODAY
                             </h5>
                             <div class="list-group">
                                 <a data-id="2" data-name="room_request"
@@ -126,13 +126,13 @@
                                 <a data-id="3" data-name="room_request"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_room_dash">
                                     Room Reservations
-                                    <span class="badge bg-success text-white room_reserve3">0</span>
+                                    <span class="badge bg-success  room_reserve3">0</span>
                                 </a>
 
                                 <a data-name="transit_request" data-id="3"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_transit">
                                     Shuttle Requests
-                                    <span class="badge bg-success text-white transit_request_text3">0</span>
+                                    <span class="badge bg-success  transit_request_text3">0</span>
                                 </a>
 
                                 <a data-name="for_delivery" data-procedure="1" data-id="3"
@@ -519,154 +519,172 @@
 
 
             @if(in_array(2, $roles) || in_array(3, $roles))
-                $.ajax({
-                    url: "{{ route('aits_dashboard_counts') }}",
-                    type: "GET",
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-                        const { pending_count, ongoing_count, completed_count } = e.room_request;
-                        $('.room_reserve1').text(pending_count ?? 0);
-                        $('.room_reserve2').text(ongoing_count ?? 0);
-                        $('.room_reserve3').text(completed_count ?? 0);
 
-                        $('.transit_request_text1').text(e['vehicle_request']['pending_count'] ?? 0);
-                        $('.transit_request_text2').text(e['vehicle_request']['ongoing_count'] ?? 0);
-                        $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ?? 0);
-                        // $('.delivery_logistic1').text(0);
-                        // $('delivery_logistic2').text(0);
-                        // $('delivery_logistic3').text(0);
+                function counters() {
+                    $.ajax({
+                        url: "{{ route('aits_dashboard_counts') }}",
+                        type: "GET",
+                        success: function (e) {
+                            if (e['isValid'] == false) {
+                                alertify.set('notifier', 'position', 'top-right');
+                                alertify.set('notifier', 'delay', 5);
+                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                return;
+                            }
+                            const { pending_count, ongoing_count, completed_count } = e.room_request;
+                            $('.room_reserve1').text(pending_count ?? 0);
+                            $('.room_reserve2').text(ongoing_count ?? 0);
+                            $('.room_reserve3').text(completed_count ?? 0);
 
-                        // $('.collection_logistic1').text(0);
-                        // $('.collection_logistic2').text(0);
-                        // $('.collection_logisti3').text(0);
+                            $('.transit_request_text1').text(e['vehicle_request']['pending_count'] ?? 0);
+                            $('.transit_request_text2').text(e['vehicle_request']['ongoing_count'] ?? 0);
+                            $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ?? 0);
+                            // $('.delivery_logistic1').text(0);
+                            // $('delivery_logistic2').text(0);
+                            // $('delivery_logistic3').text(0);
 
-
-                        // $('.pickup_logistic1').text(0);
-                        // $('.pickup_logistic2').text(0);
-                        // $('.pickup_logistic3').text(0);
+                            // $('.collection_logistic1').text(0);
+                            // $('.collection_logistic2').text(0);
+                            // $('.collection_logisti3').text(0);
 
 
-                        var logisticsRequests = e['logistics_request'];
-                        var searchStatus = "For Delivery";
-                        var index = -1;
-                        var collection_params = "For Collection"
-                        var collection_index = -1;
-                        var pick_up_params = "For Pick Up";
-                        var pick_up_index = -1;
+                            // $('.pickup_logistic1').text(0);
+                            // $('.pickup_logistic2').text(0);
+                            // $('.pickup_logistic3').text(0);
 
-                        $.each(logisticsRequests, function (i, obj) {
-                            if (obj.procedure_status == searchStatus) {
-                                index = i;
+
+                            var logisticsRequests = e['logistics_request'];
+                            var searchStatus = "For Delivery";
+                            var index = -1;
+                            var collection_params = "For Collection"
+                            var collection_index = -1;
+                            var pick_up_params = "For Pick Up";
+                            var pick_up_index = -1;
+
+                            $.each(logisticsRequests, function (i, obj) {
+                                if (obj.procedure_status == searchStatus) {
+                                    index = i;
+                                }
+
+                                if (obj.procedure_status == collection_params) {
+                                    collection_index = i;
+                                }
+
+                                if (obj.procedure_status == pick_up_params) {
+                                    pick_up_index = i;
+                                }
+
+                            });
+
+
+                            if (index != -1) {
+                                $('.delivery_logistic1').text(logisticsRequests[index]['pending_counts']);
+                                $('.delivery_logistic2').text(logisticsRequests[index]['On_going']);
+                                $('.delivery_logistic3').text(logisticsRequests[index]['Approved']);
+
                             }
 
-                            if (obj.procedure_status == collection_params) {
-                                collection_index = i;
+
+                            if (collection_index != -1) {
+                                $('.collection_logistic1').text(logisticsRequests[collection_index]['pending_counts']);
+                                $('.collection_logistic2').text(logisticsRequests[collection_index]['On_going']);
+                                $('.collection_logisti3').text(logisticsRequests[collection_index]['Approved']);
                             }
 
-                            if (obj.procedure_status == pick_up_params) {
-                                pick_up_index = i;
+
+                            if (pick_up_index != -1) {
+                                $('.pickup_logistic1').text(logisticsRequests[pick_up_index]['pending_counts']);
+                                $('.pickup_logistic2').text(logisticsRequests[pick_up_index]['On_going']);
+                                $('.pickup_logistic3').text(logisticsRequests[pick_up_index]['Approved']);
+
                             }
 
-                        });
-
-
-                        if (index != -1) {
-                            $('.delivery_logistic1').text(logisticsRequests[index]['pending_counts']);
-                            $('.delivery_logistic2').text(logisticsRequests[index]['On_going']);
-                            $('.delivery_logistic3').text(logisticsRequests[index]['Approved']);
 
                         }
+                    });
+                }
 
+                counters();
 
-                        if (collection_index != -1) {
-                            $('.collection_logistic1').text(logisticsRequests[collection_index]['pending_counts']);
-                            $('.collection_logistic2').text(logisticsRequests[collection_index]['On_going']);
-                            $('.collection_logisti3').text(logisticsRequests[collection_index]['Approved']);
-                        }
+                setInterval(function () {
+                    counters();
+                }, 5 * 60 * 1000);
 
-
-                        if (pick_up_index != -1) {
-                            $('.pickup_logistic1').text(logisticsRequests[pick_up_index]['pending_counts']);
-                            $('.pickup_logistic2').text(logisticsRequests[pick_up_index]['On_going']);
-                            $('.pickup_logistic3').text(logisticsRequests[pick_up_index]['Approved']);
-
-                        }
-
-
-                    }
-                });
 
             @elseif(in_array(4, $roles))
 
+                function messenger_counter() {
 
-                $.ajax({
-                    url: "{{ route('aits_dashboard_counts_messenger') }}",
-                    type: "GET",
-                    success: function (e) {
-                        if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
-                            return;
-                        }
-
-
-
-                        var logisticsRequests = e['logistics_request_messenger'];
-                        var for_delivery = "For Delivery";
-                        var index_messenger = -1;
-                        var for_collection = "For Collection"
-                        var collection_index_messenger = -1;
-                        var for_pick_up = "For Pick Up";
-                        var pick_up_index_messenger = -1;
-
-                        $.each(logisticsRequests, function (i, obj) {
-                            if (obj.procedure_status == for_delivery) {
-                                index_messenger = i;
+                    $.ajax({
+                        url: "{{ route('aits_dashboard_counts_messenger') }}",
+                        type: "GET",
+                        success: function (e) {
+                            if (e['isValid'] == false) {
+                                alertify.set('notifier', 'position', 'top-right');
+                                alertify.set('notifier', 'delay', 5);
+                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                return;
                             }
 
-                            if (obj.procedure_status == for_collection) {
-                                collection_index_messenger = i;
+
+
+                            var logisticsRequests = e['logistics_request_messenger'];
+                            var for_delivery = "For Delivery";
+                            var index_messenger = -1;
+                            var for_collection = "For Collection"
+                            var collection_index_messenger = -1;
+                            var for_pick_up = "For Pick Up";
+                            var pick_up_index_messenger = -1;
+
+                            $.each(logisticsRequests, function (i, obj) {
+                                if (obj.procedure_status == for_delivery) {
+                                    index_messenger = i;
+                                }
+
+                                if (obj.procedure_status == for_collection) {
+                                    collection_index_messenger = i;
+                                }
+
+                                if (obj.procedure_status == for_pick_up) {
+                                    pick_up_index_messenger = i;
+                                }
+
+                            });
+
+
+
+                            if (index_messenger != -1) {
+                                $('.delivery_mess_logistic1').text(logisticsRequests[index_messenger]['pending_counts']);
+                                $('.delivery_mess_logistic2').text(logisticsRequests[index_messenger]['On_going']);
+                                $('.delivery_mess_logistic3').text(logisticsRequests[index_messenger]['Approved']);
+
                             }
 
-                            if (obj.procedure_status == for_pick_up) {
-                                pick_up_index_messenger = i;
+
+                            if (collection_index_messenger != -1) {
+                                $('.collection_mess_logistic1').text(logisticsRequests[collection_index_messenger]['pending_counts']);
+                                $('.collection_mess_logistic2').text(logisticsRequests[collection_index_messenger]['On_going']);
+                                $('.collection_mess_logistic3').text(logisticsRequests[collection_index_messenger]['Approved']);
                             }
 
-                        });
 
+                            if (pick_up_index_messenger != -1) {
+                                $('.pickup_mess_logistic1').text(logisticsRequests[pick_up_index_messenger]['pending_counts']);
+                                $('.pickup_mess_logistic2').text(logisticsRequests[pick_up_index_messenger]['On_going']);
+                                $('.pickup_mess_logistic3').text(logisticsRequests[pick_up_index_messenger]['Approved']);
 
+                            }
 
-                        if (index_messenger != -1) {
-                            $('.delivery_mess_logistic1').text(logisticsRequests[index_messenger]['pending_counts']);
-                            $('.delivery_mess_logistic2').text(logisticsRequests[index_messenger]['On_going']);
-                            $('.delivery_mess_logistic3').text(logisticsRequests[index_messenger]['Approved']);
 
                         }
+                    });
+                }
+                messenger_counter()
+                setInterval(function () {
+                    messenger_counter()
+                }, 5 * 60 * 1000);
 
 
-                        if (collection_index_messenger != -1) {
-                            $('.collection_mess_logistic1').text(logisticsRequests[collection_index_messenger]['pending_counts']);
-                            $('.collection_mess_logistic2').text(logisticsRequests[collection_index_messenger]['On_going']);
-                            $('.collection_mess_logistic3').text(logisticsRequests[collection_index_messenger]['Approved']);
-                        }
-
-
-                        if (pick_up_index_messenger != -1) {
-                            $('.pickup_mess_logistic1').text(logisticsRequests[pick_up_index_messenger]['pending_counts']);
-                            $('.pickup_mess_logistic2').text(logisticsRequests[pick_up_index_messenger]['On_going']);
-                            $('.pickup_mess_logistic3').text(logisticsRequests[pick_up_index_messenger]['Approved']);
-
-                        }
-
-
-                    }
-                });
             @endif
 
             $('.btn_room_dash').click(function () {
@@ -683,20 +701,15 @@
 
             $('.btn_transit').click(function () {
                 $('#transit_request_modal').modal('show');
-
                 $('#tbl_transit').DataTable({
                     destroy: true,
                     ajax: {
                         url: "transit_request_dash/" + $(this).data('id'),
                     },
                     columns: columns_data($(this).data('name')),
-
                 })
 
-
             });
-
-
 
 
             $('.btn_logistics').click(function () {
@@ -709,6 +722,7 @@
                             ? 'For Pick Up Request'
                             : '';
 
+
                 $('#logistic_header').text(header_text);
                 $('#deliver_tbl').DataTable({
                     destroy: true,
@@ -718,6 +732,7 @@
                     columns: columns_data('logistic_request'),
                 });
             });
+
 
 
             $('.btn_logistics_mess').click(function () {

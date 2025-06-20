@@ -542,7 +542,7 @@
                                 .head_title {
                                     font-size: 1.2em;
                                     font-weight: bold;
-                                    /* letter-spacing: 2px; */
+
                                     background: linear-gradient(270deg,
                                             #66abe2,
                                             #1e90ff,
@@ -550,16 +550,13 @@
                                             #66abe2,
                                             #00c6ff,
                                             #66abe2);
-                                   /*  background-size: 1200% 1200%; */
+                                    background-size: 1200% 1200%;
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
-                                  
+
                                     text-fill-color: transparent;
                                     animation: gradientMove 6s ease-in-out infinite;
-                                    /* text-shadow: 0 0 10px #66abe2, 0 0 20px #1e90ff, 0 0 40px #66abe2; */
-                                    /* border-radius: 8px; */
-                                    /* padding: 0.2em 0.6em; */
-                                    /* box-shadow: 0 0 16px 2px #66abe244; */
+
                                 }
 
                                 @keyframes gradientMove {
@@ -716,6 +713,28 @@
                 })
             })
         @endif
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to update the datetime-local inputs
+            function updateDateTimeInputs() {
+                const now = new Date();
+                const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .slice(0, 16); // Format to 'YYYY-MM-DDTHH:MM'
+
+                // Set the value for all datetime-local inputs with the class 'date_time_input'
+                document.querySelectorAll('input.date_time_input[type="datetime-local"]').forEach(input => {
+                    input.value = localDateTime;
+                });
+            }
+
+            // Initial update
+            updateDateTimeInputs();
+
+            // Update every minute (60000 milliseconds)
+            setInterval(updateDateTimeInputs, 60000);
+        });
     </script>
 </body>
 

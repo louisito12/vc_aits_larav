@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Aits_Dashboard;
 use App\Http\Controllers\Pms_Maintenance_Controller;
+use App\Http\Controllers\PmsApprovalController;
 use App\Http\Controllers\PmsvalidationController;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
@@ -60,12 +61,7 @@ Route::get('registed_user', function () {
 
 
 Route::controller(UserController::class)->group(function () {
-
     Route::post('register_user', 'register_user')->name('register_user');
-
-
-
-
 });
 
 
@@ -106,11 +102,7 @@ Route::controller(Aits_Dashboard::class)->group(function () {
     Route::get('transit_request_dash/{params}', 'transit_request_dash')->name('transit_request_dash');
     Route::get('aits_dashboard_logistics/{params}/{procedure}', 'aits_dashboard_logistics')->name('aits_dashboard_logistics');
     Route::get('aits_dashboard_logistics_mess/{params}/{procedure}', 'aits_dashboard_logistics_mess')->name('aits_dashboard_logistics_mess');
-
-
-
     Route::get('aits_dashboard_counts_messenger', 'aits_dashboard_counts_messenger')->name('aits_dashboard_counts_messenger');
-
 });
 
 
@@ -194,6 +186,13 @@ Route::controller(Pms_Maintenance_Controller::class)->group(function () {
     Route::get('delete_pms_request/{id}', 'delete_pms_request')->name('delete_pms_request');
     Route::get('test_dates', 'test_dates')->name('test_dates');
     Route::post('add_pms_remarks', 'add_pms_remarks')->name('add_pms_remarks');
+    Route::post('get_noted_by', 'get_noted_by')->name('get_noted_by');
+});
+
+
+Route::controller(PmsApprovalController::class)->group(function () {
+    Route::get('get_pms_approval', 'get_pms_approval')->name('get_pms_approval');
+    Route::get('approved_pms/{id}/{val}/{remarks}', 'approved_pms')->name('approved_pms');
 });
 
 Route::controller(PmsvalidationController::class)->group(function () {
@@ -224,6 +223,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aits_usermanagement', [Aits_User_Controller::class, 'aits_usermanagement'])->name('aits_usermanagement');
     //pms
     Route::get('pms_page', [Pms_Maintenance_Controller::class, 'pms_page'])->name('pms_page');
+    Route::get('pms_approval_view', [PmsApprovalController::class, 'pms_approval_view'])->name('pms_approval_view');
 });
 
 

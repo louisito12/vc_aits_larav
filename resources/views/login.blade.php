@@ -84,14 +84,16 @@
                                                 </div>
                                             @endif
                                         </div>
+
                                         <div class="col-12">
-                                            <p class="small mb-0">Don't have account? <a
+                                            <p class="small mb-0">Please Login Your Account <a hidden
                                                     href="{{ route('registed_user') }}">Create an
                                                     account</a>
                                             </p>
                                         </div>
                                     </form>
 
+                                    <br>
                                 </div>
                             </div>
 

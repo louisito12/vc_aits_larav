@@ -100,13 +100,21 @@ class AitsTransitApproval extends Controller
         try {
 
             $data = AitsShuttleRequest::find($request->id);
-            $validation = $this->date_validation($data->pick_up_date, $data->departure_date, $request->car_id);
-            if ($validation != 0) {
-                return response()->json([
-                    'msg' => 'The service shuttle Car for that time is no longer available !',
-                    'status' => 402,
-                    "isValid" => false,
-                ]);
+
+            $spec_approve = 0;
+            if ($request->spec_approval == 3) {
+                $spec_approve = 1;
+            }
+
+            if ($request->spec_approval != 3) {
+                $validation = $this->date_validation($data->pick_up_date, $data->appointment_date, $request->car_id);
+                if ($validation != 0) {
+                    return response()->json([
+                        'msg' => 'The service shuttle Car for that time is no longer available !',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                }
             }
 
             AitsShuttleRequest::where('id', $request->id)->update([
@@ -114,8 +122,8 @@ class AitsTransitApproval extends Controller
                 'driver_id' => $request->driver_id,
                 'request_status' => 'Approved',
                 'approved_by' => Auth::user()->id,
-                "date_approved" => Carbon::now()
-
+                "date_approved" => Carbon::now(),
+                'is_special_approve' => $spec_approve,
             ]);
 
             $object = [
@@ -228,6 +236,23 @@ class AitsTransitApproval extends Controller
         // OR ('$fromDate' BETWEEN pick_up_date AND departure_date)
         // OR ('$toDate' BETWEEN pick_up_date AND departure_date) )
         // AND request_status='Approved' AND car_id=$car_id;
+        //appointment_date
+        // ";
+
+
+        //         $query = "
+        // SELECT COUNT(*) AS overlapping_count
+        // FROM aits_shuttle_requests
+        // WHERE
+        // (
+        //   (pick_up_date    BETWEEN '$fromDate' AND '$toDate')
+        //   OR (departure_date BETWEEN '$fromDate' AND '$toDate')
+        //   OR ('$fromDate'   BETWEEN pick_up_date    AND departure_date)
+        //   OR ('$toDate'     BETWEEN pick_up_date    AND departure_date)
+        //   OR (appointment_date BETWEEN '$fromDate' AND '$toDate')
+        // )
+        // AND request_status = 'Approved'
+        // AND car_id = $car_id;
         // ";
 
         $fromDate = Carbon::parse($date_from)->format('Y-m-d');
@@ -236,9 +261,12 @@ class AitsTransitApproval extends Controller
         $query = "
             SELECT COUNT(*) AS overlapping_count
             FROM aits_shuttle_requests WHERE
-            CAST(departure_date AS DATE) = '$toDate'
+            CAST(appointment_date AS DATE) = '$toDate'
             AND request_status = 'Approved'
             AND car_id = $car_id;";
+
+
+
 
         $data = DB::connection('sqlsrv')->select($query, []);
 

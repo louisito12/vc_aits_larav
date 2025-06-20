@@ -72,7 +72,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Room Request
+                    <h6 class="modal-title" id="">Room Request Form
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -82,14 +82,15 @@
                             <label>Date From</label>
                             <input min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="date_from"
-                                type="datetime-local" class="form-control spec_input">
+                                type="datetime-local" class="form-control spec_input date_time_input">
+
                         </div>
                         <div class="col-6">
                             <label>Date To</label>
                             <input id="date_to" type="datetime-local"
                                 min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
-                                class="form-control spec_input">
+                                class="form-control spec_input date_time_input">
                         </div>
                     </div>
                     <br>
@@ -115,7 +116,7 @@
                         </div>
                     </div>
                     <br>
-                    <div id="purpose_row"  class="row">
+                    <div id="purpose_row" class="row">
                         <div class="col-12">
                             <label>Purpose</label>
                             <textarea class="form-control" id="purpose"></textarea>
@@ -220,7 +221,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Room Request
+                    <h6 class="modal-title" id="">Room Request Form
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -230,7 +231,7 @@
                             <label>Date From</label>
                             <input id="edit_update_from" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" type="datetime-local"
-                                class="form-control spec_input">
+                                step="300" class="form-control spec_input">
                             <input id="hidden_id" type="text" hidden class="form-control spec_input">
 
                         </div>
@@ -317,8 +318,8 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
+                            // alertify.set('notifier', 'position', 'top-right');
+                            // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -423,8 +424,8 @@
                     type: "GET",
                     success: function (e) {
                         if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
+                            // alertify.set('notifier', 'position', 'top-right');
+                            // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -544,8 +545,6 @@
                     },
                     success: function (e) {
                         if (e['isValid'] == false) {
-                            alertify.set('notifier', 'position', 'top-right');
-                            alertify.set('notifier', 'delay', 5);
                             alertify.error('<span class="custom-error-msg">' + e['msg'] + '</span>').setting('modal', true);
                             return;
                         }

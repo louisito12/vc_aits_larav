@@ -14,6 +14,9 @@
   <link rel="icon" href="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" type="image/x-icon">
   <!-- Logo -->
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  
+
   <!-- Choices JS -->
   <script src="{{ asset('aits_asset/assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
 

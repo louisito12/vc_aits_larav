@@ -36,7 +36,7 @@ function date_converter($date)
 
 function date_coverters($date)
 {
-    return Carbon::createFromFormat('Y-m-d h:i A', $date)->format('Y-m-d\TH:i');
+    return Carbon::parse($date)->format('Y-m-d\TH:i');
 }
 
 function date_coverters_transit($date)
@@ -171,24 +171,44 @@ function next_date_pms($start_date, $type)
     // Initialize Carbon instance from the start date
     $date = Carbon::parse($start_date);
 
+    $date = Carbon::parse($start_date);
+
     switch ($type) {
+        case 'daily':
+            $date->addDay();
+            break;
+        case 'weekly':
+            $date->addWeek();
+            break;
+
+        case 'semi-monthly':
+            $date->addDays(15);
+            break;
+
         case 'monthly':
-
-            return $date->addMonthNoOverflow()->format('Y-m-d');
-
-        case 'yearly':
-
-            return $date->addYear()->format('Y-m-d');
+            $date->addMonthNoOverflow();
+            break;
 
         case 'quarterly':
-
-            return $date->addMonthsNoOverflow(3)->format('Y-m-d');
+            $date->addMonthsNoOverflow(3);
+            break;
+        case 'tri-annual':
+            $date->addMonthsNoOverflow(4);
+            break;
+        case 'semi-annual':
+            $date->addMonthsNoOverflow(6);
+            break;
+        case 'annual':
+        case 'yearly':
+            $date->addYear();
+            break;
 
         default:
-            return $date->format('Y-m-d');
+            throw new InvalidArgumentException("Invalid frequency type: {$type}");
     }
 
 
+    return $date->format('Y-m-d');
 
 
 }
@@ -219,6 +239,25 @@ function roles_array($user_id)
 
 }
 
+
+function add_schedule()
+{
+
+
+    $schedule = ['annual', 'semi-annual', 'tri-annual', 'quarterly', 'monthly', 'bi-monthly', 'semi-monthly', 'weekly', 'daily'];
+    foreach ($schedule as $schedules) {
+
+
+        DB::table('pms_schedule_types')->insert([
+            'user_id' => Auth::user()->id,
+            'date_created' => Carbon::now(),
+            'schedule' => $schedules
+
+        ]);
+
+    }
+
+}
 // $dateString = '2025-07-09 00:00:00.000';
 // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
 

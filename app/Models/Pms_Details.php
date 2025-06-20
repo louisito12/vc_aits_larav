@@ -13,4 +13,13 @@ class Pms_Details extends Model
 
 
     protected $guarded = [];
+
+
+    public function get_noted_by()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'noted_by');
+
+
+
+    }
 }

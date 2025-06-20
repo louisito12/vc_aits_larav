@@ -324,17 +324,26 @@
                                     url: "approved_room_request/" + $(this).data('id') + "/" + $(this).data('val') + '/' + remarks,
                                     success: function (e) {
                                         if (e['isValid'] == false) {
-                                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                            Swal.fire({
+                                                icon: 'error',
+                                                html: '<span style="color: white;">' + e['msg'] + '</span>',
+                                                background: '#f27474',
+                                                timer: 5000,
+                                                showConfirmButton: false,
+                                                timerProgressBar: true,
+                                                toast: false,
+                                            })
                                             reject('Deletion failed');
                                         }
-
-                                        Swal.fire({
-                                            title: "Deleted!",
-                                            text: "Your request has been deleted.",
-                                            icon: "success"
-                                        });
-                                        $('#room_request_tbl').DataTable().ajax.reload();
-                                        resolve();
+                                        else {
+                                            Swal.fire({
+                                                title: approve + '!',
+                                                text: "Your request has been " + approve,
+                                                icon: "success"
+                                            });
+                                            $('#room_request_tbl').DataTable().ajax.reload();
+                                            resolve();
+                                        }
 
                                     },
 

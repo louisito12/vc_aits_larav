@@ -28,7 +28,7 @@ class PmsvalidationController extends Controller
             foreach ($data as $datas) {
                 $date1 = $datas->pms_date;
                 // $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
-                $date2 = Carbon::now()->subWeek()->format('Y-m-d H:i:s.u');
+                $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
                 $result = compare_dates($date1, $date2);
                 if ($result == -1) {
                     if (!in_array($datas->id, $data_arr)) {

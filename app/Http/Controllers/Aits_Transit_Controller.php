@@ -27,10 +27,26 @@ class Aits_Transit_Controller extends Controller
             ->where('expiry_date', '>=', Carbon::now())
             ->get();
         $type = AitsShuttleType::where('status', 1)->get();
-        $manager = DB::connection('main_user')
-            ->table('tbl_personal_datas')
-            ->where('poslevel_id', 1003)
-            ->get();
+        // $manager = DB::connection('main_user')
+        //     ->table('tbl_personal_datas')
+        //     ->where('poslevel_id', 1003)
+        //     ->orderBy('firstname','asc')
+        //     ->get();
+
+        $manager_sql = "
+        SELECT users.id as user_id,tbl_personal_datas.firstname,tbl_personal_datas.lastname FROM users 
+        LEFT JOIN tbl_personal_datas  ON users.id = tbl_personal_datas.user_id
+        WHERE tbl_personal_datas.poslevel_id = 1003 AND users.isactive= 1
+        ORDER BY  tbl_personal_datas.firstname ASC";
+
+
+        $manager = DB::connection('main_user')->select(
+            $manager_sql,
+            []
+        );
+
+
+
         return view('aits_pages.aits_transit_request_view', compact('vehicle', 'type', 'manager'));
     }
 
@@ -53,6 +69,9 @@ class Aits_Transit_Controller extends Controller
             );
 
 
+
+
+
             if ($validated->fails()) {
                 return response()->json([
                     'msg' => 'All fields are required!',
@@ -72,16 +91,21 @@ class Aits_Transit_Controller extends Controller
                 }
             }
 
-            $dateFrom = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-            $dateTo = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-            if ($dateFrom < $dateTo) {
+
+            $appointment_date = $formatted = Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $departure = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $date_pick_up = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+
+            $validation_date = $this->date_validations($date_pick_up, $departure, $appointment_date);
+            if ($validation_date['stat'] == 1) {
                 return response()->json([
-                    'msg' => 'The Departure date must not be later than Pick up date!',
+                    'msg' => $validation_date['msg'],
                     'status' => 402,
                     "isValid" => false,
                 ]);
             }
 
+            
 
             $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
@@ -95,9 +119,9 @@ class Aits_Transit_Controller extends Controller
             // }
 
             $closer_request = AitsRequestCloser::
-                where('date_end', '<', Carbon::now())
+                where('date_end', '>', Carbon::now())
                 ->where('status', 1)
-                ->get();
+                ->first();
 
             if ($closer_request) {
                 return response()->json([
@@ -177,6 +201,32 @@ class Aits_Transit_Controller extends Controller
 
     }
 
+
+    public function date_validations($pick_date, $departure_date, $appointment_date)
+    {
+        $val = 0;
+        $message = '';
+
+        if ($pick_date == $departure_date) {
+            $val = 1;
+            $message = 'Pick up date and Departure date must not be equal';
+        }
+
+        if ($pick_date == $appointment_date) {
+            $val = 1;
+            $message = 'Pick up date and Appointment Date must not be equal';
+        }
+
+        if ($departure_date == $appointment_date) {
+            $val = 1;
+            $message = 'Departure Date Must Not be equal to Appointment Date';
+        }
+
+
+        return ['stat' => $val, 'msg' => $message];
+
+
+    }
 
 
 
@@ -308,6 +358,7 @@ class Aits_Transit_Controller extends Controller
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
                             <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
+                            <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="3" data-id="' . $data->id . '" href="javascript:void(0);">Special Approval</a></li>
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                     </div>
@@ -523,9 +574,9 @@ class Aits_Transit_Controller extends Controller
 
 
             $closer_request = AitsRequestCloser::
-                where('date_end', '<', Carbon::now())
+                where('date_end', '>', Carbon::now())
                 ->where('status', 1)
-                ->get();
+                ->first();
 
             if ($closer_request) {
                 return response()->json([
@@ -559,9 +610,6 @@ class Aits_Transit_Controller extends Controller
                     'remarks' => $data_logs->remarks,
                     'orig_id' => $data_logs->id,
                     'edited_by' => Auth::user()->id,
-
-
-
                 ]
             );
 

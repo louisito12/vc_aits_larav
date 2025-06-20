@@ -496,15 +496,12 @@
                 const logs_params = $('#log_btn').text().trim().toLowerCase();
                 const filter_array = ['all', 'for assign', 'rescheduled', 'completed'];
                 const logs_array = ['all', 'for delivery', 'for collection', 'for pick up'];
-
                 if (!filter_array.includes(filt_params) || !logs_array.includes(logs_params)) {
                     alertify.set('notifier', 'position', 'top-right');
                     alertify.set('notifier', 'delay', 5);
                     alertify.error('<span style="color: white;">Please select Logistics and Filter</span>');
                     return;
                 }
-
-
                 $('#deliver_tbl').DataTable({
                     destroy: true,
                     ajax: {

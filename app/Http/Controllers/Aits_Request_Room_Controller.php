@@ -70,8 +70,8 @@ class Aits_Request_Room_Controller extends Controller
             // }
 
 
-            $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
-            $dateTo = $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
+            $dateFrom = $formatted = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $dateTo = $formatted = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             if ($dateFrom > $dateTo) {
                 return response()->json([
                     'msg' => 'The To date must be later than from date !',
@@ -79,6 +79,14 @@ class Aits_Request_Room_Controller extends Controller
                     "isValid" => false,
                 ]);
             }
+            if ($dateFrom == $dateTo) {
+                return response()->json([
+                    'msg' => 'The To date and from date must not be equal !',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
             $from_date = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
 
@@ -223,6 +231,8 @@ class Aits_Request_Room_Controller extends Controller
         OR ('$toDate' BETWEEN date_from AND date_to) )
         AND request_status ='Approved'
         AND room_id = $room_id;";
+
+        // return $query;
 
         $data = DB::connection('sqlsrv')->select($query, []);
 
@@ -536,6 +546,8 @@ class Aits_Request_Room_Controller extends Controller
                 'status' => 1,
                 'date_created' => Carbon::now(),
             ];
+
+            
             insert_audit($object);
 
 

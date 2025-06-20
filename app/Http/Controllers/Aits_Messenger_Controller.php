@@ -308,14 +308,14 @@ class Aits_Messenger_Controller extends Controller
 
     public function test_pdf()
     {
-        // $driver = AitsDriver::get();
-        // $hello = 'GG PARE';
-        // $html = view('test_pdf', compact('driver', 'hello'))->render();
-        // $pdfContent = GpdfFacade::generate($html);
-        // return response($pdfContent, 200, [
-        //     'Content-Type' => 'application/pdf',
-        //     'Content-Disposition' => 'inline; filename="invoice.pdf"',
-        // ]);
+        $driver = AitsDriver::get();
+        $hello = 'GG PARE';
+        $html = view('test_pdf', compact('driver', 'hello'))->render();
+        $pdfContent = GpdfFacade::generate($html);
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        ]);
 
 
         // $driver = AitsDriver::get();
@@ -333,7 +333,7 @@ class Aits_Messenger_Controller extends Controller
         //     'Content-Disposition' => 'inline; filename="invoice.pdf"',
         // ]);
 
-        return $url = url('/');
+        // return $url = url('/');
     }
 
 

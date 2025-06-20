@@ -92,7 +92,23 @@ class Aits_Request_Room_approval_Controller extends Controller
 
             }
 
+            $data = AitsRequestRoomModel::find($id);
 
+            $from_date = Carbon::parse($data->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
+            $to_date = Carbon::parse($data->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
+            if ($approve == 1) {
+                $room_controller = new Aits_Request_Room_Controller();
+                 $validation = $room_controller->request_room_validation($from_date, $to_date, $data->room_id);
+                if ($validation != 0) {
+                    return response()->json([
+                        'msg' => 'The room is scheduled on that time and date frame. You can not approve this request !',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                }
+            }
+
+        
             $object = [
                 'attachment_id' => $id,
                 'remarks' => $remarks,

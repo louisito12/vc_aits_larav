@@ -32,7 +32,7 @@
             <ul class="main-menu">
                 <!-- Start::slide__category -->
                 <!-- <br><br> -->
-                 <br>
+                <br>
                 <li class="slide__category"><span class="category-name">Main</span></li>
                 <!-- End::slide__category -->
 
@@ -89,7 +89,10 @@
 
 
                     $super_admin = ["aits_roles_view" => request::is('aits_roles_view')];
-                    $pms = ["pms_page" => request::is('pms_page')];
+                    $pms = [
+                        "pms_page" => request::is('pms_page'),
+                        "pms_approval_view" => request::is('pms_approval_view'),
+                    ];
 
                 @endphp
 
@@ -209,10 +212,10 @@
 
 
                             <!-- <li class="slide">
-                                                                                <a href="{{ route('user_manage_view') }}"
-                                                                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                                                                    Users Management</a>
-                                                                            </li> -->
+                                                                                                    <a href="{{ route('user_manage_view') }}"
+                                                                                                        class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                                                                        Users Management</a>
+                                                                                                </li> -->
 
                         </ul>
                     </li>
@@ -304,6 +307,17 @@
                                     class="side-menu__item {{ Request::is('pms_page') ? 'active' : '' }}">
                                     PMS Management</a>
                             </li>
+
+
+
+                            <li class="slide">
+                                <a href="{{ route('pms_approval_view') }}"
+                                    class="side-menu__item {{ Request::is('pms_approval_view') ? 'active' : '' }}">
+                                    PMS For Approval</a>
+
+                            </li>
+
+
 
 
 

@@ -173,6 +173,7 @@
                         <div class="col-2 show_purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input disabled type="text" id="show_purpose" class="form-control spec_input">
+                            <input type="text" hidden id="spec_approval">
                         </div>
 
                     </div>
@@ -459,7 +460,7 @@
             $(document).on('click', '.btn_approved', function () {
                 // alert($(this).data('val'));
 
-                if ($(this).data('val') == 1) {
+                if ($(this).data('val') == 1 || $(this).data('val') == 3) {
                     //approve
                     $('#model').val('');
                     $('#brand').val('');
@@ -467,7 +468,7 @@
                     $('#car_id').val('');
                     $('#approve_modal').modal('show');
                     $('#approve_id').val($(this).data('id'))
-
+                    $('#spec_approval').val($(this).data('val'));
 
 
                     $.ajax({
@@ -656,6 +657,7 @@
                 const driver_id_approve = $('#driver_id').val();
                 const approve_id_approve = $('#approve_id').val();
                 const approve_remarks = $('#remarks').val();
+                const spec_approval = $('#spec_approval').val();
                 if (car_id_approve == "" || driver_id_approve == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
                     return;
@@ -669,6 +671,7 @@
                         driver_id: driver_id_approve,
                         id: approve_id_approve,
                         remarks: approve_remarks,
+                        spec_approval: spec_approval,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
