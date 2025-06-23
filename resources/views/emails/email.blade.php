@@ -18,7 +18,6 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
-
         .email-container {
             background-color: #ffffff;
             border-radius: 8px;

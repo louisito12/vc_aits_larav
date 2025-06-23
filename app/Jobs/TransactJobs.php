@@ -39,7 +39,6 @@ class TransactJobs implements ShouldQueue
         while (true) {
 
             $pms_data = PmsFiles::where('status', 1)
-                ->whereDate('pms_date', '<', Carbon::now()->toDateString())
                 ->where('notif', 0)
                 ->get();
             foreach ($pms_data as $pms_datas) {
@@ -48,20 +47,23 @@ class TransactJobs implements ShouldQueue
                     ->where('id', $pms_datas->pms_id)
                     ->where('is_email', 1)
                     ->first();
-                if ($records) {
+                $pms_start = $pms_datas->pms_date;
+                if ($pms_start < Carbon::now()) {
+                    if ($records) {
 
-                    $data = [
-                        'pms_name' => $records->pms_name,
-                        'pms_description' => $records->pms_description,
-                        'date_start' => date_converter_date($records->date_start),
-                        'schedule' => ucfirst($records->pms_date_types),
-                    ];
+                        $data = [
+                            'pms_name' => $records->pms_name,
+                            'pms_description' => $records->pms_description,
+                            'date_start' => date_converter_date($records->date_start),
+                            'schedule' => ucfirst($records->pms_date_types),
+                        ];
 
-                    Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
+                        Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
 
-                    PmsFiles::where('id', $pms_datas->id)->update(
-                        ['notif' => 1]
-                    );
+                        PmsFiles::where('id', $pms_datas->id)->update(
+                            ['notif' => 1]
+                        );
+                    }
                 }
 
 

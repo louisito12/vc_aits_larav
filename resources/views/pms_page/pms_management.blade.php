@@ -48,28 +48,21 @@
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">PMS Management</div>
                     <div class="col d-flex justify-content-end">
-                        <div hidden class="input-group input-group-sm w-25">
+                        <div class="input-group input-group-sm w-25">
                             <button id="view_tbl_pms" class="btn  btn-info">View PMS</button>
-                            <select name="" id="pms_year" class="form-select ">
+                            <select style="width: 10px !important;" name="" id="pms_year" class="form-select spec_input">
                                 <!-- options from now minu 10 years and plus 1 from year now -->
                                 @php
                                     $currentYear = date('Y');
                                  @endphp
                                 @for($i = $currentYear - 10; $i <= $currentYear + 1; $i++)
-
-
                                     <option value={{ $i }}>{{ $i}}</option>
-
                                 @endfor
-
                             </select>
                         </div>
                     </div>
 
                     <button id="add_pms_btn" class="btn btn-success m-3">Add PMS</button>
-
-
-
 
                 </div>
                 <div class="card-body">
@@ -86,12 +79,8 @@
                                             <th class="text-center">PMS Start</th>
                                             <th class="text-center">Conducted By</th>
                                             <th class="text-center">Noted By</th>
-                                            <th class="text-center">
-                                                PMS Action
-                                            </th>
-                                            <th class="text-center">
-                                                PMS Status
-                                            </th>
+                                            <th class="text-center"> PMS Action</th>
+                                            <th class="text-center"> PMS Status </th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -349,15 +338,11 @@
 
 
     <!-- Modal -->
-
-
-
-
     <div class="modal fade" id="view_pms_data" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="pms_text_header">PMS View 2025
+                    <h6 class="modal-title" id="pms_text_header_top">PMS View 2025
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -455,11 +440,8 @@
     </div>
 
 
-
-
-
-
 @endsection
+
 
 @section('scripts')
     <script>
@@ -653,7 +635,6 @@
                 })
             });
 
-
             $('#edit_pms_modal').on('shown.bs.modal', function () {
                 $('#edit_noted_by').select2({
                     dropdownParent: $('#edit_pms_modal .modal-content'),
@@ -679,9 +660,6 @@
                     },
                 })
             });
-
-
-
 
 
 
@@ -909,6 +887,9 @@
             $('#view_tbl_pms').click(function () {
 
                 const pms_year = $('#pms_year').val();
+         
+             $('#pms_text_header_top').text('PMS View ' + pms_year)
+
                 // create me a ajax for pms_sched_table tbody   public function get_pms_sched_table($year) 
                 $.ajax({
                     url: 'get_pms_sched_table/' + pms_year,

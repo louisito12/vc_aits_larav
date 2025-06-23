@@ -111,7 +111,6 @@ class Pms_Maintenance_Controller extends Controller
         // echo $formattedDate; // Outputs: 2025-07-09
 
         $schedule = PmsScheduleType::where('status', 1)->get();
-
         return view('pms_page.pms_management', compact('schedule'));
 
 
@@ -302,14 +301,156 @@ class Pms_Maintenance_Controller extends Controller
             ->get();
         $rows = [];
 
+        // foreach ($data as $pms) {
+        //     $row = [];
+        //     $row[] = htmlspecialchars($pms->pms_name);
+        //     $row[] = ucfirst($pms->pms_date_types);
+        //     $start = Carbon::parse($pms->date_start);
+        //     $schedule = strtolower($pms->pms_date_types);
+        //     for ($m = 1; $m <= 12; $m++) {
+        //         $highlight = false;
+        //         if ($schedule == 'monthly') {
+        //             if ($start->year < $year || ($start->year == $year && $start->month <= $m)) {
+        //                 $highlight = true;
+        //             }
+        //         } elseif ($schedule == 'quarterly') {
+        //             $quarterMonths = [];
+        //             $firstMonth = $start->month;
+        //             for ($i = 0; $i < 4; $i++) {
+        //                 $month = (($firstMonth - 1) + ($i * 3)) % 12 + 1;
+        //                 $quarterYear = $start->year + intval(($firstMonth - 1 + $i * 3) / 12);
+        //                 if ($quarterYear == $year) {
+        //                     $quarterMonths[] = $month;
+        //                 }
+        //             }
+        //             if (in_array($m, $quarterMonths)) {
+        //                 $highlight = true;
+        //             }
+        //         } elseif ($schedule == 'annual') {
+        //             if ($start->month == $m) {
+        //                 $highlight = true;
+        //             }
+        //         }
+        //         $row[] = $highlight
+        //             ? '<td style="background:#6f6f6f !important;color:#6f6f6f "></td>'
+        //             : '<td></td>';
+        //     }
+
+        //     $rows[] = $row;
+        // }
+
+
+
+
+        // foreach ($data as $pms) {
+        //     $row = [];
+        //     $row[] = htmlspecialchars($pms->pms_name);
+        //     $row[] = ucfirst($pms->pms_date_types);
+        //     $start = Carbon::parse($pms->date_start);
+        //     $schedule = strtolower($pms->pms_date_types);
+
+        //     for ($m = 1; $m <= 12; $m++) {
+        //         $highlight = false;
+
+        //         switch ($schedule) {
+        //             case 'monthly':
+        //                 if ($start->year < $year || ($start->year == $year && $start->month <= $m)) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'quarterly':
+        //                 $quarterMonths = [];
+        //                 $firstMonth = $start->month;
+        //                 for ($i = 0; $i < 4; $i++) {
+        //                     $month = (($firstMonth - 1) + ($i * 3)) % 12 + 1;
+        //                     $quarterYear = $start->year + intval(($firstMonth - 1 + $i * 3) / 12);
+        //                     if ($quarterYear == $year) {
+        //                         $quarterMonths[] = $month;
+        //                     }
+        //                 }
+        //                 if (in_array($m, $quarterMonths)) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'annual':
+        //                 if ($start->month == $m) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'semi-annual':
+        //                 if ($start->month == $m || $start->month == ($m - 6 + 12) % 12) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'tri-annual':
+        //                 if (in_array($m, [$start->month, ($start->month + 4) % 12, ($start->month + 8) % 12])) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'bi-monthly':
+        //                 if (
+        //                     in_array($m, [
+        //                         $start->month,
+        //                         ($start->month + 2) % 12,
+        //                         ($start->month + 4) % 12,
+        //                         ($start->month + 6) % 12,
+        //                         ($start->month + 8) % 12,
+        //                         ($start->month + 10) % 12
+        //                     ])
+        //                 ) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'semi-monthly':
+        //                 if ($m == $start->month) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'weekly':
+        //                 $weeks = Carbon::parse($start)->week();
+        //                 $currentWeek = Carbon::now()->week();
+        //                 if ($weeks == $currentWeek) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             case 'daily':
+        //                 if ($start->year == $year && $start->month == $m) {
+        //                     $highlight = true;
+        //                 }
+        //                 break;
+
+        //             default:
+        //                 break;
+        //         }
+
+
+        //         $row[] = $highlight
+        //             ? '<td style="background:#6f6f6f !important;color:#6f6f6f "></td>'
+        //             : '<td></td>';
+        //     }
+
+        //     $rows[] = $row;
+        // }
+
         foreach ($data as $pms) {
             $row = [];
             $row[] = htmlspecialchars($pms->pms_name);
             $row[] = ucfirst($pms->pms_date_types);
             $start = Carbon::parse($pms->date_start);
             $schedule = strtolower($pms->pms_date_types);
+
             for ($m = 1; $m <= 12; $m++) {
                 $highlight = false;
+
+
                 if ($schedule == 'monthly') {
                     if ($start->year < $year || ($start->year == $year && $start->month <= $m)) {
                         $highlight = true;
@@ -327,11 +468,52 @@ class Pms_Maintenance_Controller extends Controller
                     if (in_array($m, $quarterMonths)) {
                         $highlight = true;
                     }
-                } elseif ($schedule == 'yearly') {
+                } elseif ($schedule == 'annual') {
                     if ($start->month == $m) {
                         $highlight = true;
                     }
+                } elseif ($schedule == 'semi-annual') {
+                    if ($start->month == $m || $start->month == ($m - 6 + 12) % 12) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'tri-annual') {
+                    if (in_array($m, [$start->month, ($start->month + 4) % 12, ($start->month + 8) % 12])) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'bi-monthly') {
+                    if (in_array($m, [$start->month, ($start->month + 2) % 12, ($start->month + 4) % 12, ($start->month + 6) % 12, ($start->month + 8) % 12, ($start->month + 10) % 12])) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'semi-monthly') {
+                    if ($m == $start->month || $start->month <= $m) {
+
+                        $highlight = true;
+                    }
                 }
+
+                // Handle weekly schedule
+                elseif ($schedule == 'weekly') {
+                    // $weeks = Carbon::parse($start)->week();
+                    // $currentWeek = Carbon::now()->week();
+                    // if ($weeks == $currentWeek) {
+                    //     $highlight = true;
+                    // }
+                    $weeks = Carbon::parse($start)->week();
+                    $currentWeek = Carbon::now()->week();
+                    if (($start->year == $year && $start->month <= $m) || $start->year < $year) {
+                        $highlight = true;
+                    }
+                } elseif ($schedule == 'daily') {
+                    // // if ($start->year == $year && $start->month == $m) {}
+                    // $highlight = true;
+
+                    if (($start->year == $year && $start->month <= $m) || $start->year < $year) {
+                        $highlight = true;
+                    }
+
+                }
+
+
                 $row[] = $highlight
                     ? '<td style="background:#6f6f6f !important;color:#6f6f6f "></td>'
                     : '<td></td>';
@@ -339,6 +521,7 @@ class Pms_Maintenance_Controller extends Controller
 
             $rows[] = $row;
         }
+
 
         $tbody_html = '';
         foreach ($rows as $row) {

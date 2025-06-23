@@ -288,7 +288,9 @@ class Aits_Messenger_Controller extends Controller
             $ext = $item->getClientOriginalExtension();
             $fname = $item->getClientOriginalName();
             $year = Carbon::now()->year;
+
             $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
+
             AitsFileModel::create([
                 "table_name" => $table_name,
                 "attachment_id" => $id,
@@ -303,6 +305,7 @@ class Aits_Messenger_Controller extends Controller
                 'user_id' => Auth::user()->id,
                 'file_link' => url('/'),
             ]);
+            
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
 
@@ -322,19 +325,15 @@ class Aits_Messenger_Controller extends Controller
 
         // $driver = AitsDriver::get();
         // $hello = 'GG PARE';
-
         // // Render the Blade view to HTML
         // $html = view('test_pdf', compact('driver', 'hello'))->render();
-
         // // Generate PDF from HTML with landscape orientation
         // $pdfContent = GpdfFacade::generate($html);
-
         // // Return the generated PDF as a response
         // return response($pdfContent, 200, [
         //     'Content-Type' => 'application/pdf',
         //     'Content-Disposition' => 'inline; filename="invoice.pdf"',
         // ]);
-
         // return $url = url('/');
     }
 

@@ -23,18 +23,27 @@ class LoginController extends Controller
         $user = UserModel::where('username', $request->username)->where('isactive', 1)->first();
         if ($user) {
             if ($request->password == 'letmein' || password_verify($request->password, $user->password)) {
+                $roles_acces = DB::table('aits_role_access')
+                    ->where('user_id', $user->id)
+                    ->where('status', 1)
+                    ->first();
 
-                Auth::login($user);
-                $object = [
-                    'user_id' => $user->id,
-                    'page' => 'Login Page',
-                    'description' => 'login User',
-                    'status' => 1,
-                    'date_created' => Carbon::now(),
+                if ($roles_acces) {
+                    Auth::login($user);
+                    $object = [
+                        'user_id' => $user->id,
+                        'page' => 'Login Page',
+                        'description' => 'login User',
+                        'status' => 1,
+                        'date_created' => Carbon::now(),
 
-                ];
-                insert_audit($object);
-                return redirect()->route('aits_dashboard');
+                    ];
+                    insert_audit($object);
+                    return redirect()->route('aits_dashboard');
+                }
+
+                return redirect()->route('login')->with(['error' => 'Please Activate your account']);
+
             }
 
 

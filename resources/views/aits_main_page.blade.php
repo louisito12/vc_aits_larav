@@ -716,24 +716,37 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Function to update the datetime-local inputs
             function updateDateTimeInputs() {
                 const now = new Date();
                 const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
                     .toISOString()
-                    .slice(0, 16); // Format to 'YYYY-MM-DDTHH:MM'
+                    .slice(0, 16);
 
-                // Set the value for all datetime-local inputs with the class 'date_time_input'
                 document.querySelectorAll('input.date_time_input[type="datetime-local"]').forEach(input => {
                     input.value = localDateTime;
                 });
             }
 
-            // Initial update
-            updateDateTimeInputs();
 
-            // Update every minute (60000 milliseconds)
+            updateDateTimeInputs();
             setInterval(updateDateTimeInputs, 60000);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.date_time_input').change(function () {
+                const forbiddenMinutes = ['05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
+                let timeValue = $(this).val();
+                console.log("Original Time: ", timeValue);
+                let minutes = timeValue.substring(14, 16);
+                let hours = timeValue.substring(11, 13);
+                if (!forbiddenMinutes.includes(minutes)) {
+                    let newTimeValue = timeValue.substring(0, 14) + '00';
+                    $(this).val(newTimeValue);
+                    console.log("Updated Time: ", newTimeValue);
+                }
+            });
         });
     </script>
 </body>
