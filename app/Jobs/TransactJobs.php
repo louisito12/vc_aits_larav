@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\PmsFiles;
 use Carbon\Carbon;
 use App\Mail\PmsMailer;
 use App\Mail\RequestMail;
@@ -37,22 +38,39 @@ class TransactJobs implements ShouldQueue
 
         while (true) {
 
-
-            $records = Pms_Details::where('is_email', 1)
-                ->where('status', 1)
+            $pms_data = PmsFiles::where('status', 1)
+                ->whereDate('pms_date', '<', Carbon::now()->toDateString())
+                ->where('notif', 0)
                 ->get();
+            foreach ($pms_data as $pms_datas) {
+                $records = Pms_Details::where('status', 1)
+                    ->where('pms_status', 'Approved')
+                    ->where('id', $pms_datas->pms_id)
+                    ->where('is_email', 1)
+                    ->first();
+                if ($records) {
 
-            foreach ($records as $record) {
-                $data = [
-                    'pms_name' => $record->pms_name,
-                    'pms_description' => $record->pms_description,
-                    'date_start' => date_converter_date($record->date_start),
-                    'schedule' => ucfirst($record->pms_date_types),
-                ];
+                    $data = [
+                        'pms_name' => $records->pms_name,
+                        'pms_description' => $records->pms_description,
+                        'date_start' => date_converter_date($records->date_start),
+                        'schedule' => ucfirst($records->pms_date_types),
+                    ];
 
-                Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
-                $record->update(['is_email' => 0]);
+                    Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
+
+                    PmsFiles::where('id', $pms_datas->id)->update(
+                        ['notif' => 1]
+                    );
+                }
+
+
             }
+
+
+
+
+
 
             //Room request Emailer
 

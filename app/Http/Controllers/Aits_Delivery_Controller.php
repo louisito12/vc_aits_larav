@@ -143,7 +143,7 @@ class Aits_Delivery_Controller extends Controller
                 'aits_process' => 'Request',
                 'send_to_user_id' => 'admin',
                 'date_created' => Carbon::now(),
-     
+
             ]);
 
             insert_audit($object);
@@ -188,6 +188,8 @@ class Aits_Delivery_Controller extends Controller
                 "date_created" => Carbon::now(),
                 'procedure' => $delivery,
                 'user_id' => Auth::user()->id,
+                'file_link' => url('/'),
+
             ]);
 
 
@@ -271,7 +273,9 @@ class Aits_Delivery_Controller extends Controller
                 }
 
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
-                $url = dynamic_file($path);
+                $link = $data_file->file_link;
+                $url = dynamic_file($path, $link);
+
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
@@ -309,7 +313,8 @@ class Aits_Delivery_Controller extends Controller
             if ($messenge_file) {
 
                 $path = $messenge_file->folder_name . '/' . $messenge_file->year . '/' . $messenge_file->file_name;
-                $direction = dynamic_file($path);
+                $link = $messenge_file->file_link;
+                $url = dynamic_file($path, $link);
                 $filename = $messenge_file->orig_file;
             }
 

@@ -105,7 +105,7 @@ class Aits_Transit_Controller extends Controller
                 ]);
             }
 
-            
+
 
             $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
@@ -247,6 +247,7 @@ class Aits_Transit_Controller extends Controller
                 "folder_name" => $folder_name,
                 "year" => Carbon::now()->year,
                 "status" => 1,
+                "file_link" => url('/'),
                 "date_created" => Carbon::now()
             ]);
 
@@ -339,8 +340,9 @@ class Aits_Transit_Controller extends Controller
                     ->where('status', 1)
                     ->where('attachment_id', $data->id)
                     ->first();
+                $link = $data_file->file_link;
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
-                $url = dynamic_file($path);
+                $url = dynamic_file($path, $link);
                 return '
                 
                    <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>

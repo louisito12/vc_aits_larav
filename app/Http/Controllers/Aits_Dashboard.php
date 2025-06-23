@@ -387,7 +387,8 @@ class Aits_Dashboard extends Controller
                 }
 
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
-                $url = dynamic_file($path);
+                $link = $data_file->file_link;
+                $url = dynamic_file($path, $link);
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })

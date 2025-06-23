@@ -144,8 +144,8 @@
         </div>
 
         <div class="email-footer">
-            <p>&copy; 2025 Your Company. All rights reserved.</p>
-            <p><a href="#">Unsubscribe</a> | <a href="#">Privacy Policy</a></p>
+            <p>&copy; 2025 Valucare All rights reserved.</p>
+        
         </div>
     </div>
 

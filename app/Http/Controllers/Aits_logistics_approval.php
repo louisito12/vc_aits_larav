@@ -105,7 +105,9 @@ class Aits_logistics_approval extends Controller
                 }
 
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
-                $url = dynamic_file($path);
+                $link = $data_file->file_link;
+                $url = dynamic_file($path, $link);
+               
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
@@ -292,7 +294,7 @@ class Aits_logistics_approval extends Controller
                 if ($email_logistic->aits_process == 'Reschedule messenger') {
                     $process = $stat . ' ' . 'is rescheduled';
                 }
-                $data= [
+                $data = [
                     'requestor' => $data_log['get_requestor_fullname']['firstname'] . ' ' . $data_log['get_requestor_fullname']['lastname'],
                     // 'request_number' => $req_number,
                     'type' => $data_log['get_delivery_type']['del_type'],

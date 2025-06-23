@@ -82,7 +82,8 @@ class Aits_Messenger_Controller extends Controller
                 }
 
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
-                $url = dynamic_file($path);
+                $link = $data_file->file_link;
+                $url = dynamic_file($path, $link);
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
@@ -300,6 +301,7 @@ class Aits_Messenger_Controller extends Controller
                 'procedure' => $delivery,
                 'delivery_mess' => 1,
                 'user_id' => Auth::user()->id,
+                'file_link' => url('/'),
             ]);
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
@@ -373,7 +375,7 @@ class Aits_Messenger_Controller extends Controller
 
     //    $data_2 = DB::connection('sqlsrv_secondary')->select($query_2);
 
-    
+
     //     // foreach ($data_2 as $data_update) {
     //     //     $city = DB::connection('sqlsrv_secondary')
     //     //         ->select('SELECT city_name FROM cities WHERE city_id = :city_id', ['city_id' => $data_update->doc_city]);

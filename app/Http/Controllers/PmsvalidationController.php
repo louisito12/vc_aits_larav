@@ -22,12 +22,17 @@ class PmsvalidationController extends Controller
 
         try {
 
-            $data = PmsFiles::with('get_pms_details')->where('status', 1)->get();
+
             $data_arr = [];
+            $data = PmsFiles::with('get_pms_details')
+                ->select('pms_files.id', 'pms_details.id as pms_details_id', 'pms_files.pms_date', 'pms_files.pms_id')
+                ->leftJoin('pms_details', 'pms_files.pms_id', '=', 'pms_details.id')
+                ->where('pms_details.status', 1)
+                ->where('pms_details.pms_status', 'Approved')
+                ->get();
 
             foreach ($data as $datas) {
                 $date1 = $datas->pms_date;
-                // $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
                 $date2 = Carbon::now()->format('Y-m-d H:i:s.u');
                 $result = compare_dates($date1, $date2);
                 if ($result == -1) {

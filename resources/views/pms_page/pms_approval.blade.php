@@ -66,7 +66,7 @@
                         </div>
                     </div>
 
-                    <button id="add_pms_btn" class="btn btn-success m-3">Add PMS</button>
+                
 
 
 

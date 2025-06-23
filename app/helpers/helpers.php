@@ -87,11 +87,11 @@ function insert_type()
 
 }
 
-function dynamic_file($path)
+function dynamic_file($path, $link)
 {
 
     if (config('app.env') == 'local') {
-        return (url('/') . '/' . $path);
+        return ($link . '/' . $path);
     } else {
         return url(env('APP_ENV') . 'public/' . $path);
     }
