@@ -109,6 +109,8 @@ class Aits_Transit_Controller extends Controller
 
             $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
+
+            
             // $validation = $this->date_validation($from_date, $to_date);
             // if ($validation != 0) {
             //     return response()->json([

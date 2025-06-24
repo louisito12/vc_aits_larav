@@ -130,7 +130,7 @@
                         </div>
                         <div class="col-3">
                             <label>Number of Passengers</label>
-                            <input type="number" id="number_pass" class="form-control spec_input">
+                            <input type="number" id="number_pass" min="1" class="form-control spec_input">
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
@@ -233,7 +233,7 @@
                         </div>
                         <div class="col-3">
                             <label>Number of Passengers</label>
-                            <input type="number" id="edit_passenger_number" class="form-control spec_input">
+                            <input type="number" id="edit_passenger_number"  min="1" class="form-control spec_input">
                         </div>
                         <div class="col-3">
                             <label>Manager</label>

@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-4">
                             <label>Document Counts</label>
-                            <input type="number" id="count_documents" class="form-control spec_input">
+                            <input type="number" id="count_documents" min="1" class="form-control spec_input">
                         </div>
                     </div>
                     <br>
@@ -193,7 +193,7 @@
                         </div>
                         <div class="col-4">
                             <label>Document Counts</label>
-                            <input type="number" id="edit_count_documents" class="form-control spec_input">
+                            <input type="number" id="edit_count_documents" min="1" class="form-control spec_input">
                         </div>
                     </div>
                     <br>

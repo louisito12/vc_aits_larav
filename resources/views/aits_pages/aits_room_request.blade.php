@@ -552,7 +552,7 @@
 
                         Swal.fire({
                             title: "Good job!",
-                            text: "Successfully added request!",
+                            text: "Successfully edited request!",
                             icon: "success"
                         });
                         $('#room_request_tbl').DataTable().ajax.reload();
