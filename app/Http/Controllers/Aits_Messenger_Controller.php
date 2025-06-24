@@ -204,6 +204,14 @@ class Aits_Messenger_Controller extends Controller
                         'date_resched' => ['required'],
                     ],
                 );
+
+
+                $data_update = [
+                    'request_status' => $status,
+                    'delivery_date' => Carbon::now(),
+                    'messenger_remarks' => $remarks,
+                    'procedure_date' => Carbon::createFromFormat('Y-m-d\TH:i', $request->date_resched, 'Asia/Manila')->format('Y-m-d H:i:s'),
+                ];
             }
 
 
@@ -226,27 +234,27 @@ class Aits_Messenger_Controller extends Controller
                 }
                 $this->messenger_file_upload($request->id, 'AitsDelivery', $request->file('file'), $data->procedures);
                 AitsLogisticsResched::where('logistic_id', $request->id)->update(['status' => 0]);
+
+                $data_update = [
+                    'request_status' => $status,
+                    'delivery_date' => Carbon::now(),
+                    'messenger_remarks' => $remarks,
+                ];
+
             }
 
 
-
-            $update = AitsDelivery::where('id', $request->id)->update([
-                'request_status' => $status,
-                'delivery_date' => Carbon::now(),
-                'messenger_remarks' => $remarks,
-            ]);
-
-
             if ($request->process_val == 2) {
+                $log_data = AitsDelivery::where('id', $request->id)->first();
                 AitsLogisticsResched::create([
                     'logistic_id' => $request->id,
                     'user_id' => Auth::user()->id,
-                    'date_resched' => Carbon::parse($request->procedure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
+                    'date_resched' =>  $log_data->delivery_date,
                     'remarks' => $request->reschedule_remarks,
                     'is_messenger' => 1,
                     'status' => 1,
                     'date_created' => Carbon::now(),
-
+                    'procedure_logs' => $log_data->procedure_date,
                 ]);
             }
 
@@ -258,6 +266,7 @@ class Aits_Messenger_Controller extends Controller
                 'transact_id' => $request->id,
                 'status' => 1,
                 'date_created' => Carbon::now(),
+                'is_messenger' => 1,
             ];
             insert_audit($object);
 
@@ -269,6 +278,8 @@ class Aits_Messenger_Controller extends Controller
                 'date_created' => Carbon::now(),
                 'remarks' => $remarks,
             ]);
+
+            $update = AitsDelivery::where('id', $request->id)->update($data_update);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -305,7 +316,7 @@ class Aits_Messenger_Controller extends Controller
                 'user_id' => Auth::user()->id,
                 'file_link' => url('/'),
             ]);
-            
+
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
 

@@ -151,11 +151,12 @@ class Aits_Dashboard extends Controller
 
 
 
-
             $room_counts = DB::connection('sqlsrv')->select($room_request, )[0];
+
 
             $vehicle_counts = DB::connection('sqlsrv')->select($shuttle_request, [
             ])[0];
+
 
             $logistics_count = DB::connection('sqlsrv')->select(
                 $logistics_query,
@@ -168,6 +169,7 @@ class Aits_Dashboard extends Controller
                 'room_request' => $room_counts,
                 'vehicle_request' => $vehicle_counts,
                 'logistics_request' => $logistics_count,
+           
             ]);
 
 
@@ -351,15 +353,12 @@ class Aits_Dashboard extends Controller
             })
             ->addColumn('date_created', function ($data) {
                 return date_converter($data->date_created);
-
             })
             ->addColumn('department', function ($data) {
                 return DepartmentModel::find($data->get_requestor_fullname->deparment_id)->description;
-
             })
             ->addColumn('delivery_type', function ($data) {
                 return $data['get_delivery_type']['del_type'];
-
             })
             ->addColumn('requestor', function ($data) {
                 return $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
@@ -370,7 +369,6 @@ class Aits_Dashboard extends Controller
                 if ($data->status == 0) {
                     return ' <h5> <span class="badge rounded-pill bg-danger">Cancelled</span></h5>';
                 }
-
 
                 $status_html = new Aits_Delivery_Controller();
                 return $status_html->status_html($data->request_status, $procedure, $data->id);

@@ -406,7 +406,7 @@
                         $('#view_room_name').val(e['data']['room_id']);
                         $('#view_events').val(e['data']['event_id']);
                         $('#view_purpose').val(e['data']['remarks']);
-                        $('#show_data_status').val(e['data']['request_status']);
+                        $('#show_data_status').val(e['data']['status'] == 0 ? "Cancelled" : e['data']['request_status']);
                         $('#show_data_approver').val(
                             e['data']['get_approved_data']
                                 ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']

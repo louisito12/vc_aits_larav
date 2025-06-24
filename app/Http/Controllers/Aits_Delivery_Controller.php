@@ -78,6 +78,22 @@ class Aits_Delivery_Controller extends Controller
             //     ],
             // );
 
+
+
+
+            $process_date = Carbon::now()->addDay()->format('Y-m-d');
+            $area_id = $request->area_id;
+            $area_val = messenger_id($area_id);
+
+
+            if ($area_val['stat'] == 0) {
+                return response()->json([
+                    'msg' => 'The area that you selected has no messenger',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
             $rules = [
                 'name_receiver' => ['required'],
                 'company_name' => ['required'],
@@ -108,6 +124,12 @@ class Aits_Delivery_Controller extends Controller
             }
 
 
+
+
+
+
+
+
             $request->merge([
                 'is_transact' => 1,
                 'date_created' => Carbon::now(),
@@ -115,6 +137,8 @@ class Aits_Delivery_Controller extends Controller
                 'status' => 1,
                 'user_id' => Auth::user()->id,
                 'request_status' => 'Pending',
+                'messenger_id' => $area_val['data']->messenger_id,
+                'procedure_date' => $process_date,
             ]);
 
 
@@ -391,6 +415,7 @@ class Aits_Delivery_Controller extends Controller
                 $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
             }
             return '<center><h5>' . $stat . '</h5></center>';
+            
         }
 
 
@@ -464,6 +489,26 @@ class Aits_Delivery_Controller extends Controller
                     "isValid" => false,
                 ]);
             }
+
+
+            $process_date = Carbon::now()->addDay()->format('Y-m-d');
+            $area_id = $request->area_id;
+            $area_val = messenger_id($area_id);
+
+
+            if ($area_val['stat'] == 0) {
+                return response()->json([
+                    'msg' => 'The area that you selected has no messenger',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+            }
+
+
+            $request->merge(['messenger_id' => $area_val['data']->messenger_id, 'procedure_date' => $process_date]);
+
+
+
 
             $old_data = AitsDelivery::find($request->id);
 

@@ -53,7 +53,7 @@ function date_from_to_converter_date($date)
 
 function get_user_profile($id)
 {
-    return UserProfile::where('id', $id)->first();
+    return UserProfile::where('user_id', $id)->first();
 }
 
 function date_converter_date($date)
@@ -258,6 +258,35 @@ function add_schedule()
     }
 
 }
+
+function messenger_id($area_id)
+{
+
+
+    $data = DB::table('aits_messengers_areas')
+        ->where('status', 1)
+        ->where('area_id', $area_id)
+        ->first();
+
+    if ($data) {
+        $data_stat = [
+            'stat' => 1,
+            'data' => $data
+        ];
+
+    } else {
+        $data_stat = [
+            'stat' => 0,
+            'data' => []
+        ];
+
+    }
+
+    return $data_stat;
+}
+
+
+
 // $dateString = '2025-07-09 00:00:00.000';
 // $formattedDate = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
 

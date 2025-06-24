@@ -25,10 +25,26 @@ class TransactJobs implements ShouldQueue
     /**
      * Create a new job instance.
      */
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 120; // 2 minutes
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 3;
     public function __construct()
     {
         //
     }
+
+
 
     /**
      * Execute the job.
@@ -252,8 +268,8 @@ class TransactJobs implements ShouldQueue
 
 
 
-            //follow up aits logistics
-            sleep(5);
+      
+            sleep(120);
 
         }
     }
