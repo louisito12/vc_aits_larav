@@ -49,7 +49,7 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
                         <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
-                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">For Assign</a></li>
+                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">Pending</a></li>
                         <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a></li>
                         <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">Completed</a>
                         </li>
@@ -94,7 +94,7 @@
                                     <th class="text-center">Company Name </th>
                                     <th class="text-center">View Request File </th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center">Assign status</th>
+                                    <!-- <th class="text-center">Assign status</th> -->
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
@@ -265,20 +265,44 @@
                             <label>Requestor</label>
                             <input type="text" disabled class="form-control spec_input" id="req_name">
                         </div>
+
+
                         <div class="col-4">
-                            <label>Assign By</label>
-                            <input type="text" disabled class="form-control spec_input" id="admin_name">
+                            <label>Status</label>
+                            <input type="text" disabled class="form-control spec_input" id="stat_logs">
                         </div>
-                        <div class="col-4">
-                            <label>Assign By</label>
-                            <input type="text" disabled class="form-control spec_input" id="date_assign">
-                        </div>
+
                         <input type="text" hidden id="process_val">
                         <input type="text" hidden id="hidden_id">
 
                     </div>
                     <br>
 
+
+                    <div id="row_messenger" class="row">
+                        <div class="col-6">
+                            <label>Delivery remarks</label>
+                            <textarea class="form-control spec_input" disabled id="mess_remarks"></textarea>
+                        </div>
+
+                        <div class="col-6 file_column">
+                            <label>Files</label>
+                            <div id="messenger_file"></div>
+                        </div>
+
+                    </div>
+
+                    <div id="row_messenger_reschedule" class="row">
+                        <div class="col-4">
+                            <label>Date Reschedule</label>
+                            <input disabled class="form-control spec_input" id="date_rescheduled" type="text">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Delivery Remarks</label>
+                            <input disabled class="form-control spec_input" id="reschedule_remarks" type="text">
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -340,14 +364,64 @@
                     {
                         data: "req_status",
                     },
-                    {
-                        data: "messenger_stat"
-                    },
+                    // {
+                    //     data: "messenger_stat"
+                    // },
                     {
                         data: "action",
                     },
                 ];
             }
+
+
+            function status_namer(status, procedure, proc_stat) {
+                if (status == 0) {
+                    return 'Cancelled';
+                }
+
+                if (procedure == 1) {
+                    if (proc_stat == 'Pending') {
+                        return 'Undelivered'
+                    }
+                    if (proc_stat == 'Reschedule') {
+                        return 'Rescheduled';
+                    }
+                    if (proc_stat == 'Delivered') {
+                        return 'Delivered';
+                    }
+                }
+
+                if (procedure == 2) {
+                    if (proc_stat == 'Pending') {
+                        return 'Uncollected'
+                    }
+                    if (proc_stat == 'Reschedule') {
+                        return 'Rescheduled';
+                    }
+                    if (proc_stat == 'Delivered') {
+                        return 'Collected';
+                    }
+                }
+
+                if (procedure == 3) {
+                    if (proc_stat == 'Pending') {
+                        return 'Unpicked'
+                    }
+                    if (proc_stat == 'Reschedule') {
+                        return 'Rescheduled';
+                    }
+                    if (proc_stat == 'Delivered') {
+                        return '	Picked Up';
+                    }
+                }
+
+
+            }
+
+
+
+
+
             $('#deliver_tbl').DataTable({
                 destroy: true,
                 ajax: {
@@ -442,7 +516,9 @@
 
 
 
-
+                $('#messenger_file').html('');
+                $('#row_messenger').addClass('d-none');
+                $('#row_messenger_reschedule').addClass('d-none');
 
                 $('#show_delivery_request_modal').modal('show');
                 $.ajax({
@@ -464,13 +540,33 @@
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] +
                             ' ' + e['data']['get_requestor_fullname']['lastname'])
                         $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data']['request_number']);
-                        $('#admin_name').val(
-                            e['data']['get_admin_data']
-                                ? e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname']
-                                : '');
-
-                        $('#date_assign').val(e['data']['date_assign']);
+                        // $('#admin_name').val(
+                        //     e['data']['get_admin_data']
+                        //         ? e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname']
+                        //         : '');
+                        // $('#date_assign').val(e['data']['date_assign']);
                         $('#hidden_id').val(e['data']['id'])
+
+                        const stats_name = status_namer(e['data']['status'], e['data']['procedures'], e['data']['request_status']);
+                        $('#stat_logs').val(stats_name);
+
+
+
+                        if (e['data']['request_status'] == 'Delivered') {
+                            $('#row_messenger').removeClass('d-none');
+                            $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                            $('#mess_remarks').val(e['data']['messenger_remarks']);
+                        }
+
+                        if (e['data']['request_status'] == 'Reschedule') {
+                            $('#row_messenger_reschedule').removeClass('d-none');
+                            $('#reschedule_remarks').val(e['data']['messenger_remarks'] || '');
+                            $('#date_rescheduled').val(e['data']['procedure_date'] || '');
+                        }
+
+
+
+
 
 
                     }
@@ -494,7 +590,7 @@
             $('#filter_request').click(function () {
                 const filt_params = $('#filter_btn').text().trim().toLowerCase();
                 const logs_params = $('#log_btn').text().trim().toLowerCase();
-                const filter_array = ['all', 'for assign', 'rescheduled', 'completed'];
+                const filter_array = ['all', 'pending', 'rescheduled', 'completed'];
                 const logs_array = ['all', 'for delivery', 'for collection', 'for pick up'];
                 if (!filter_array.includes(filt_params) || !logs_array.includes(logs_params)) {
                     alertify.set('notifier', 'position', 'top-right');

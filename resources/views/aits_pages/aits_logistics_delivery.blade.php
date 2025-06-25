@@ -66,7 +66,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Delivery Request
+                    <h6 class="modal-title" id="">Delivery Request Form
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -304,42 +304,43 @@
                             <label>Requestor</label>
                             <input type="text" disabled class="form-control" id="req_name">
                         </div>
+                        <div class="col-6">
+                            <label>Status</label>
+                            <textarea class="form-control spec_input" disabled id="status_logs"></textarea>
+                        </div>
                     </div><br>
                     <br>
-                    <!-- Admin -->
-                    <div class="row row_admin">
-                        <div class="col-3">
-                            <label>Assign By</label>
-                            <input type="text" disabled class="form-control" id="admin_name">
-                        </div>
-
-                        <div class="col-3">
-                            <label>Delivery Date</label>
-                            <input type="text" disabled class="form-control" id="delivery_date">
-                        </div>
-
-                        <div class="col-4">
-                            <label>Messenger Name</label>
-                            <input type="text" disabled class="form-control" id="messenger_name">
-                        </div>
-
-                    </div>
 
                     <!-- Messenger -->
                     <br><br>
                     <div id="row_messenger" class="row">
-                        <div class="col-3">
+                        <div class="col-6">
                             <label>Delivery remarks</label>
                             <textarea class="form-control spec_input" disabled id="mess_remarks"></textarea>
                         </div>
 
-                        <div class="col-3 file_column">
+                        <div class="col-6 file_column">
                             <label>Files</label>
                             <div id="messenger_file"></div>
                         </div>
 
                     </div>
 
+                    <div id="row_messenger_reschedule" class="row">
+
+
+                        <div class="col-4">
+                            <label>Date Reschedule</label>
+                            <input disabled class="form-control spec_input" id="date_rescheduled" type="text">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Delivery Remarks</label>
+                            <input disabled class="form-control spec_input" id="reschedule_remarks" type="text">
+                        </div>
+
+
+                    </div>
 
 
 
@@ -495,7 +496,6 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
-
                         $('#edit_id').val(e['data']['id']);
                         $('#edit_name_receiver').val(e['data']['name_receiver']);
                         $('#edit_company_name').val(e['data']['company_name']);
@@ -505,10 +505,6 @@
                         $('#edit_count_documents').val(e['data']['count_documents']);
                         $('#edit_complete_address').val(e['data']['complete_address']);
                         $('#edit_delivery_remarks').val(e['data']['delivery_remarks']);
-
-
-
-
                     }
                 });
             });
@@ -516,9 +512,12 @@
             $(document).on('click', '.btn_show_data', function () {
 
                 $('#show_delivery_request_modal').modal('show');
-                $('.row_admin').attr('hidden', true)
+
                 $('#messenger_file').html('');
                 $('#row_messenger').addClass('d-none');
+                $('#row_messenger_reschedule').addClass('d-none');
+
+
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
@@ -539,26 +538,42 @@
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
 
 
-                        if (e['data']['get_admin_data']) {
-                            //if admin has assign messenger
-                            $('.row_admin').removeAttr('hidden')
-                            $('#admin_name').val(e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname'])
-                            $('#delivery_date').val(e['data']['procedure_date'])
-                            $('#messenger_name').val(e['data']['get_messenger_name']['firstname'] + ' ' + e['data']['get_messenger_name']['lastname'])
+                        // if (e['data']['get_admin_data']) {
+                        //     //if admin has assign messenger
+                        //     $('.row_admin').removeAttr('hidden')
+                        //     $('#admin_name').val(e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname'])
+                        //     $('#delivery_date').val(e['data']['procedure_date'])
+                        //     $('#messenger_name').val(e['data']['get_messenger_name']['firstname'] + ' ' + e['data']['get_messenger_name']['lastname'])
 
+                        // }
+
+
+
+                        $('#status_logs').val('Undelivered');
+
+
+                        if (e['data']['request_status'] == 'Delivered') {
+                            $('#row_messenger').removeClass('d-none');
+                            $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                            $('#mess_remarks').val(e['data']['messenger_remarks']);
+                            $('#status_logs').val('Delivered');
+                        }
+
+                        if (e['data']['request_status'] == 'Reschedule') {
+                            $('#row_messenger_reschedule').removeClass('d-none');
+                            $('#status_logs').val('Rescheduled');
+                            $('#reschedule_remarks').val(e['data']['messenger_remarks'] || '');
+                            $('#date_rescheduled').val(e['data']['procedure_date'] || '');
                         }
 
 
 
 
-
-                        if (e['data']['messenger_file'] == 'nofile') {
-                            return;
+                        if (e['data']['status'] == 0) {
+                            $('#status_logs').val('Cancelled');
                         }
 
-                        $('#row_messenger').removeClass('d-none');
-                        $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
-                        $('#mess_remarks').val(e['data']['messenger_remarks']);
+
 
                     }
                 })

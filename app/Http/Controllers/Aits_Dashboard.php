@@ -145,8 +145,8 @@ class Aits_Dashboard extends Controller
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
-              END AS procedure_status,SUM(CASE WHEN request_status = 'Pending' AND messenger_id IS NULL THEN 1 ELSE 0 END) AS pending_counts,
-	          SUM (CASE WHEN request_status !='Delivered' AND messenger_id IS NOT NULL THEN 1 ELSE 0 END) On_going,
+              END AS procedure_status,SUM(CASE WHEN request_status != 'Approved' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
+	          SUM (CASE WHEN request_status !='Delivered' AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
 	          SUM(CASE WHEN request_status ='Delivered' THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) $shuttle_request_id GROUP BY procedures ";
 
 
@@ -169,7 +169,7 @@ class Aits_Dashboard extends Controller
                 'room_request' => $room_counts,
                 'vehicle_request' => $vehicle_counts,
                 'logistics_request' => $logistics_count,
-           
+
             ]);
 
 
@@ -193,9 +193,9 @@ class Aits_Dashboard extends Controller
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
-              END AS procedure_status,SUM(CASE WHEN request_status = 'Pending' AND messenger_id IS NULL THEN 1 ELSE 0 END) AS pending_counts,
-	          SUM (CASE WHEN request_status !='Delivered' AND messenger_id=$user_id THEN 1 ELSE 0 END) On_going,
-	          SUM(CASE WHEN request_status ='Delivered' AND messenger_id=$user_id THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1)   GROUP BY procedures ";
+              END AS procedure_status,SUM(CASE WHEN request_status != 'Delivered' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
+	          SUM (CASE WHEN request_status !='Delivered' AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
+	          SUM(CASE WHEN request_status ='Delivered'  THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) AND messenger_id=$user_id   GROUP BY procedures ";
 
 
             $logistics_count = DB::connection('sqlsrv')->select(
@@ -263,11 +263,11 @@ class Aits_Dashboard extends Controller
             ->where('status', 1);
 
         if ($params == 1) {
-            $data->where('request_status', 'Pending')->whereNull('messenger_id');
+            $data->whereNot('request_status', 'Delivered')->where('procedure_date', '<', Carbon::now()->toDateString());
         }
 
         if ($params == 2) {
-            $data->whereNotNull('messenger_id')->whereNot('request_status', 'Delivered');
+            $data->whereNot('request_status', 'Delivered')->where('procedure_date', '=', Carbon::now()->toDateString());
         }
         if ($params == 3) {
             $data->where('request_status', 'Delivered');
@@ -300,20 +300,35 @@ class Aits_Dashboard extends Controller
             ->where('procedures', $procedure)
             ->where('status', 1);
 
+
+        // if ($params == 1) {
+        //     $data->whereNot('request_status', 'Approved')->where('procedure_date', '<', Carbon::now()->toDateString());
+        // }
+
+        // if ($params == 2) {
+        //     $data->whereNot('request_status', 'Approved')->where('procedure_date', '=', Carbon::now()->toDateString());
+        // }
+
+
+        
+
         if ($params == 1) {
-            $data->where('request_status', 'Pending')->whereNull('messenger_id');
+            $data->whereNot('request_status', 'Delivered')
+                ->where('messenger_id', Auth::user()->id)
+                ->where('procedure_date', '<', Carbon::now()->toDateString());
+
         }
 
         if ($params == 2) {
-            $data->where('messenger_id', Auth::user()->id)->whereNot('request_status', 'Delivered');
+            $data->where('messenger_id', Auth::user()->id)->whereNot('request_status', 'Delivered')
+                ->whereDate('procedure_date', '=', Carbon::now()->toDateString());
+
         }
         if ($params == 3) {
             $data->where('request_status', 'Delivered')->where('messenger_id', Auth::user()->id);
         }
 
-        // if (!in_array(2, $roles)) {
-        //     $data->where('user_id', Auth::user()->id);
-        // }
+
 
         $data = $data->get();
 

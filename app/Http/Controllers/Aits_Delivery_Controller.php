@@ -335,10 +335,9 @@ class Aits_Delivery_Controller extends Controller
                 ->first();
 
             if ($messenge_file) {
-
                 $path = $messenge_file->folder_name . '/' . $messenge_file->year . '/' . $messenge_file->file_name;
                 $link = $messenge_file->file_link;
-                $url = dynamic_file($path, $link);
+                $direction = dynamic_file($path, $link);
                 $filename = $messenge_file->orig_file;
             }
 
@@ -405,9 +404,9 @@ class Aits_Delivery_Controller extends Controller
 
         if ($procedure == 3) {
             if ($status == "Pending") {
-                $stat = '<span class="badge rounded-pill bg-warning">Pending</span>';
+                $stat = '<span class="badge rounded-pill bg-warning">Unpicked </span>';
             } else if ($status == "Delivered") {
-                $stat = '<span class="badge rounded-pill bg-success">Pick up</span>';
+                $stat = '<span class="badge rounded-pill bg-success">Picked Up</span>';
             } else if ($status == "Reschedule") {
                 $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
 
@@ -415,7 +414,7 @@ class Aits_Delivery_Controller extends Controller
                 $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
             }
             return '<center><h5>' . $stat . '</h5></center>';
-            
+
         }
 
 

@@ -30,7 +30,7 @@ class Aits_logistics_approval extends Controller
 
         $filter = [
             'all' => 0,
-            'for assign' => 'Pending',
+            'pending' => 'Pending',
             'rescheduled' => 'Reschedule',
             'completed' => 'Delivered'
         ];
@@ -38,7 +38,7 @@ class Aits_logistics_approval extends Controller
 
 
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
-            ->where('is_transact', 1);
+            ->where('status', 1);
         if ($request->pending_data) {
             $data->where('request_status', 'Pending');
         }
@@ -47,7 +47,6 @@ class Aits_logistics_approval extends Controller
             if ($filters != 0) {
                 $data->where('request_status', $filters);
             }
-
         }
         if ($request->logs_params) {
             $logistics = $logistics_arr[$request->logs_params];
@@ -107,7 +106,7 @@ class Aits_logistics_approval extends Controller
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
                 $link = $data_file->file_link;
                 $url = dynamic_file($path, $link);
-               
+
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
@@ -145,6 +144,7 @@ class Aits_logistics_approval extends Controller
             ->addColumn('action', function ($data) {
 
                 $hidden = $data->messenger_id != null ? 'hidden' : '';
+                $hidden = 'hidden';
                 return '
              <div  class="btn-group dropstart input_spec my-1">
             <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"

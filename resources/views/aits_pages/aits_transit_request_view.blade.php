@@ -69,7 +69,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Shuttle Request
+                    <h6 class="modal-title" id="">Vehicle Service Request Form
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -169,7 +169,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="">Shuttle Request
+                    <h6 class="modal-title" id="">Edit Vehicle Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -233,7 +233,7 @@
                         </div>
                         <div class="col-3">
                             <label>Number of Passengers</label>
-                            <input type="number" id="edit_passenger_number"  min="1" class="form-control spec_input">
+                            <input type="number" id="edit_passenger_number" min="1" class="form-control spec_input">
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
@@ -267,7 +267,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id=""> View Shuttle Request
+                    <h6 class="modal-title" id=""> View Vehicle Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
