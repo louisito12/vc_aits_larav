@@ -136,7 +136,6 @@
                                                     id="edit_suffix_id" name="suffix_id">
                                                     <option value="">Select Suffix</option>
                                                     @foreach ($suffix as $suffixs)
-
                                                         <option value="{{ $suffixs->id }}" {{ old('suffix_id') == $suffixs->id ? 'selected' : '' }}>
                                                             {{ $suffixs->description }}
                                                         </option>
@@ -220,7 +219,6 @@
                                         <!-- Step 3 -->
                                         <div class="tab-pane fade" id="tab3" role="tabpanel">
                                             <input type="hidden" id="edit_id" name="id" value="{{ old('id') }}">
-
                                             <div class="mb-3">
                                                 <label for="edit_gender_id">Gender</label>
                                                 <select
@@ -239,7 +237,6 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
                                             <div class="mb-3">
                                                 <label for="edit_user_email">Email</label>
                                                 <input type="email"

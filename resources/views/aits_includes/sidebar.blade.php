@@ -90,7 +90,8 @@
 
                     $super_admin = [
                         "aits_roles_view" => request::is('aits_roles_view'),
-                        "aits_usermanagement" => request::is('aits_usermanagement')
+                        "aits_usermanagement" => request::is('aits_usermanagement'),
+                        "aits_assign_area" => request::is('aits_assign_area'),
                     ];
                     $pms = [
                         "pms_page" => request::is('pms_page'),
@@ -215,10 +216,10 @@
 
 
                             <!-- <li class="slide">
-                                                                                                                <a href="{{ route('user_manage_view') }}"
-                                                                                                                    class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
-                                                                                                                    Users Management</a>
-                                                                                                            </li> -->
+                                                                                                                        <a href="{{ route('user_manage_view') }}"
+                                                                                                                            class="side-menu__item {{ Request::is('user_manage_view') ? 'active' : '' }}">
+                                                                                                                            Users Management</a>
+                                                                                                                    </li> -->
 
                         </ul>
                     </li>
@@ -281,6 +282,15 @@
                                     class="side-menu__item {{ Request::is('aits_usermanagement') ? 'active' : '' }}">
                                     User Management</a>
                             </li>
+
+                            <li class="slide">
+                                <a href="{{ route('aits_assign_area') }}"
+                                    class="side-menu__item {{ Request::is('aits_assign_area') ? 'active' : '' }}">
+                                    Assign Area</a>
+                            </li>
+
+
+
 
                         </ul>
                     </li>

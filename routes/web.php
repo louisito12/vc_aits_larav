@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AitsAssignAreaController;
 use Carbon\Carbon;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
@@ -136,6 +137,15 @@ Route::controller(Aits_Car_Management_Controller::class)->group(function () {
     Route::post('edit_vehicle', 'edit_vehicle')->name('edit_vehicle');
 });
 
+Route::controller(AitsAssignAreaController::class)->group(function () {
+    Route::Get('aits_area_user_data', 'aits_area_user_data')->name('aits_area_user_data');
+    Route::post('aits_save_area_messenger', 'aits_save_area_messenger')->name('aits_save_area_messenger');
+    Route::Get('aits_show_area_messenger/{id}', 'aits_show_area_messenger')->name('aits_show_area_messenger');
+    Route::post('aits_mess_area_edit', 'aits_mess_area_edit')->name('aits_mess_area_edit');
+    Route::Get('aits_mess_area_delete/{id}', 'aits_mess_area_delete')->name('aits_mess_area_delete');
+
+});
+
 
 Route::controller(AitsTransitApproval::class)->group(function () {
     Route::post('get_approval_transit', 'get_approval_transit')->name('get_approval_transit');
@@ -222,6 +232,7 @@ Route::middleware(['auth'])->group(function () {
     //superadmin
     Route::get('aits_roles_view', [Aits_roles_controller::class, 'aits_roles_view'])->name('aits_roles_view');
     Route::get('aits_usermanagement', [Aits_User_Controller::class, 'aits_usermanagement'])->name('aits_usermanagement');
+    Route::get('aits_assign_area', [AitsAssignAreaController::class, 'aits_assign_area'])->name('aits_assign_area');
     //pms
     Route::get('pms_page', [Pms_Maintenance_Controller::class, 'pms_page'])->name('pms_page');
     Route::get('pms_approval_view', [PmsApprovalController::class, 'pms_approval_view'])->name('pms_approval_view');

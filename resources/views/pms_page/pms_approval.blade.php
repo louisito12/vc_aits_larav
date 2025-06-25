@@ -56,21 +56,11 @@
                                     $currentYear = date('Y');
                                  @endphp
                                 @for($i = $currentYear - 10; $i <= $currentYear + 1; $i++)
-
-
                                     <option value={{ $i }}>{{ $i}}</option>
-
                                 @endfor
-
                             </select>
                         </div>
                     </div>
-
-                
-
-
-
-
                 </div>
                 <div class="card-body">
 
@@ -86,12 +76,8 @@
                                             <th class="text-center">PMS Start</th>
                                             <th class="text-center">Conducted By</th>
                                             <th class="text-center">Noted By</th>
-                                            <th class="text-center">
-                                                PMS Action
-                                            </th>
-                                            <th class="text-center">
-                                                PMS Status
-                                            </th>
+                                            <th class="text-center"> PMS Action</th>
+                                            <th class="text-center"> PMS Status </th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -351,10 +337,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
                         <div class="col-12">
-
                             <table class="table table-bordered" id="pms_sched_table">
                                 <thead>
                                     <tr>
@@ -372,8 +356,6 @@
                                         <th scope="col">OCT</th>
                                         <th scope="col">NOV</th>
                                         <th scope="col">DEC</th>
-
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -437,14 +419,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
                 </div>
             </div>
         </div>
     </div>
-
-
-
 
 
 
@@ -492,7 +470,6 @@
                     },
                 ],
             });
-
 
             $(document).on('click', '.btn_approved', function () {
 
@@ -549,9 +526,7 @@
                                             $('#tbl_pms').DataTable().ajax.reload();
                                             resolve();
                                         }
-
                                     },
-
                                 });
                             }
                         });

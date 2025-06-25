@@ -390,9 +390,7 @@
                             alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return
                         }
-
                         if (procedure == "edit_data") {
-
                             $('#edit_shuttle_modal').modal('show');
                             $('#edit_id').val(e['data']['id']);
                             $('#edit_departure_date').val(e['data']['departure_date']);
@@ -424,12 +422,10 @@
                             $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
                             $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
                             $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
-                            $('#show_req_stats').val(e['data']['request_status']);
+                            $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e['data']['requst_status']);
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
                                 + ' ' + e['data']['get_approver_data']['lastname'] : '');
                             $('#show_approve_date').val(e['data']['date_approved']);
-
-
 
 
                             // if (e['data']['get_approver_data']) {
@@ -513,12 +509,10 @@
                 const manager_app = $('#manager_app').val();
                 const ob_form_file = $('#ob_form_file')[0].files[0];
                 const add_shuttle_data = new FormData();
-
                 if (ob_form_file == undefined) {
                     alertify.error('<span style="color: white;">OB form file is required</span>');
                     return;
                 }
-
                 add_shuttle_data.append('departure_date', departure_date);
                 add_shuttle_data.append('appointment_date', appointment_date);
                 add_shuttle_data.append('pick_up_date', pickup_date);
@@ -531,8 +525,6 @@
                 add_shuttle_data.append('destination', destination);
                 add_shuttle_data.append('remarks', remarks);
                 add_shuttle_data.append('file[]', ob_form_file);
-
-
 
                 $.ajax({
                     url: "{{ route('aits_save_shuttle_request') }}",
@@ -571,8 +563,6 @@
 
                     }
                 })
-
-
 
             });
 
@@ -702,11 +692,7 @@
 
 
 
-
-
-
             $('#edit_shuttle_btn').click(function () {
-
                 const edit_id = $('#edit_id').val();
                 const edit_departure_date = $('#edit_departure_date').val();
                 const edit_appointment_date = $('#edit_appointment_date').val();
@@ -740,10 +726,6 @@
                 if (edit_ob_form) {
                     edit_shuttle_data.append('ob_form[]', edit_ob_form, edit_ob_form.name);
                 }
-
-
-
-
 
 
 

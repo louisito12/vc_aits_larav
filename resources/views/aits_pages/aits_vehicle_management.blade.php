@@ -89,13 +89,17 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Date</label>
                             <input type="date" id="registry_date" class="spec_input form-control">
                         </div>
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Expiry</label>
                             <input type="date" id="registry_expiry" class="spec_input form-control">
+                        </div>
+                        <div class="col-2">
+                            <label>Last Digit PN</label>
+                            <input type="text" id="last_digit" class="spec_input form-control">
                         </div>
                     </div>
                 </div>
@@ -106,8 +110,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <div class="modal fade" id="edit_vehicle_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
@@ -138,14 +140,19 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Date</label>
                             <input type="date" id="edit_registry_date" class="spec_input form-control">
                         </div>
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Expiry</label>
                             <input type="date" id="edit_registry_expiry" class="spec_input form-control">
                         </div>
+                        <div class="col-2">
+                            <label>Last Digit PN</label>
+                            <input type="text" id="edit_last_digit" class="spec_input form-control">
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -185,14 +192,22 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Date</label>
                             <input disabled type="date" id="view_registry" class="spec_input form-control">
                         </div>
-                        <div class="col-6">
+                        <div class="col-5">
                             <label>Registry Expiry</label>
                             <input disabled type="date" id="view_expiry" class="spec_input form-control">
                         </div>
+
+                        <div class="col-2">
+                            <label>Registry Expiry</label>
+                            <input disabled type="text" id="edit_last_digit" class="spec_input form-control">
+                        </div>
+
+
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -293,8 +308,9 @@
                 const plate_number = $('#plate_number').val();
                 const registry_date = $('#registry_date').val();
                 const registry_expiry = $('#registry_expiry').val();
+                const last_digit = $('#last_digit').val();
 
-                if (brand == "" || model == "" || plate_number == "" || registry_date == "" || registry_expiry == "") {
+                if (brand == "" || model == "" || plate_number == "" || registry_date == "" || registry_expiry == "" || last_digit == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
                     return;
                 }
@@ -308,7 +324,8 @@
                         model: model,
                         plate_number: plate_number,
                         start_date: registry_date,
-                        expiry_date: registry_expiry
+                        expiry_date: registry_expiry,
+                        last_digit: last_digit
 
                     },
                     headers: {
@@ -326,6 +343,7 @@
                         $('#plate_number').val("");
                         $('#registry_date').val("");
                         $('#registry_expiry').val("");
+                        $('#last_digit').val("")
                     }
                 });
 
@@ -349,6 +367,8 @@
                         $('#edit_plate_number').val(e['data']['plate_number'])
                         $('#edit_registry_date').val(e['data']['start_date'])
                         $('#edit_registry_expiry').val(e['data']['expiry_date'])
+                        $('#edit_registry_expiry').val(e['data']['expiry_date'])
+                        $('#edit_last_digit').val(e['data']['last_digit'] || '');
                         $('#edit_vehicle_modal').modal('show')
 
                     }
@@ -362,8 +382,9 @@
                 const edit_plate_number = $('#edit_plate_number').val()
                 const edit_registry_date = $('#edit_registry_date').val()
                 const edit_registry_expiry = $('#edit_registry_expiry').val()
+                const edit_last_digit = $('#edit_last_digit').val();
 
-                if (edit_brand == "" || edit_model == "" || edit_plate_number == "" || edit_registry_date == "" || edit_registry_expiry == "") {
+                if (edit_brand == "" || edit_model == "" || edit_plate_number == "" || edit_registry_date == "" || edit_registry_expiry == "" || edit_last_digit == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
                     return;
                 }
@@ -376,6 +397,8 @@
                         id: edit_id, brand: edit_brand,
                         model: edit_model, plate_number: edit_plate_number,
                         start_date: edit_registry_date, expiry_date: edit_registry_expiry,
+                        last_digit: edit_last_digit,
+
 
                     },
                     headers: {
