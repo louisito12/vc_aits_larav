@@ -103,7 +103,6 @@ class Aits_Car_Management_Controller extends Controller
 
     public function get_car_details($id)
     {
-
         try {
             $data = AitsVehicleModel::find($id);
             $data->start_date = Carbon::createFromFormat('Y-m-d H:i:s.u', $data->start_date)->format('Y-m-d');
@@ -114,8 +113,6 @@ class Aits_Car_Management_Controller extends Controller
                 'status' => 200,
                 "isValid" => true,
             ];
-
-
 
         } catch (\Exception $e) {
             return response()->json([

@@ -72,7 +72,7 @@ class AitsAssignAreaController extends Controller
                 ]);
             }
 
-            $validation = AitsMessengersArea::where($request->all())->first();
+            $validation = AitsMessengersArea::where($request->all())->where('status', 1)->first();
             if ($validation) {
                 return response()->json([
                     'msg' => 'The area and Messenger is Assign at the same time',
@@ -148,7 +148,10 @@ class AitsAssignAreaController extends Controller
                 ]);
             }
 
-            $validation = AitsMessengersArea::where($request->except(['id']))->whereNot('id', $request->id)->first();
+            $validation = AitsMessengersArea::where($request->except(['id']))
+                ->where('status', 1)
+                ->whereNot('id', $request->id)
+                ->first();
             if ($validation) {
                 return response()->json([
                     'msg' => 'The area and Messenger is Assign at the same time',
