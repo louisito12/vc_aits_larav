@@ -56,8 +56,9 @@
                     <div class="card-title m-1 p-3">Room Request</div>
                 </div>
                 <div class="card-body">
+
                     <div class="table-responsive">
-                        <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm">
+                        <table id="room_request_tbl" class="table table-bordered text-nowrap w-100 table-sm">
                             <thead>
                                 <tr>
                                     <th class="spec_input w-25">Request #</th>

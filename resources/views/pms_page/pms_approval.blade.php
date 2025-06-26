@@ -67,7 +67,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="tbl_pms" class="table table-bordered text-nowrap table-sm text-center">
+                                <table id="tbl_pms" class="table table-bordered text-nowrap table-sm w-100 text-center">
                                     <thead>
                                         <tr>
                                             <th class="text-center">PMS Name</th>

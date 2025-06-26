@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AitsAssignAreaController;
+use App\Http\Controllers\PdfController;
 use Carbon\Carbon;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
@@ -213,6 +214,11 @@ Route::controller(PmsvalidationController::class)->group(function () {
     Route::get('save_open_req', 'save_open_req')->name('save_open_req');
 
 
+});
+Route::controller(PdfController::class)->group(function () {
+    Route::get('bp_pdf_view', 'bp_pdf_view')->name('bp_pdf_view');
+    Route::get('bmi_pdf_view', 'bmi_pdf_view')->name('bmi_pdf_view');
+    Route::get('oximeter_pdf_view', 'oximeter_pdf_view')->name('oximeter_pdf_view');
 });
 
 //pages authentication

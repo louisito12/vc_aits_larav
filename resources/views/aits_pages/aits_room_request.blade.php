@@ -42,8 +42,9 @@
                 </div>
 
                 <div class="card-body">
+                  
                     <div class="table-responsive">
-                        <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm text-center">
+                        <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm w-100 text-center">
                             <thead>
                                 <tr>
                                     <th class="text-center">Request #</th>
