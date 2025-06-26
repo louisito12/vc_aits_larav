@@ -251,6 +251,18 @@ Route::get('email_template', function () {
 
 Route::get('test_pdf', [Aits_Messenger_Controller::class, 'test_pdf'])->name('test_pdf');
 
+Route::Get('test_time', function () {
+    $five_mins = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s.v');
+
+    $time_now = Carbon::parse('2025-06-26 16:20:40.090')->addMinutes(5)->format('Y-m-d H:i:s.v');
+
+
+    if ($five_mins > $time_now) {
+        echo 'Help';
+        return;
+    }
+    return 'Sige';
+});
 // role -> admin,driver('itenerary arrive'),messenger(''),user
 // Route::get('show_data', [Aits_Delivery_Controller::class, 'show_data'])->name('show_data');
 

@@ -30,7 +30,7 @@
     <!-- Page Header Close -->
     <div class="row">
         <div class="col-xl-12">
-            <div class="card custom-card">
+            <div  class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">Shuttle Request</div>
                     <button id="add_request_btn" class="btn btn-success m-3 ">Add Request</button>
@@ -38,7 +38,8 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="table-responsive">
-                            <table id="tbl_transit" class="table table-bordered text-nowrap w-100">
+                            <table  id="tbl_transit"
+                                class="table table-bordered text-nowrap w-100">
                                 <thead>
                                     <tr>
                                         <th>Request #</th>
@@ -445,6 +446,7 @@
                     url: "{{ route('get_shuttel_request_data') }}",
 
                 },
+
                 columns: [
                     {
                         data: "request_no"

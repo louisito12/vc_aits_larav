@@ -233,7 +233,7 @@ class TransactJobs implements ShouldQueue
                         $process = $stat . ' ' . 'is completed';
                     }
                     if ($email_logistic->aits_process == 'Request') {
-                        $process = 'Request is for Assigning';
+                        $process = 'Request is for ' . $stat;
                     }
 
                     if ($email_logistic->aits_process == 'Reschedule messenger') {
@@ -268,7 +268,7 @@ class TransactJobs implements ShouldQueue
 
 
 
-      
+
             sleep(120);
 
         }

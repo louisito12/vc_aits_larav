@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsMessenger;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Validator;
@@ -202,6 +203,16 @@ class Aits_User_Controller extends Controller
                 'citizenship_id' => $request->citizenship_id,
 
             ]);
+            if (in_array(4, $request->roles_arr)) {
+                $insert = AitsMessenger::create([
+                    'fname' => $request->firstname,
+                    'lname' => $request->lastname,
+                    'status' => 1,
+                    'cen_user_id' => $last_id,
+                    'date_created' => Carbon::now(),
+
+                ]);
+            }
 
         } catch (\Exception $e) {
             return response()->json([
@@ -296,6 +307,19 @@ class Aits_User_Controller extends Controller
                 'citizenship_id' => $request->citizenship_id,
 
             ]);
+
+
+
+            if (in_array(4, $request->roles_arr)) {
+                $insert = AitsMessenger::create([
+                    'fname' => $request->firstname,
+                    'lname' => $request->lastname,
+                    'status' => 1,
+                    'cen_user_id' => $request->id,
+                    'date_created' => Carbon::now(),
+
+                ]);
+            }
 
         } catch (\Exception $e) {
             return response()->json([

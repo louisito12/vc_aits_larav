@@ -42,5 +42,4 @@ class PdfController extends Controller
         ]);
     }
 
-
 }

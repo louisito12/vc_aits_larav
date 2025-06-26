@@ -380,8 +380,8 @@
                 });
 
 
-                if (update_roles.length == 0) {
-                    roles_arr.error('<span style="color: white;">Please Select roles </span>');
+                if (roles_arr.length == 0) {
+                    alertify.error('<span style="color: white;">Please Select roles </span>');
                     return;
                 }
 

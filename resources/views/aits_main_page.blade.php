@@ -729,7 +729,7 @@
 
 
             updateDateTimeInputs();
-            setInterval(updateDateTimeInputs, 60000);
+            //  setInterval(updateDateTimeInputs, 60000);
         });
     </script>
 
