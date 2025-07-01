@@ -157,7 +157,6 @@ Route::controller(AitsTransitApproval::class)->group(function () {
 Route::controller(Aits_logistics_approval::class)->group(function () {
     Route::post('get_logistics_request', 'get_logistics_request')->name('get_logistics_request');
     Route::post('assigned_messenger', 'assigned_messenger')->name('assigned_messenger');
-
     Route::get('get_data_email', 'get_data_email')->name('get_data_email');
 });
 
@@ -253,10 +252,7 @@ Route::get('test_pdf', [Aits_Messenger_Controller::class, 'test_pdf'])->name('te
 
 Route::Get('test_time', function () {
     $five_mins = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s.v');
-
     $time_now = Carbon::parse('2025-06-26 16:20:40.090')->addMinutes(5)->format('Y-m-d H:i:s.v');
-
-
     if ($five_mins > $time_now) {
         echo 'Help';
         return;

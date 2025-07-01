@@ -174,9 +174,7 @@ class Aits_logistics_approval extends Controller
             $validated = Validator::make(
                 $request->all(),
                 [
-                    'messenger_id' => [
-                        'required',
-                    ],
+                    'messenger_id' => ['required'],
                     'procedure_date' => ['required'],
                     'assign_remarks' => ['required'],
 

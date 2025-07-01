@@ -110,7 +110,7 @@ class Aits_Transit_Controller extends Controller
             $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
 
-            
+
             // $validation = $this->date_validation($from_date, $to_date);
             // if ($validation != 0) {
             //     return response()->json([
@@ -208,6 +208,7 @@ class Aits_Transit_Controller extends Controller
     {
         $val = 0;
         $message = '';
+        //vehicle condtions departure,pick upd, abd appointend date
 
         if ($pick_date == $departure_date) {
             $val = 1;
@@ -234,9 +235,7 @@ class Aits_Transit_Controller extends Controller
 
     public function uploade_file_transit($id, $table_name, $folder_name, $files)
     {
-
         foreach ($files as $item) {
-
             $ext = $item->getClientOriginalExtension();
             $fname = $item->getClientOriginalName();
             $year = Carbon::now()->year;
@@ -252,9 +251,9 @@ class Aits_Transit_Controller extends Controller
                 "file_link" => url('/'),
                 "date_created" => Carbon::now()
             ]);
-
             $item->move('aits_shuttle_file/' . $year . '/', $format_name . '.' . $ext);
         }
+
 
     }
 

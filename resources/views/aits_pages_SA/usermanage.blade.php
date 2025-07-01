@@ -283,8 +283,8 @@
                         </div>
 
                         <!-- <div class="col-2">
-                                                                                                                                                                                      <label>Passworod</label>
-                                                                                                                                                                                     <input type="password" id="edit_password" class="form-control spec_input"></div> -->
+                                                                                                                                                                                              <label>Passworod</label>
+                                                                                                                                                                                             <input type="password" id="edit_password" class="form-control spec_input"></div> -->
 
                     </div>
                     <br><br>
@@ -525,7 +525,7 @@
                         civil_status_id: edit_civil_status_id,
                         user_title: edit_user_title,
                         citizenship_id: edit_citizenship_id,
-                        contact_no: edit_contact_no, update_roles
+                        contact_no: edit_contact_no, roles_arr: update_roles
                     },
 
                     headers: {
@@ -540,7 +540,7 @@
                         $('.update_role').prop('checked', false);
                         $('#tbl_users').DataTable().ajax.reload();
                         Swal.fire({
-                            title: "updated!",
+                            title: "Updated!",
                             text: "Your  user has been updated.",
                             icon: "success"
                         });

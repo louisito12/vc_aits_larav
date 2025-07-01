@@ -6,7 +6,7 @@
 
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
-            <h5 class="page-title fs-21 mb-1">Vehicle Management</h5>
+            <h5 class="page-title fs-21 mb-1">Car Management</h5>
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Service Request</a></li>
@@ -31,7 +31,7 @@
         <div class="col-xl-12">
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
-                    <div class="card-title m-1 p-3">Shuttle Request</div>
+                    <div class="card-title m-1 p-3">Car Management</div>
                     <button id="add_request_btn" class="btn btn-success m-3 ">Add Car</button>
 
                 </div>
@@ -105,14 +105,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="save_shuttle_btn" class="btn btn-primary">Save changes</button>
+                    <button type="button" id="save_shuttle_btn" class="btn btn-primary">Add Car</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="modal fade" id="edit_vehicle_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal fade" id="edit_vehicle_modal" tabindex="-9999999" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -164,7 +165,8 @@
     </div>
 
 
-    <div class="modal fade" id="view_vehicle_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal fade" id="view_vehicle_modal" tabindex="-999999" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -219,7 +221,8 @@
     </div>
     <!-- Vehicle Operation -->
 
-    <div class="modal fade" id="add_operation_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal fade" id="add_operation_modal" tabindex="-999999" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -337,6 +340,7 @@
                             text: "The car  has been added.",
                             icon: "success"
                         });
+                        $('#add_transit_room').modal('hide');
                         $('#tbl_car').DataTable().ajax.reload();
                         $('#brand').val("");
                         $('#model').val("");
@@ -408,7 +412,7 @@
                         $('#edit_vehicle_modal').modal('hide')
                         Swal.fire({
                             title: "Success!",
-                            text: "The car  has been Edited.",
+                            text: "The car details has been Edited.",
                             icon: "success"
                         });
                         $('#tbl_car').DataTable().ajax.reload();

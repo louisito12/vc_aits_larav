@@ -40,6 +40,7 @@ class Aits_Car_Management_Controller extends Controller
             $data = AitsVehicleModel::where('status', 1)->get();
             return DataTables::of($data)
                 ->addColumn('status', function ($data) {
+                    //validation of date if its valid or not 
                     $expiry = $data->expiry_date;
                     $expiryDate = Carbon::parse($expiry);
                     $currentDate = Carbon::now();
@@ -155,7 +156,6 @@ class Aits_Car_Management_Controller extends Controller
             'date_created' => Carbon::now(),
             'edit_user_id' => Auth::user()->id,
             'user_id' => $data->user_id,
-
         ]);
     }
 }

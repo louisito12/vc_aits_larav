@@ -501,8 +501,6 @@
     <!-- Loader -->
     <div id="loader">
         <img src="{{ asset('aits_asset/assets/images/media/loader.svg') }}" alt="">
-
-
     </div>
     <!-- Loader -->
 
@@ -512,20 +510,11 @@
 
             <!-- Start::main-header-container -->
             <div class="main-header-container container-fluid">
-
-
-
-
                 <!-- Start::header-content-left -->
                 <div class="header-content-left">
-
                     <!-- Start::header-element logo -->
                     @include('aits_includes.header_logo')
                     <!-- End::header-element logo -->
-
-
-
-
                     <div class="row">
                         <div class="col-12 mx-auto text-center">
                             <h4>
@@ -646,9 +635,7 @@
                                     following PMS:
                                 </p>
                                 <ul id="pms_body">
-
                                 </ul>
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

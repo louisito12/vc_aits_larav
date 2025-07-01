@@ -112,6 +112,8 @@ class Aits_Dashboard extends Controller
 
 
 
+            //row queries counts 
+
 
             $room_request = "";
             $shuttle_request_id = "";
@@ -123,6 +125,7 @@ class Aits_Dashboard extends Controller
             $user_id = Auth::user()->id;
 
             if (!in_array(2, $roles)) {
+                //if roles is not an admin then should have $user_id
                 // $data->where('request_by', Auth::user()->id);
                 $room_request = " AND request_by =$user_id";
                 $shuttle_request_id = " AND user_id =$user_id";
@@ -145,7 +148,7 @@ class Aits_Dashboard extends Controller
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
-              END AS procedure_status,SUM(CASE WHEN request_status != 'Approved' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
+              END AS procedure_status,SUM(CASE WHEN request_status != 'Delivered' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
 	          SUM (CASE WHEN request_status !='Delivered' AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
 	          SUM(CASE WHEN request_status ='Delivered' THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) $shuttle_request_id GROUP BY procedures ";
 
@@ -169,7 +172,6 @@ class Aits_Dashboard extends Controller
                 'room_request' => $room_counts,
                 'vehicle_request' => $vehicle_counts,
                 'logistics_request' => $logistics_count,
-
             ]);
 
 
@@ -310,7 +312,7 @@ class Aits_Dashboard extends Controller
         // }
 
 
-        
+
 
         if ($params == 1) {
             $data->whereNot('request_status', 'Delivered')

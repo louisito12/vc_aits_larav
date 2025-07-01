@@ -290,7 +290,7 @@ class Aits_User_Controller extends Controller
 
             ]);
 
-            $this->role_update($request->id, $request->update_roles);
+            $this->role_update($request->id, $request->roles_arr);
 
 
             $insert_profile = UserProfile::where('user_id', $request->id)->update([
@@ -343,7 +343,6 @@ class Aits_User_Controller extends Controller
                 ->pluck('role_id');
             $data->role = $roles;
             return response()->json([
-
                 'msg' => 'successfully provided',
                 'data' => $data,
                 'status' => 200,
@@ -362,7 +361,6 @@ class Aits_User_Controller extends Controller
     public function users_delete($id)
     {
         try {
-
 
             UserModel::where('id', $id)->update(['isactive' => 0]);
 
@@ -390,7 +388,6 @@ class Aits_User_Controller extends Controller
                 'date_created' => Carbon::now(),
             ]);
         }
-
 
 
     }

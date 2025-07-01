@@ -313,7 +313,10 @@ class Aits_Delivery_Controller extends Controller
         try {
 
 
-            $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_admin_data', 'get_messenger_name'])->find($id);
+            $data = AitsDelivery::with(
+                ['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_admin_data', 'get_messenger_name']
+            )->find($id);
+
             $procedure = $data->procedures;
             $stat = '';
             if ($procedure == 1) {
@@ -416,8 +419,6 @@ class Aits_Delivery_Controller extends Controller
             return '<center><h5>' . $stat . '</h5></center>';
 
         }
-
-
 
 
 
