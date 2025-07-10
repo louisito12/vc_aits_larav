@@ -11,6 +11,24 @@
         padding: 2px;
     }
 
+    .dataTables_scrollBody {
+        position: relative !important;
+        overflow: auto !important;
+        width: 100% !important;
+       /*  max-height: calc(31.6667vh);
+        height: calc(31.6667vh); */
+    }
+
+    .dataTables_scrollBody {
+        scrollbar-width: thin;
+        scrollbar-color: #888 transparent;
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background: transparent;
+    }
 
 
     th,

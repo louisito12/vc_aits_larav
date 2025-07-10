@@ -203,7 +203,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="approve_data_header"> Add PMS
+                    <h6 class="modal-title" id="approve_data_header"> Edit PMS
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -887,8 +887,8 @@
             $('#view_tbl_pms').click(function () {
 
                 const pms_year = $('#pms_year').val();
-         
-             $('#pms_text_header_top').text('PMS View ' + pms_year)
+
+                $('#pms_text_header_top').text('PMS View ' + pms_year)
 
                 // create me a ajax for pms_sched_table tbody   public function get_pms_sched_table($year) 
                 $.ajax({

@@ -75,15 +75,13 @@ class TransactJobs implements ShouldQueue
                         ];
 
                         Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
-
                         PmsFiles::where('id', $pms_datas->id)->update(
                             ['notif' => 1]
                         );
                     }
                 }
-
-
             }
+        
 
 
 

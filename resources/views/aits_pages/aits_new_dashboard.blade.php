@@ -588,7 +588,7 @@
                             if (collection_index != -1) {
                                 $('.collection_logistic1').text(logisticsRequests[collection_index]['pending_counts']);
                                 $('.collection_logistic2').text(logisticsRequests[collection_index]['On_going']);
-                                $('.collection_logisti3').text(logisticsRequests[collection_index]['Approved']);
+                                $('.collection_logistic3').text(logisticsRequests[collection_index]['Approved']);
                             }
 
 

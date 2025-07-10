@@ -525,9 +525,6 @@ class Aits_Transit_Controller extends Controller
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],
-
-
-
                 ],
             );
 

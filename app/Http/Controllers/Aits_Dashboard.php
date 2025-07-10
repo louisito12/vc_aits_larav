@@ -205,38 +205,7 @@ class Aits_Dashboard extends Controller
                 []
             );
 
-            //  var for_delivery = "For Delivery";
-            //         // var index = -1;
-            //         var for_collection = "For Collection"
-            //         // var collection_index = -1;
-            //         var for_pick_up = "For Pick Up";
-            //         // var pick_up_index = -1;
-
-            // $logistics_count = [
-            //     [
-            //         'procedure_status' => 'For Delivery',
-            //         'pending_counts' => 1,
-            //         'On_going' => 2,
-            //         'Approved' => 4,
-
-            //     ],
-
-            // [
-            //     'procedure_status' => 'For Collection',
-            //     'pending_counts' => 1,
-            //     'On_going' => 2,
-            //     'Approved' => 4,
-
-            // ],
-
-            //     [
-            //         'procedure_status' => 'For Pick Up',
-            //         'pending_counts' => 1,
-            //         'On_going' => 2,
-            //         'Approved' => 4,
-
-            //     ],
-            // ];
+         
 
 
 
@@ -258,8 +227,9 @@ class Aits_Dashboard extends Controller
     {
 
 
-        $roles = roles_array(Auth::user()->id);
+         $roles = roles_array(Auth::user()->id);
 
+     
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
             ->where('procedures', $procedure)
             ->where('status', 1);

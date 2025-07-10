@@ -80,7 +80,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="deliver_tbl" class="table table-bordered text-nowrap w-100 table-sm text-center">
+                        <table id="deliver_tbl" class="table table-bordered text-nowrap w-100 table-sm text-center ">
                             <thead>
                                 <tr>
                                     <th class="text-center">Request #</th>
@@ -411,7 +411,7 @@
                         return 'Rescheduled';
                     }
                     if (proc_stat == 'Delivered') {
-                        return '	Picked Up';
+                        return 'Picked Up';
                     }
                 }
 
@@ -424,9 +424,13 @@
 
             $('#deliver_tbl').DataTable({
                 destroy: true,
+                scrollX: true,
+                // scrollY: 'calc(95vh / 2.5)',
+
                 ajax: {
                     url: "{{ route('get_logistics_request') }}",
                     type: "POST",
+
                     data: {
                         pending_data: 1,
                     },
@@ -437,6 +441,10 @@
                 },
                 columns: get_columns(),
             });
+
+
+
+
 
             $(document).on('click', '.btn_approved', function () {
                 const params_val = $(this).data('val');
@@ -463,7 +471,6 @@
 
 
                 }
-
 
             });
 

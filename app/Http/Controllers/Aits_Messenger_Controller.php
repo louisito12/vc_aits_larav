@@ -279,7 +279,24 @@ class Aits_Messenger_Controller extends Controller
                 'remarks' => $remarks,
             ]);
 
+
+            $message = 'Rescheduled';
+
+
             $update = AitsDelivery::where('id', $request->id)->update($data_update);
+
+            $data_proc = AitsDelivery::where('id', $request->id)->first();
+            if ($request->process_val != 2) {
+                $procedure = $data_proc->procedures;
+                $message = $procedure == 1 ? 'Delivered'
+                    : ($procedure == 2 ? 'Collected'
+                        : ($procedure ==3 ? 'Picked Up' : ''));
+
+            }
+
+            return response()->json([
+                'alert_msg' => $message,
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -316,6 +333,7 @@ class Aits_Messenger_Controller extends Controller
                 'user_id' => Auth::user()->id,
                 'file_link' => url('/'),
             ]);
+
 
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
