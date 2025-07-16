@@ -56,5 +56,10 @@ class AitsRequestRoomModel extends Model
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'approve_by');
     }
+    // public function get_cancelled_data()
+    // {
+    //     return $this->hasOne(AitsProcessRemarks::class, 'attachment_id', 'id')
+    //         ->where('aits_request_room_models')->where('Cancel of Room Request');
+    // }
 
 }

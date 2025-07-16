@@ -40,9 +40,13 @@ class Aits_Dashboard extends Controller
             //     $date_ex = '<';
             // }
             // return Carbon::now()->toDateString();
-            $date_ex = $params == 3 ? '<' : '=';
-            $data->whereDate('date_to', $date_ex, Carbon::now()->toDateString())
+            $date_ex = $params == 3 ? '<' : '>';
+            $data->where('date_to', $date_ex, Carbon::now())
                 ->where('request_status', 'Approved');
+            if ($params == 2) {
+                $data->whereDate('date_to', '=', Carbon::now()->toDateString());
+            }
+
         }
 
 
@@ -117,11 +121,13 @@ class Aits_Dashboard extends Controller
 
             $room_request = "";
             $shuttle_request_id = "";
+
             $roles = DB::table('aits_role_access')
                 ->where('user_id', Auth::user()->id)
                 ->where('status', 1)
                 ->pluck('role_id')
                 ->toArray();
+
             $user_id = Auth::user()->id;
 
             if (!in_array(2, $roles)) {
@@ -132,11 +138,18 @@ class Aits_Dashboard extends Controller
             }
 
 
-            $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
-            SUM(CASE WHEN request_status = 'Approved' AND date_to < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
-            FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
+            // $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+            // SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
+            // SUM(CASE WHEN request_status = 'Approved' AND date_to < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
+            // FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
 
+
+            $now = Carbon::now();
+            $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+            SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) AND date_to > '$now'
+             THEN 1 ELSE 0 END) AS ongoing_count,
+            SUM(CASE WHEN request_status = 'Approved' AND date_to < '$now' THEN 1 ELSE 0 END) AS completed_count
+            FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
 
             $shuttle_request = "
             SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
@@ -205,7 +218,7 @@ class Aits_Dashboard extends Controller
                 []
             );
 
-         
+
 
 
 
@@ -227,9 +240,9 @@ class Aits_Dashboard extends Controller
     {
 
 
-         $roles = roles_array(Auth::user()->id);
+        $roles = roles_array(Auth::user()->id);
 
-     
+
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
             ->where('procedures', $procedure)
             ->where('status', 1);

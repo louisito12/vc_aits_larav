@@ -301,7 +301,9 @@ class Aits_Request_Room_Controller extends Controller
                 return $this->status_html($data->request_status, $data->id);
             })
             ->addColumn('admin_action', function ($data) {
-                $hidden = $data->request_status != 'Pending' ? 'hidden' : '';
+                $hidden = ($data->request_status != 'Pending' || $data->data_request_status == 'Cancelled') ? 'hidden' : '';
+
+
 
                 return '
         <div  class="btn-group dropstart input_spec my-1">
@@ -312,10 +314,10 @@ class Aits_Request_Room_Controller extends Controller
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
+             <li><a class="dropdown-item btn_delete" ' . $hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
                 <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
-            </ul>
-        </div>
-    ';
+            </ul></div>    ';
+
             })
             ->addColumn('request_no', function ($data) {
                 $number = $data->request_no;
@@ -517,7 +519,13 @@ class Aits_Request_Room_Controller extends Controller
     public function delete_request($id, $remarks)
     {
         try {
-            AitsRequestRoomModel::where('id', $id)->update(['request_status' => 'Cancelled']);
+            $data = AitsRequestRoomModel::where('id', $id)->first();
+            $is_app = 0;
+            if ($data->request_status == 'Approved') {
+                $is_app = 1;
+            }
+
+            AitsRequestRoomModel::where('id', $id)->update(['request_status' => 'Cancelled', 'is_app_cancel' => $is_app]);
 
             $object = [
                 'attachment_id' => $id,

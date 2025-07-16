@@ -344,7 +344,7 @@
                                 $.ajax({
                                     url: "approved_room_request/" + $(this)
                                         .data('id') + "/" + $(this).data(
-                                        'val') + '/' + remarks,
+                                            'val') + '/' + remarks,
                                     success: function(e) {
                                         if (e['isValid'] == false) {
                                             Swal.fire({
@@ -394,7 +394,9 @@
 
             $('#filter_request').click(function() {
                 const filter_params = $('#filter_btn').text().toLowerCase();
-                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved','all cancelled'];
+                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved',
+                    'all cancelled'
+                ];
 
                 if (!filter_array.includes(filter_params)) {
                     alertify.set('notifier', 'position', 'top-right');
@@ -423,6 +425,56 @@
 
             });
 
+            $(document).on('click', '.btn_delete', function() {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to cancel this request?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, cancel it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Reason for cancellation?',
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "delete_request/" + $(this).data(
+                                        'id') + '/' + remarks,
+                                    success: function(e) {
+                                        if (e['isValid'] == false) {
+                                            alertify.error(
+                                                '<span style="color: white;">' +
+                                                e['msg'] + '</span>');
+                                            reject('Deletion failed');
+                                        }
+
+                                        Swal.fire({
+                                            title: "Cancel!",
+                                            text: "Your request has been Cancel.",
+                                            icon: "success"
+                                        });
+                                        $('#room_request_tbl').DataTable()
+                                            .ajax.reload();
+                                        resolve();
+
+                                    },
+
+                                });
+                            }
+                        });
+                    }
+                })
+            });
 
 
 

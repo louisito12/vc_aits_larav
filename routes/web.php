@@ -211,8 +211,6 @@ Route::controller(PmsvalidationController::class)->group(function () {
     Route::get('save_cancellation_request/{date}', 'save_cancellation_request')->name('save_cancellation_request');
     Route::get('get_close_schedule', 'get_close_schedule')->name('get_close_schedule');
     Route::get('save_open_req', 'save_open_req')->name('save_open_req');
-
-
 });
 Route::controller(PdfController::class)->group(function () {
     Route::get('bp_pdf_view', 'bp_pdf_view')->name('bp_pdf_view');
