@@ -178,7 +178,9 @@ class Aits_Request_Room_Controller extends Controller
 
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])->where('is_transact', 1)
-                ->where('request_by', Auth::user()->id)->get();
+                ->where('request_by', Auth::user()->id)
+                // ->where('date_created', '<', Carbon::now())
+                ->get();
             return $this->room_request_datatable($data);
 
         } catch (\Exception $e) {
@@ -265,9 +267,9 @@ class Aits_Request_Room_Controller extends Controller
                 }
                 return '
                     <center>
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
+                    <button title="View" type="button" data-id=' . $data->id . ' class="btn btn-dark btn-sm btn_show_data  spec_input"><i class="bi bi-eye-fill"></i></button> 
+                    <button title="Edit"  type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
+                    <button title="Cancel"  type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>
                     </center> ';
             })
             ->addColumn('room', function ($data) {
@@ -342,6 +344,8 @@ class Aits_Request_Room_Controller extends Controller
             <span class="badge rounded-pill bg-danger">Disapproved</span>
             
             ';
+        } else if ($status == "Cancelled") {
+            $stat = ' <span class="badge rounded-pill bg-danger">Cancelled</span>';
         } else {
             $stat = '
             <span class="badge rounded-pill bg-danger">Error</span>
@@ -513,7 +517,7 @@ class Aits_Request_Room_Controller extends Controller
     public function delete_request($id, $remarks)
     {
         try {
-            AitsRequestRoomModel::where('id', $id)->update(['status' => 0]);
+            AitsRequestRoomModel::where('id', $id)->update(['request_status' => 'Cancelled']);
 
             $object = [
                 'attachment_id' => $id,
@@ -547,7 +551,7 @@ class Aits_Request_Room_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
 
-            
+
             insert_audit($object);
 
 

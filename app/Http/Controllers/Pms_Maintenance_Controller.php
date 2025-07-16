@@ -581,6 +581,7 @@ class Pms_Maintenance_Controller extends Controller
             ->leftJoin(DB::raw('users'), 'tbl_personal_datas.user_id', '=', 'users.id')
             ->where('users.isactive', 1)
             ->limit(400)
+            ->OrderBy('firstname', 'asc')
             ->get();
         $data_new = [];
         foreach ($data as $dt) {

@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Room Request</h5>
@@ -26,9 +25,14 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
                         <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
-                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">All Pending</a></li>
-                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a></li>
-                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Disapproved</a>
+                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">All Pending</a>
+                        </li>
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a>
+                        </li>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All
+                                Disapproved</a>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Cancelled</a>
+
                         </li>
 
                     </ul>
@@ -165,25 +169,40 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 
 @section('scripts')
-
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             function get_column() {
-                return [
-                    { data: 'request_no' },
-                    { data: 'room' },
-                    { data: 'department' },
-                    { data: 'date_from' },
-                    { data: 'date_to' },
-                    { data: 'event' },
-                    { data: 'date_created' },
-                    { data: 'status' },
-                    { data: 'admin_action' }
+                return [{
+                        data: 'request_no'
+                    },
+                    {
+                        data: 'room'
+                    },
+                    {
+                        data: 'department'
+                    },
+                    {
+                        data: 'date_from'
+                    },
+                    {
+                        data: 'date_to'
+                    },
+                    {
+                        data: 'event'
+                    },
+                    {
+                        data: 'date_created'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'admin_action'
+                    }
                 ];
             }
 
@@ -208,12 +227,12 @@
 
 
 
-            $(document).on('click', '.btn_show_data', function () {
+            $(document).on('click', '.btn_show_data', function() {
 
                 $.ajax({
                     url: "retrieve_room_request/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             alertify.error(e['msg']);
                             return;
@@ -228,12 +247,14 @@
                         $('#view_purpose').val(e['data']['remarks']);
                         $('#status').val(e['data']['request_status']);
                         if (e['data']['get_approved_data']) {
-                            $('#approve_by').val(e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']);
+                            $('#approve_by').val(e['data']['get_approved_data']['firstname'] +
+                                ' ' + e['data']['get_approved_data']['lastname']);
                             $('#approve_data_text').val(e['data']['approve_date']);
 
                         }
 
-                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
+                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
+                            ' ' + e['data']['get_requestor_data']['lastname']);
 
 
 
@@ -292,11 +313,10 @@
             // })
 
 
-            $(document).on('click', '.btn_approved', function () {
+            $(document).on('click', '.btn_approved', function() {
                 if ($(this).data('val') == 1) {
                     var approve = 'Approve';
-                }
-                else {
+                } else {
                     var approve = 'Disapprove';
 
                 }
@@ -322,12 +342,16 @@
                                 Swal.hideLoading();
                             } else {
                                 $.ajax({
-                                    url: "approved_room_request/" + $(this).data('id') + "/" + $(this).data('val') + '/' + remarks,
-                                    success: function (e) {
+                                    url: "approved_room_request/" + $(this)
+                                        .data('id') + "/" + $(this).data(
+                                        'val') + '/' + remarks,
+                                    success: function(e) {
                                         if (e['isValid'] == false) {
                                             Swal.fire({
                                                 icon: 'error',
-                                                html: '<span style="color: white;">' + e['msg'] + '</span>',
+                                                html: '<span style="color: white;">' +
+                                                    e['msg'] +
+                                                    '</span>',
                                                 background: '#f27474',
                                                 timer: 5000,
                                                 showConfirmButton: false,
@@ -335,14 +359,16 @@
                                                 toast: false,
                                             })
                                             reject('Deletion failed');
-                                        }
-                                        else {
+                                        } else {
                                             Swal.fire({
-                                                title: approve + '!',
-                                                text: "Your request has been " + approve,
+                                                title: approve +
+                                                    '!',
+                                                text: "Your request has been " +
+                                                    approve,
                                                 icon: "success"
                                             });
-                                            $('#room_request_tbl').DataTable().ajax.reload();
+                                            $('#room_request_tbl')
+                                                .DataTable().ajax.reload();
                                             resolve();
                                         }
 
@@ -360,15 +386,15 @@
 
 
 
-            $('.filter_data').on('click', function () {
+            $('.filter_data').on('click', function() {
                 var filterValue = $(this).text().toLowerCase();
                 $('#filter_btn').text($(this).text());
             })
 
 
-            $('#filter_request').click(function () {
+            $('#filter_request').click(function() {
                 const filter_params = $('#filter_btn').text().toLowerCase();
-                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved'];
+                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved','all cancelled'];
 
                 if (!filter_array.includes(filter_params)) {
                     alertify.set('notifier', 'position', 'top-right');
@@ -405,5 +431,4 @@
 
         })
     </script>
-
 @endsection
