@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">My Logisitics</h5>
@@ -15,33 +14,33 @@
             </nav>
         </div>
         <!-- <div   class="d-flex my-xl-auto right-content align-items-center">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="pe-1 mb-xl-0">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-info btn-icon me-2 btn-b"><i
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="mdi mdi-filter-variant"></i></button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="pe-1 mb-xl-0">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-danger btn-icon me-2"><i
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="mdi mdi-star"></i></button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="pe-1 mb-xl-0">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-warning  btn-icon me-2"><i
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="mdi mdi-refresh"></i></button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div  class="mb-xl-0">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="dropdown">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                14 Aug 2019
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li><a class="dropdown-item" href="javascript:void(0);">2015</a></li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li><a class="dropdown-item" href="javascript:void(0);">2016</a></li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li><a class="dropdown-item" href="javascript:void(0);">2017</a></li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li><a class="dropdown-item" href="javascript:void(0);">2018</a></li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="pe-1 mb-xl-0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-info btn-icon me-2 btn-b"><i
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="mdi mdi-filter-variant"></i></button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="pe-1 mb-xl-0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-danger btn-icon me-2"><i
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="mdi mdi-star"></i></button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="pe-1 mb-xl-0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <button type="button" class="btn btn-warning  btn-icon me-2"><i
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="mdi mdi-refresh"></i></button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div  class="mb-xl-0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="dropdown">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDate"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            14 Aug 2019
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li><a class="dropdown-item" href="javascript:void(0);">2015</a></li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li><a class="dropdown-item" href="javascript:void(0);">2016</a></li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li><a class="dropdown-item" href="javascript:void(0);">2017</a></li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li><a class="dropdown-item" href="javascript:void(0);">2018</a></li>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
 
     </div>
 
@@ -50,14 +49,14 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card custom-card">
-                <div class="card-header">
-                    <div class="card-title">
+                <div class="card-header d-flex justify-content-between align-items-center p-0">
+                    <div class="card-title m-1 p-3">
                         Information
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="messenger_tbl" class="table table-bordered text-nowrap w-100">
+                        <table id="messenger_tbl" class="table table-bordered text-nowrap w-100 table-sm text-center">
                             <thead>
                                 <tr>
 
@@ -70,6 +69,9 @@
                                     <th class="text-center">Area </th>
                                     <th class="text-center">Client Name </th>
                                     <th class="text-center">Company Name </th>
+                                    <th class="text-center">Procedure Date </th>
+
+
                                     <th class="text-center">View Request File </th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Action</th>
@@ -208,33 +210,60 @@
             </div>
         </div>
     </div>
-
-
-
-
 @endsection
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#messenger_tbl').DataTable({
+                scrollX: true,
                 ajax: {
                     url: "{{ route('aits_messenger_logistics') }}",
                     serverSide: true,
                 },
-                columns: [
-                    { data: "request_no" },
-                    { data: "logistics_stat" },
-                    { data: "date_created" },
-                    { data: "department" },
-                    { data: "requestor" },
-                    { data: "complete_address" },
-                    { data: 'get_area_request', render: function (data, type, row) { return row.get_area_request.area; } },
-                    { data: "name_receiver" },
-                    { data: "company_name" },
-                    { data: "view_file_request" },
-                    { data: "req_status" },
-                    { data: "action" },
+                columns: [{
+                        data: "request_no"
+                    },
+                    {
+                        data: "logistics_stat"
+                    },
+                    {
+                        data: "date_created"
+                    },
+                    {
+                        data: "department"
+                    },
+                    {
+                        data: "requestor"
+                    },
+                    {
+                        data: "complete_address"
+                    },
+                    {
+                        data: 'get_area_request',
+                        render: function(data, type, row) {
+                            return row.get_area_request.area;
+                        }
+                    },
+                    {
+                        data: "name_receiver"
+                    },
+                    {
+                        data: "company_name"
+                    },
+                    {
+                        data: "mess_schedule"
+                    },
+                    {
+                        data: "view_file_request"
+                    },
+
+                    {
+                        data: "req_status"
+                    },
+                    {
+                        data: "action"
+                    },
                 ],
 
 
@@ -255,7 +284,7 @@
                 // ]
             });
 
-            $(document).on('click', '.btn_deliver', function () {
+            $(document).on('click', '.btn_deliver', function() {
                 //delivery process
                 $('.row_hidden').attr('hidden', true);
 
@@ -265,12 +294,12 @@
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
-
                         $('#show_id').val(e['data']['id']);
                         $('#show_name_receiver').val(e['data']['name_receiver']);
                         $('#show_company_name').val(e['data']['company_name']);
@@ -282,11 +311,15 @@
                         $('#show_delivery_remarks').val(e['data']['delivery_remarks']);
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] +
                             ' ' + e['data']['get_requestor_fullname']['lastname'])
-                        $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data']['request_number']);
+                        $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data'][
+                            'request_number'
+                        ]);
                         $('#admin_name').val(
-                            e['data']['get_admin_data']
-                                ? e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname']
-                                : '');
+                            e['data']['get_admin_data'] ?
+                            e['data']['get_admin_data']['firstname'] + ' ' + e['data'][
+                                'get_admin_data'
+                            ]['lastname'] :
+                            '');
                         $('#date_assign').val(e['data']['date_assign']);
                         $('#hidden_id').val(e['data']['id'])
 
@@ -297,8 +330,10 @@
 
                 if (delivery_val == 1) {
                     $('#btn_messenger').text('Delivered Request')
+                    //for delivery
                     $('#show_delivery_request_modal').modal('show');
                     $('#row_delivery').removeAttr('hidden')
+
 
                 }
 
@@ -314,7 +349,7 @@
             });
 
 
-            $('#btn_messenger').click(function () {
+            $('#btn_messenger').click(function() {
                 const messenger_process_val = $('#process_val').val();
                 const request_id = $('#hidden_id').val();
                 const messenger_remarks = $('#messenger_remarks').val();
@@ -348,12 +383,13 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
-
+                        
                         $('#show_delivery_request_modal').modal('hide');
                         $('#messenger_tbl').DataTable().ajax.reload();
 
@@ -366,7 +402,7 @@
                         $('#messenger_remarks').val('');
                         $('#file').val('');
                         $('#date_resched').val("");
-                        $('#reschedule_remarks').val("");
+                        $('#reschedule_remarks').val("+");
 
                     }
                 });
@@ -375,5 +411,4 @@
             })
         })
     </script>
-
 @endsection

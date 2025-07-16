@@ -31,7 +31,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tbl_roles" class="table table-bordered text-nowrap table-sm text-center">
+                        <table id="tbl_roles" class="table table-bordered text-nowrap table-sm text-center w-100">
                             <thead>
                                 <tr>
                                     <th class="text-center">Roles</th>

@@ -3,7 +3,7 @@
 
 
 
-
+<span> {{ Auth::user()->username }} </span>
 
 
     <a href="javascript:void(0);" class="header-link layout-setting">
@@ -34,8 +34,8 @@
     <!-- Start::header-link|dropdown-toggle -->
     <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown"
         data-bs-auto-close="outside" aria-expanded="false">
-        <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="img" width="37" height="37"
-            class="rounded-circle">
+        <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="img" width="37"
+            height="37" class="rounded-circle">
     </a>
     <!-- End::header-link|dropdown-toggle -->
     <ul class="main-header-dropdown dropdown-menu pt-0 header-profile-dropdown dropdown-menu-end main-profile-menu"
@@ -55,10 +55,11 @@
         <li><a class="dropdown-item d-flex border-block-end" href="mail.html"><i
                     class="bx bxs-inbox fs-18 me-2 op-7"></i>Inbox</a></li>
         <li><a class="dropdown-item d-flex" href="chat.html"><i class="bx bx-envelope fs-18 me-2 op-7"></i>Messages</a> </li>-->
-        <!-- 
+        <!--
         <li><a class="dropdown-item d-flex border-block-end" href="editprofile.html"><i
                     class="bx bx-slider-alt fs-18 me-2 op-7"></i>Account Settings</a></li> -->
-        <li><a class="dropdown-item d-flex" href="{{route('logout')}}"><i class="bx bx-log-out fs-18 me-2 op-7"></i>Sign
+        <li><a class="dropdown-item d-flex" href="{{ route('logout') }}"><i
+                    class="bx bx-log-out fs-18 me-2 op-7"></i>Sign
                 Out</a>
         </li>
     </ul>

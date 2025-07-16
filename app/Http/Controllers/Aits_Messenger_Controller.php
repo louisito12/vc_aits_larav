@@ -87,6 +87,13 @@ class Aits_Messenger_Controller extends Controller
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
+
+            ->addColumn('mess_schedule', function ($data) {
+
+                return Carbon::make($data->procedure_date)->format('M j, Y');
+
+            })
+
             ->addColumn('logistics_stat', function ($data) {
                 $procedure = $data->procedures;
                 $stat = '';
@@ -290,7 +297,7 @@ class Aits_Messenger_Controller extends Controller
                 $procedure = $data_proc->procedures;
                 $message = $procedure == 1 ? 'Delivered'
                     : ($procedure == 2 ? 'Collected'
-                        : ($procedure ==3 ? 'Picked Up' : ''));
+                        : ($procedure == 3 ? 'Picked Up' : ''));
 
             }
 
