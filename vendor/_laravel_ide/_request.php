@@ -5,7 +5,7 @@ namespace Illuminate\Http;
 interface Request
 {
     /**
-     * @return \App\Models\User|null
+     * @return \App\Models\UserModel|null
      */
     public function user($guard = null);
 }
