@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Room Request</h5>
@@ -42,7 +41,7 @@
                 </div>
 
                 <div class="card-body">
-                  
+
                     <div class="table-responsive">
                         <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm w-100 text-center">
                             <thead>
@@ -206,6 +205,13 @@
                             <input disabled type="text" id="show_data_approve_date" class="form-control">
                         </div>
                     </div>
+                    <br>
+                    <div class="row act_remarks">
+                        <div class="col-12">
+                            <label>Action Remarks</label>
+                            <textarea disabled id="show_data_remarks" class="form-control"></textarea>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -283,21 +289,17 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection
 
 
 @section('scripts')
-
     <script>
-        $(document).ready(function () {
-            $('#add_request_btn').click(function () {
+        $(document).ready(function() {
+            $('#add_request_btn').click(function() {
                 $('#add_room_request').modal('show')
             })
 
-            $('#save_room_request').click(function () {
+            $('#save_room_request').click(function() {
                 const room_id = $('#room_val').val();
                 const event_id = $('#event_val').val();
                 const date_to = $('#date_to').val();
@@ -317,11 +319,12 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#add_room_request').modal('hide')
@@ -356,8 +359,7 @@
                     url: "{{ route('get_request_data') }}",
 
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "request_no"
                     },
                     {
@@ -391,14 +393,16 @@
             });
 
 
-            $(document).on('click', '.btn_show_data', function () {
+            $(document).on('click', '.btn_show_data', function() {
+                $('.act_remarks').attr('hidden', true);
 
                 $.ajax({
                     url: "retrieve_room_request/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#view_request_modal').modal('show');
@@ -407,27 +411,43 @@
                         $('#view_room_name').val(e['data']['room_id']);
                         $('#view_events').val(e['data']['event_id']);
                         $('#view_purpose').val(e['data']['remarks']);
-                        $('#show_data_status').val(e['data']['status'] == 0 ? "Cancelled" : e['data']['request_status']);
-                        $('#show_data_approver').val(
-                            e['data']['get_approved_data']
-                                ? e['data']['get_approved_data']['firstname'] + ' ' + e['data']['get_approved_data']['lastname']
-                                : ''
-                        );
-                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
-                        $('#show_data_approve_date').val(e['data']['approve_date']);
+                        if (e['data']['request_status'] != 'Cancelled') {
+                            $('#show_data_approver').val(
+                                e['data']['get_approved_data'] ?
+                                e['data']['get_approved_data']['firstname'] + ' ' + e[
+                                    'data'][
+                                    'get_approved_data'
+                                ]['lastname'] :
+                                ''
+                            );
+                            $('#show_data_approve_date').val(e['data']['approve_date']);
+                        }
+                        $('#show_data_status').val(e['data']['status'] == 0 ? "Cancelled" : e[
+                            'data']['request_status']);
+                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
+                            ' ' + e['data']['get_requestor_data']['lastname']);
+
+
+                        if (e['data']['get_remarks']) {
+                            $('.act_remarks').removeAttr('hidden');
+
+                            $('#show_data_remarks').val(e['data']['get_remarks']['remarks']);
+                        }
+
                     }
                 });
             });
 
-            $(document).on('click', '.btn_edit ', function () {
+            $(document).on('click', '.btn_edit ', function() {
                 $.ajax({
                     url: "retrieve_room_request/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#hidden_id').val(e['data']['id']);
@@ -475,7 +495,7 @@
             // })
 
 
-            $(document).on('click', '.btn_delete', function () {
+            $(document).on('click', '.btn_delete', function() {
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You want to delete this request?",
@@ -498,10 +518,13 @@
                                 Swal.hideLoading();
                             } else {
                                 $.ajax({
-                                    url: "delete_request/" + $(this).data('id') + '/' + remarks,
-                                    success: function (e) {
+                                    url: "delete_request/" + $(this).data(
+                                        'id') + '/' + remarks,
+                                    success: function(e) {
                                         if (e['isValid'] == false) {
-                                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                            alertify.error(
+                                                '<span style="color: white;">' +
+                                                e['msg'] + '</span>');
                                             reject('Deletion failed');
                                         }
 
@@ -510,7 +533,8 @@
                                             text: "Your request has been deleted.",
                                             icon: "success"
                                         });
-                                        $('#room_request_tbl').DataTable().ajax.reload();
+                                        $('#room_request_tbl').DataTable()
+                                            .ajax.reload();
                                         resolve();
 
                                     },
@@ -523,7 +547,7 @@
             });
 
 
-            $('#edit_room_request_btn').click(function () {
+            $('#edit_room_request_btn').click(function() {
                 const edit_id = $('#hidden_id').val();
                 const edit_date_from = $('#edit_update_from').val();
                 const edit_date_to = $('#edit_update_to').val();
@@ -544,9 +568,10 @@
                         event_id: edit_event,
                         remarks: edit_edit_purpose,
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span class="custom-error-msg">' + e['msg'] + '</span>').setting('modal', true);
+                            alertify.error('<span class="custom-error-msg">' + e['msg'] +
+                                '</span>').setting('modal', true);
                             return;
                         }
                         $('#update_room_request_modal').modal('hide');
@@ -573,5 +598,4 @@
 
         })
     </script>
-
 @endsection

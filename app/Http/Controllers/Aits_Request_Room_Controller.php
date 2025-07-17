@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AitsNotif;
-use App\Models\DepartmentModel;
-use App\Models\UserProfile;
 use Auth;
 use Validator;
 use Carbon\Carbon;
+use App\Models\AitsNotif;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use App\Models\AitsRoomModel;
 use App\Models\AitsEventModel;
+use App\Models\Aits_audit_logs;
+use App\Models\DepartmentModel;
 use Yajra\DataTables\DataTables;
+use App\Models\AitsProcessRemarks;
 use Illuminate\Support\Facades\DB;
 use App\Models\AitsRequestRoomModel;
 
@@ -301,9 +303,11 @@ class Aits_Request_Room_Controller extends Controller
                 return $this->status_html($data->request_status, $data->id);
             })
             ->addColumn('admin_action', function ($data) {
-                $hidden = ($data->request_status != 'Pending' || $data->data_request_status == 'Cancelled') ? 'hidden' : '';
-
-
+                $array = ['Pending'];
+                $hidden = (!in_array($data->request_status, $array)) ? 'hidden' : '';
+                // $hidden = ($data->request_status != 'Pending' || $data->data_request_status == 'Cancelled' || $data->data_request_status != 'Approved') ? 'hidden' : '';
+                $array_2 = ['Pending', 'Approved'];
+                $cancel_hidden = (!in_array($data->request_status, $array_2)) ? 'hidden' : '';
 
                 return '
         <div  class="btn-group dropstart input_spec my-1">
@@ -314,7 +318,7 @@ class Aits_Request_Room_Controller extends Controller
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
-             <li><a class="dropdown-item btn_delete" ' . $hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
+             <li><a class="dropdown-item btn_delete" ' . $cancel_hidden  . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
                 <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
             </ul></div>    ';
 
@@ -390,7 +394,7 @@ class Aits_Request_Room_Controller extends Controller
     {
 
         try {
-            $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor', 'get_requestor_data', 'get_department', 'get_approved_data'])->find($id);
+            $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor', 'get_requestor_data', 'get_department', 'get_remarks', 'get_approved_data'])->find($id);
             $data->date_from = date_coverters($data->date_from);
             $data->date_to = date_coverters($data->date_to);
             $data->approve_date = date_converter($data->approve_date);
@@ -524,6 +528,10 @@ class Aits_Request_Room_Controller extends Controller
             if ($data->request_status == 'Approved') {
                 $is_app = 1;
             }
+            AitsProcessRemarks::where('attachment_id', $id)->where('table_name', 'aits_request_room_models')->update([
+                'status' => 0
+            ]);
+
 
             AitsRequestRoomModel::where('id', $id)->update(['request_status' => 'Cancelled', 'is_app_cancel' => $is_app]);
 
@@ -561,7 +569,6 @@ class Aits_Request_Room_Controller extends Controller
 
 
             insert_audit($object);
-
 
         } catch (\Exception $e) {
             return response()->json([

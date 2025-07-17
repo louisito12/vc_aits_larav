@@ -48,6 +48,10 @@ class Aits_Dashboard extends Controller
             }
 
         }
+        if ($params == 4) {
+
+            $data->where('request_status', 'Cancelled');
+        }
 
 
 
@@ -148,7 +152,8 @@ class Aits_Dashboard extends Controller
             $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
             SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) AND date_to > '$now'
              THEN 1 ELSE 0 END) AS ongoing_count,
-            SUM(CASE WHEN request_status = 'Approved' AND date_to < '$now' THEN 1 ELSE 0 END) AS completed_count
+            SUM(CASE WHEN request_status = 'Approved' AND date_to < '$now' THEN 1 ELSE 0 END) AS completed_count,
+            SUM(CASE WHEN request_status = 'Cancelled'  THEN 1 ELSE 0 END) AS deleted_counts
             FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
 
             $shuttle_request = "
@@ -390,6 +395,7 @@ class Aits_Dashboard extends Controller
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
+
             ->rawColumns(['action', 'view_file_request', 'req_status'])
             ->make(true);
 

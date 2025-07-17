@@ -85,12 +85,100 @@
     </div>
     <!-- Modal -->
 
+    <div class="modal fade" id="view_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="">Room Request View
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Date From</label>
+                            <input disabled id="view_date_from" type="datetime-local" class="form-control spec_input">
+                        </div>
+
+                        <div class="col-6">
+                            <label>Date To</label>
+                            <input disabled id="view_date_to" type="datetime-local" class="form-control spec_input">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Room Name</label>
+                            <Select disabled id="view_room_name" class="form-control spec_input">
+                                <option value="">Select Room</option>
+                                @foreach ($room as $rooms)
+                                    <option value="{{ $rooms->id }}">{{ $rooms->room_name }}</option>
+                                @endforeach
+
+                            </Select>
+                        </div>
+                        <div class="col-6">
+                            <label>Events/Purpose</label>
+                            <select disabled id="view_events" class="form-control  spec_input">
+                                <option value="">Select Event</option>
+                                @foreach ($event as $events)
+                                    <option value="{{ $events->id }}">{{ $events->event }}</option>
+                                @endforeach
+                                <option value="remarks">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="" class="row">
+                        <div class="col-12">
+                            <label>Purpose</label>
+                            <textarea disabled id="view_purpose" class="form-control" id=""></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Requestor Name</label>
+                            <input disabled type="text" id="show_requestor" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Request Status</label>
+                            <input disabled type="text" id="show_data_status" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved By </label>
+                            <input disabled type="text" id="show_data_approver" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label>Approved Date </label>
+                            <input disabled type="text" id="show_data_approve_date" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row act_remarks">
+                        <div class="col-12">
+                            <label>Action Remarks</label>
+                            <textarea disabled id="show_data_remarks" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
     <!-- add user -->
-    <div class="modal fade" id="view_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="view_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,7 +256,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 
@@ -227,45 +315,88 @@
 
 
 
+            // $(document).on('click', '.btn_show_data', function() {
+
+            //     $.ajax({
+            //         url: "retrieve_room_request/" + $(this).data('id'),
+            //         type: "GET",
+            //         success: function(e) {
+            //             if (e['isValid'] == false) {
+            //                 alertify.error(e['msg']);
+            //                 return;
+            //             }
+            //             $('#approve_by').val('');
+            //             $('#approve_data_text').val('');
+            //             $('#view_request_modal').modal('show');
+            //             $('#view_date_from').val(e['data']['date_from']);
+            //             $('#view_date_to').val(e['data']['date_to']);
+            //             $('#view_room_name').val(e['data']['room_id']);
+            //             $('#view_events').val(e['data']['event_id']);
+            //             $('#view_purpose').val(e['data']['remarks']);
+            //             $('#status').val(e['data']['request_status']);
+            //             if (e['data']['get_approved_data']) {
+            //                 $('#approve_by').val(e['data']['get_approved_data']['firstname'] +
+            //                     ' ' + e['data']['get_approved_data']['lastname']);
+            //                 $('#approve_data_text').val(e['data']['approve_date']);
+
+            //             }
+
+            //             $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
+            //                 ' ' + e['data']['get_requestor_data']['lastname']);
+
+
+
+            //         }
+            //     });
+
+
             $(document).on('click', '.btn_show_data', function() {
+                $('.act_remarks').attr('hidden', true);
 
                 $.ajax({
                     url: "retrieve_room_request/" + $(this).data('id'),
                     type: "GET",
                     success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error(e['msg']);
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
-                        $('#approve_by').val('');
-                        $('#approve_data_text').val('');
                         $('#view_request_modal').modal('show');
                         $('#view_date_from').val(e['data']['date_from']);
                         $('#view_date_to').val(e['data']['date_to']);
                         $('#view_room_name').val(e['data']['room_id']);
                         $('#view_events').val(e['data']['event_id']);
                         $('#view_purpose').val(e['data']['remarks']);
-                        $('#status').val(e['data']['request_status']);
-                        if (e['data']['get_approved_data']) {
-                            $('#approve_by').val(e['data']['get_approved_data']['firstname'] +
-                                ' ' + e['data']['get_approved_data']['lastname']);
-                            $('#approve_data_text').val(e['data']['approve_date']);
-
+                        if (e['data']['request_status'] != 'Cancelled') {
+                            $('#show_data_approver').val(
+                                e['data']['get_approved_data'] ?
+                                e['data']['get_approved_data']['firstname'] + ' ' + e[
+                                    'data'][
+                                    'get_approved_data'
+                                ]['lastname'] :
+                                ''
+                            );
+                            $('#show_data_approve_date').val(e['data']['approve_date']);
                         }
-
+                        $('#show_data_status').val(e['data']['status'] == 0 ? "Cancelled" : e[
+                            'data']['request_status']);
                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
                             ' ' + e['data']['get_requestor_data']['lastname']);
 
 
+                        if (e['data']['get_remarks']) {
+                            $('.act_remarks').removeAttr('hidden');
+
+                            $('#show_data_remarks').val(e['data']['get_remarks']['remarks']);
+                        }
 
                     }
                 });
-
-
-
-
-
             });
+
+
+
 
 
             // $(document).on('click', '.btn_approved', function () {
@@ -318,7 +449,6 @@
                     var approve = 'Approve';
                 } else {
                     var approve = 'Disapprove';
-
                 }
                 Swal.fire({
                     title: "Are you sure?",
@@ -477,10 +607,6 @@
             });
 
 
-
-
-
-
-        })
+        });
     </script>
 @endsection

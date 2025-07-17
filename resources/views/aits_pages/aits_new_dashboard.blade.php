@@ -30,10 +30,10 @@
     <div class="container mt-5">
 
 
-        @if(in_array(2, $roles) || in_array(3, $roles))
+        @if (in_array(2, $roles) || in_array(3, $roles))
             <div class="row g-4">
                 <!-- Pending Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-warning shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-warning mb-4">
@@ -75,7 +75,7 @@
                 </div>
 
                 <!-- Total Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-primary shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-4">
@@ -116,7 +116,7 @@
                 </div>
 
                 <!-- Approved Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-success shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-success mb-4">
@@ -161,12 +161,60 @@
                     </div>
                 </div>
 
+                {{-- Cancelled Request --}}
+                <!-- Approved Requests -->
+                <div class="col-md-3">
+                    <div class="card border-danger shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger mb-4">
+                                <i class="fa-solid fa-trash"></i> Cancelled Requests
+            
+                            </h5>
+                            <div class="list-group">
+                                <a data-id="4" data-name="room_request"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_room_dash">
+                                    Room Reservations
+                                    <span class="badge bg-danger  room_reserve4">0</span>
+                                </a>
+
+                                <a data-name="transit_request" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_transit">
+                                    Shuttle Requests
+                                    <span class="badge bg-danger  transit_request_text4">0</span>
+                                </a>
+
+                                {{-- <a  data-name="for_delivery" data-procedure="1" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
+                                    For Delivery
+                                    <span class="badge bg-danger  delivery_logistic4">0</span>
+                                </a>
+
+
+
+                                <a  data-name="for_delivery" data-procedure="2" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
+                                    For Collection
+                                    <span class="badge bg-danger collection_logistic4">0</span>
+                                </a>
+
+                                <a  data-name="for_delivery" data-procedure="3" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
+                                    For Pick Up
+                                    <span class="badge bg-danger pickup_logistic4">0</span>
+                                </a> --}}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         @endif
 
         <br>
-        @if(in_array(4, $roles))
-
+        @if (in_array(4, $roles))
             <div class="row g-4">
                 <!-- Pending Requests -->
                 <div class="col-md-4">
@@ -366,7 +414,8 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="deliver_tbl" class="table table-bordered text-nowrap table-sm w-100 text-center">
+                                <table id="deliver_tbl"
+                                    class="table table-bordered text-nowrap table-sm w-100 text-center">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Request #</th>
@@ -393,23 +442,14 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
 @endsection
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             function columns_data(type_request) {
                 if (type_request == "room_request") {
-                    return [
-                        {
+                    return [{
                             data: "request_no"
                         },
                         {
@@ -442,8 +482,7 @@
 
 
                 if (type_request == "transit_request") {
-                    return [
-                        {
+                    return [{
                             data: "request_no"
                         },
                         {
@@ -480,36 +519,36 @@
 
                 if (type_request == "logistic_request") {
                     return [{
-                        data: "request_no"
-                    },
+                            data: "request_no"
+                        },
 
-                    {
-                        data: "date_created"
-                    },
-                    {
-                        data: "department"
-                    },
-                    {
-                        data: "complete_address"
-                    },
-                    {
-                        data: 'get_area_request',
-                        render: function (data, type, row) {
-                            return row.get_area_request.area;
-                        }
-                    },
-                    {
-                        data: "name_receiver"
-                    },
-                    {
-                        data: "company_name"
-                    },
-                    {
-                        data: "view_file_request",
-                    },
-                    {
-                        data: "req_status",
-                    },
+                        {
+                            data: "date_created"
+                        },
+                        {
+                            data: "department"
+                        },
+                        {
+                            data: "complete_address"
+                        },
+                        {
+                            data: 'get_area_request',
+                            render: function(data, type, row) {
+                                return row.get_area_request.area;
+                            }
+                        },
+                        {
+                            data: "name_receiver"
+                        },
+                        {
+                            data: "company_name"
+                        },
+                        {
+                            data: "view_file_request",
+                        },
+                        {
+                            data: "req_status",
+                        },
 
                     ]
                 }
@@ -518,27 +557,39 @@
 
 
 
-            @if(in_array(2, $roles) || in_array(3, $roles))
+            @if (in_array(2, $roles) || in_array(3, $roles))
 
                 function counters() {
                     $.ajax({
                         url: "{{ route('aits_dashboard_counts') }}",
                         type: "GET",
-                        success: function (e) {
+                        success: function(e) {
                             if (e['isValid'] == false) {
                                 alertify.set('notifier', 'position', 'top-right');
                                 alertify.set('notifier', 'delay', 5);
                                 alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                                 return;
                             }
-                            const { pending_count, ongoing_count, completed_count } = e.room_request;
+                            const {
+                                pending_count,
+                                ongoing_count,
+                                completed_count,
+                                deleted_counts
+                            } = e.room_request;
                             $('.room_reserve1').text(pending_count ?? 0);
                             $('.room_reserve2').text(ongoing_count ?? 0);
                             $('.room_reserve3').text(completed_count ?? 0);
+                            $('.room_reserve4').text(deleted_counts ?? 0);
 
-                            $('.transit_request_text1').text(e['vehicle_request']['pending_count'] ?? 0);
-                            $('.transit_request_text2').text(e['vehicle_request']['ongoing_count'] ?? 0);
-                            $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ?? 0);
+
+                            
+
+                            $('.transit_request_text1').text(e['vehicle_request']['pending_count'] ??
+                                0);
+                            $('.transit_request_text2').text(e['vehicle_request']['ongoing_count'] ??
+                                0);
+                            $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ??
+                                0);
                             // $('.delivery_logistic1').text(0);
                             // $('delivery_logistic2').text(0);
                             // $('delivery_logistic3').text(0);
@@ -561,7 +612,7 @@
                             var pick_up_params = "For Pick Up";
                             var pick_up_index = -1;
 
-                            $.each(logisticsRequests, function (i, obj) {
+                            $.each(logisticsRequests, function(i, obj) {
                                 if (obj.procedure_status == searchStatus) {
                                     index = i;
                                 }
@@ -578,7 +629,9 @@
 
 
                             if (index != -1) {
-                                $('.delivery_logistic1').text(logisticsRequests[index]['pending_counts']);
+                                $('.delivery_logistic1').text(logisticsRequests[index][
+                                    'pending_counts'
+                                ]);
                                 $('.delivery_logistic2').text(logisticsRequests[index]['On_going']);
                                 $('.delivery_logistic3').text(logisticsRequests[index]['Approved']);
 
@@ -586,16 +639,28 @@
 
 
                             if (collection_index != -1) {
-                                $('.collection_logistic1').text(logisticsRequests[collection_index]['pending_counts']);
-                                $('.collection_logistic2').text(logisticsRequests[collection_index]['On_going']);
-                                $('.collection_logistic3').text(logisticsRequests[collection_index]['Approved']);
+                                $('.collection_logistic1').text(logisticsRequests[collection_index][
+                                    'pending_counts'
+                                ]);
+                                $('.collection_logistic2').text(logisticsRequests[collection_index][
+                                    'On_going'
+                                ]);
+                                $('.collection_logistic3').text(logisticsRequests[collection_index][
+                                    'Approved'
+                                ]);
                             }
 
 
                             if (pick_up_index != -1) {
-                                $('.pickup_logistic1').text(logisticsRequests[pick_up_index]['pending_counts']);
-                                $('.pickup_logistic2').text(logisticsRequests[pick_up_index]['On_going']);
-                                $('.pickup_logistic3').text(logisticsRequests[pick_up_index]['Approved']);
+                                $('.pickup_logistic1').text(logisticsRequests[pick_up_index][
+                                    'pending_counts'
+                                ]);
+                                $('.pickup_logistic2').text(logisticsRequests[pick_up_index][
+                                    'On_going'
+                                ]);
+                                $('.pickup_logistic3').text(logisticsRequests[pick_up_index][
+                                    'Approved'
+                                ]);
 
                             }
 
@@ -606,19 +671,17 @@
 
                 counters();
 
-                setInterval(function () {
+                setInterval(function() {
                     counters();
                 }, 5 * 60 * 1000);
-
-
-            @elseif(in_array(4, $roles))
+            @elseif (in_array(4, $roles))
 
                 function messenger_counter() {
 
                     $.ajax({
                         url: "{{ route('aits_dashboard_counts_messenger') }}",
                         type: "GET",
-                        success: function (e) {
+                        success: function(e) {
                             if (e['isValid'] == false) {
                                 alertify.set('notifier', 'position', 'top-right');
                                 alertify.set('notifier', 'delay', 5);
@@ -636,7 +699,7 @@
                             var for_pick_up = "For Pick Up";
                             var pick_up_index_messenger = -1;
 
-                            $.each(logisticsRequests, function (i, obj) {
+                            $.each(logisticsRequests, function(i, obj) {
                                 if (obj.procedure_status == for_delivery) {
                                     index_messenger = i;
                                 }
@@ -654,24 +717,36 @@
 
 
                             if (index_messenger != -1) {
-                                $('.delivery_mess_logistic1').text(logisticsRequests[index_messenger]['pending_counts']);
-                                $('.delivery_mess_logistic2').text(logisticsRequests[index_messenger]['On_going']);
-                                $('.delivery_mess_logistic3').text(logisticsRequests[index_messenger]['Approved']);
+                                $('.delivery_mess_logistic1').text(logisticsRequests[index_messenger][
+                                    'pending_counts'
+                                ]);
+                                $('.delivery_mess_logistic2').text(logisticsRequests[index_messenger][
+                                    'On_going'
+                                ]);
+                                $('.delivery_mess_logistic3').text(logisticsRequests[index_messenger][
+                                    'Approved'
+                                ]);
 
                             }
 
 
                             if (collection_index_messenger != -1) {
-                                $('.collection_mess_logistic1').text(logisticsRequests[collection_index_messenger]['pending_counts']);
-                                $('.collection_mess_logistic2').text(logisticsRequests[collection_index_messenger]['On_going']);
-                                $('.collection_mess_logistic3').text(logisticsRequests[collection_index_messenger]['Approved']);
+                                $('.collection_mess_logistic1').text(logisticsRequests[
+                                    collection_index_messenger]['pending_counts']);
+                                $('.collection_mess_logistic2').text(logisticsRequests[
+                                    collection_index_messenger]['On_going']);
+                                $('.collection_mess_logistic3').text(logisticsRequests[
+                                    collection_index_messenger]['Approved']);
                             }
 
 
                             if (pick_up_index_messenger != -1) {
-                                $('.pickup_mess_logistic1').text(logisticsRequests[pick_up_index_messenger]['pending_counts']);
-                                $('.pickup_mess_logistic2').text(logisticsRequests[pick_up_index_messenger]['On_going']);
-                                $('.pickup_mess_logistic3').text(logisticsRequests[pick_up_index_messenger]['Approved']);
+                                $('.pickup_mess_logistic1').text(logisticsRequests[
+                                    pick_up_index_messenger]['pending_counts']);
+                                $('.pickup_mess_logistic2').text(logisticsRequests[
+                                    pick_up_index_messenger]['On_going']);
+                                $('.pickup_mess_logistic3').text(logisticsRequests[
+                                    pick_up_index_messenger]['Approved']);
 
                             }
 
@@ -680,14 +755,12 @@
                     });
                 }
                 messenger_counter()
-                setInterval(function () {
+                setInterval(function() {
                     messenger_counter()
                 }, 5 * 60 * 1000);
-
-
             @endif
 
-            $('.btn_room_dash').click(function () {
+            $('.btn_room_dash').click(function() {
                 $('#room_request_modal').modal('show');
                 $('#room_request_tbl').DataTable({
                     destroy: true,
@@ -699,7 +772,7 @@
                 })
             });
 
-            $('.btn_transit').click(function () {
+            $('.btn_transit').click(function() {
                 $('#transit_request_modal').modal('show');
                 $('#tbl_transit').DataTable({
                     destroy: true,
@@ -712,22 +785,23 @@
             });
 
 
-            $('.btn_logistics').click(function () {
+            $('.btn_logistics').click(function() {
                 $('#logistics_modal').modal('show');
-                const header_text = $(this).data('procedure') == 1
-                    ? 'For Delivery Request'
-                    : $(this).data('procedure') == 2
-                        ? 'For Collection Request'
-                        : $(this).data('procedure') == 3
-                            ? 'For Pick Up Request'
-                            : '';
+                const header_text = $(this).data('procedure') == 1 ?
+                    'For Delivery Request' :
+                    $(this).data('procedure') == 2 ?
+                    'For Collection Request' :
+                    $(this).data('procedure') == 3 ?
+                    'For Pick Up Request' :
+                    '';
 
 
                 $('#logistic_header').text(header_text);
                 $('#deliver_tbl').DataTable({
                     destroy: true,
                     ajax: {
-                        url: "aits_dashboard_logistics/" + $(this).data('id') + '/' + $(this).data('procedure'),
+                        url: "aits_dashboard_logistics/" + $(this).data('id') + '/' + $(this).data(
+                            'procedure'),
                     },
                     columns: columns_data('logistic_request'),
                 });
@@ -735,21 +809,22 @@
 
 
 
-            $('.btn_logistics_mess').click(function () {
+            $('.btn_logistics_mess').click(function() {
                 $('#logistics_modal').modal('show');
-                const header_text = $(this).data('procedure') == 1
-                    ? 'For Delivery Request'
-                    : $(this).data('procedure') == 2
-                        ? 'For Collection Request'
-                        : $(this).data('procedure') == 3
-                            ? 'For Pick Up Request'
-                            : '';
+                const header_text = $(this).data('procedure') == 1 ?
+                    'For Delivery Request' :
+                    $(this).data('procedure') == 2 ?
+                    'For Collection Request' :
+                    $(this).data('procedure') == 3 ?
+                    'For Pick Up Request' :
+                    '';
 
                 $('#logistic_header').text(header_text);
                 $('#deliver_tbl').DataTable({
                     destroy: true,
                     ajax: {
-                        url: "aits_dashboard_logistics_mess/" + $(this).data('id') + '/' + $(this).data('procedure'),
+                        url: "aits_dashboard_logistics_mess/" + $(this).data('id') + '/' + $(this)
+                            .data('procedure'),
                     },
                     columns: columns_data('logistic_request'),
                 });
@@ -758,8 +833,5 @@
 
 
         });
-
-
     </script>
-
 @endsection

@@ -7,6 +7,7 @@ use App\Models\AitsNotif;
 use Illuminate\Http\Request;
 use App\Models\AitsRoomModel;
 use App\Models\AitsEventModel;
+use App\Models\AitsProcessRemarks;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Auth;
 
@@ -93,6 +94,9 @@ class Aits_Request_Room_approval_Controller extends Controller
 
             }
 
+            AitsProcessRemarks::where('attachment_id', $id)->where('table_name', 'aits_request_room_models')->update([
+                'status' => 0
+            ]);
             $data = AitsRequestRoomModel::find($id);
 
             $from_date = Carbon::parse($data->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
@@ -151,6 +155,7 @@ class Aits_Request_Room_approval_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
+
 
 
         } catch (\Exception $e) {
