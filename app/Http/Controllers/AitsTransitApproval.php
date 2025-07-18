@@ -107,7 +107,7 @@ class AitsTransitApproval extends Controller
             }
 
             if ($request->spec_approval != 3) {
-                $validation = $this->date_validation($data->pick_up_date, $data->appointment_date, $request->car_id);
+                $validation = $this->date_validation($data->departure_date, $data->pick_up_date, $request->car_id, $request->driver_id);
                 if ($validation != 0) {
                     return response()->json([
                         'msg' => 'The service shuttle Car for that time is no longer available !',
@@ -222,7 +222,7 @@ class AitsTransitApproval extends Controller
         insert_audit($object);
     }
 
-    public function date_validation($date_from, $date_to, $car_id)
+    public function date_validation($date_from, $date_to, $car_id, $driver_id)
     {
 
         // $fromDate = Carbon::parse($date_from)->format('Y-m-d H:i:s');
@@ -255,26 +255,40 @@ class AitsTransitApproval extends Controller
         // AND car_id = $car_id;
         // ";
 
-        $fromDate = Carbon::parse($date_from)->format('Y-m-d');
-        $toDate = Carbon::parse($date_to)->format('Y-m-d');
+        $fromDate = Carbon::parse($date_from)->format('Y-m-d H:i:s');
+        $toDate = Carbon::parse($date_to)->format('Y-m-d H:i:s');
 
-        $query = "
-            SELECT COUNT(*) AS overlapping_count
-            FROM aits_shuttle_requests WHERE
-            CAST(appointment_date AS DATE) = '$toDate'
-            AND request_status = 'Approved'
-            AND car_id = $car_id;";
+        // $query = "
+        //     SELECT COUNT(*) AS overlapping_count
+        //     FROM aits_shuttle_requests WHERE
+        //     ((pick_up_date    BETWEEN '$fromDate' AND '$toDate')
+        //     OR (departure_date BETWEEN '$fromDate' AND '$toDate')
+        //     OR ('$fromDate'   BETWEEN pick_up_date    AND departure_date)
+        //     OR ('$toDate'     BETWEEN pick_up_date    AND departure_date)
+        //     OR (appointment_date BETWEEN '$fromDate' AND '$toDate'))
+        //     AND request_status = 'Approved'
+        //     AND car_id =$car_id AND driver_id=$driver_id";
+
+        $overlappingCount = AitsShuttleRequest::where(function ($query) use ($fromDate, $toDate) {
+            $query->whereBetween('pick_up_date', [$fromDate, $toDate])
+                ->orWhereBetween('departure_date', [$fromDate, $toDate])
+                ->orWhereBetween('appointment_date', [$fromDate, $toDate]);
+        })
+            ->where('request_status', 'Approved')
+            ->where('car_id', $car_id)
+            ->where('driver_id', $driver_id)
+            ->count();
 
 
 
 
-        $data = DB::connection('sqlsrv')->select($query, []);
+        // $data = DB::connection('sqlsrv')->select($query, []);
 
 
         $count = 0;
 
-        if ($data) {
-            $count = $data[0]->overlapping_count;
+        if ($overlappingCount > 0) {
+            $count = $overlappingCount;
         }
         return $count;
 

@@ -107,8 +107,8 @@ class Aits_Transit_Controller extends Controller
 
 
 
-            $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
-            $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
+            // $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
+            // $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
 
 
             // $validation = $this->date_validation($from_date, $to_date);
@@ -139,9 +139,9 @@ class Aits_Transit_Controller extends Controller
                 'is_transact' => 1,
                 'user_id' => Auth::user()->id,
                 'date_created' => Carbon::now(),
-                'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
-                'appointment_date' => Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d h:i A'),
-                'pick_up_date' => Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A'),
+                'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
+                'appointment_date' => Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
+                'pick_up_date' => Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
                 'request_status' => 'Pending',
                 'request_no' => $this->request_no(),
             ]);
@@ -224,6 +224,24 @@ class Aits_Transit_Controller extends Controller
             $val = 1;
             $message = 'Departure Date Must Not be equal to Appointment Date';
         }
+        if ($departure_date > $appointment_date) {
+            $val = 1;
+            $message = 'The departure date is not be later than appointment date';
+        }
+
+        if ($departure_date > $pick_date) {
+            $val = 1;
+            $message = 'The departure date is not be later than pick up date';
+        }
+
+
+        if ($appointment_date > $pick_date) {
+            $val = 1;
+            $message = 'The appointment date is not be later than pick up date';
+        }
+
+
+
 
 
         return ['stat' => $val, 'msg' => $message];
@@ -233,7 +251,7 @@ class Aits_Transit_Controller extends Controller
 
 
 
-    public function uploade_file_transit($id, $table_name, $folder_name, $files)
+    public function uploade_file_transit($id, $table_name, $folder_name, $files): void
     {
         foreach ($files as $item) {
             $ext = $item->getClientOriginalExtension();
@@ -382,6 +400,8 @@ class Aits_Transit_Controller extends Controller
         } else if ($status == "Disapproved") {
             $stat = '<span class="badge rounded-pill bg-danger">Disapproved</span>  ';
 
+        } else if ($status == "Cancelled") {
+            $stat = '<span class="badge rounded-pill bg-danger">Cancelled</span> ';
         } else {
             $stat = '<span class="badge rounded-pill bg-danger">Error</span> ';
         }
@@ -465,7 +485,15 @@ class Aits_Transit_Controller extends Controller
     {
         try {
 
-            AitsShuttleRequest::where('id', $id)->update(['status' => 0]);
+            $data = AitsShuttleRequest::where('id', $id)->first();
+            $is_approve = 0;
+
+            if ($data->request_status == 'Approved') {
+                $is_approve = 1;
+            }
+
+
+            AitsShuttleRequest::where('id', $id)->update(['request_status' => 'Cancelled', 'is_app_cancelled' => $is_approve]);
 
 
 
@@ -550,27 +578,23 @@ class Aits_Transit_Controller extends Controller
             }
 
 
-            $dateFrom = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-            $dateTo = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-            if ($dateFrom > $dateTo) {
+
+
+            $appointment_date = $formatted = Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $departure = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+            $date_pick_up = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+
+            $validation_date = $this->date_validations($date_pick_up, $departure, $appointment_date);
+            if ($validation_date['stat'] == 1) {
                 return response()->json([
-                    'msg' => 'The pick up date must not be later than Departure date!',
+                    'msg' => $validation_date['msg'],
                     'status' => 402,
                     "isValid" => false,
                 ]);
             }
 
-            $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
-            $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
 
-            // $validation = $this->date_validation($from_date, $to_date);
-            // if ($validation != 0) {
-            //     return response()->json([
-            //         'msg' => 'The service shuttle for that time is no longer available !',
-            //         'status' => 402,
-            //         "isValid" => false,
-            //     ]);
-            // }
+
 
 
             $closer_request = AitsRequestCloser::
@@ -587,9 +611,9 @@ class Aits_Transit_Controller extends Controller
             }
 
             $request->merge([
-                'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
-                'appointment_date' => Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d h:i A'),
-                'pick_up_date' => Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A'),
+                'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
+                'appointment_date' => Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
+                'pick_up_date' => Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
 
             ]);
             $data_logs = AitsShuttleRequest::where('id', $request->id)->first();
@@ -618,10 +642,7 @@ class Aits_Transit_Controller extends Controller
 
             if ($request->file('ob_form')) {
                 AitsFileModel::where('table_name', 'AitsShuttleRequest')->where('attachment_id', $request->id)->update(['status' => 0]);
-
                 $this->uploade_file_transit($request->id, "AitsShuttleRequest", 'aits_shuttle_file', $request->file('ob_form'));
-
-
             }
 
             $object = [
@@ -633,6 +654,7 @@ class Aits_Transit_Controller extends Controller
                 'status' => 1,
                 'date_created' => Carbon::now(),
             ];
+
             insert_audit($object);
 
 
@@ -641,9 +663,7 @@ class Aits_Transit_Controller extends Controller
             ]);
 
 
-
             return [
-
                 'msg' => 'Succesfully Inserted',
                 'data' => $data,
                 'status' => 200,
@@ -677,13 +697,7 @@ class Aits_Transit_Controller extends Controller
 
         return $request_no;
 
-
-
     }
-
-
-
-
 
 
 
@@ -691,4 +705,28 @@ class Aits_Transit_Controller extends Controller
 
 }
 
+
+
+
+// $dateFrom = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s');
+// $dateTo = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s');
+// if ($dateFrom > $dateTo) {
+//     return response()->json([
+//         'msg' => 'The pick up date must not be later than Departure date!',
+//         'status' => 402,
+//         "isValid" => false,
+//     ]);
+// }
+
+// $from_date = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d h:i A');
+// $to_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d h:i A');
+
+// $validation = $this->date_validation($from_date, $to_date);
+// if ($validation != 0) {
+//     return response()->json([
+//         'msg' => 'The service shuttle for that time is no longer available !',
+//         'status' => 402,
+//         "isValid" => false,
+//     ]);
+// }
 

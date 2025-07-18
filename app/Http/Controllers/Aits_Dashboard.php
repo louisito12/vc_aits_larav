@@ -83,6 +83,9 @@ class Aits_Dashboard extends Controller
             $data->whereDate('appointment_date', $date_ex, Carbon::now()->toDateString())
                 ->where('request_status', 'Approved');
         }
+        if ($params == 4) {
+            $data->where('request_status', 'Cancelled');
+        }
 
         $data = $data->get();
 
@@ -159,8 +162,9 @@ class Aits_Dashboard extends Controller
             $shuttle_request = "
             SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
             SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), appointment_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
-            SUM(CASE WHEN request_status = 'Approved' AND appointment_date  < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
-            FROM aits_shuttle_requests WHERE (is_transact = 1  AND status = 1) $shuttle_request_id";
+            SUM(CASE WHEN request_status = 'Approved' AND appointment_date  < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count,
+            SUM(CASE WHEN request_status ='Cancelled' Then 1 ELSE 0 END) AS vehicle_cancelled
+                        FROM aits_shuttle_requests WHERE (is_transact = 1  AND status = 1) $shuttle_request_id";
 
 
             $logistics_query = "

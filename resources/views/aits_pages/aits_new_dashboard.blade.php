@@ -168,7 +168,7 @@
                         <div class="card-body">
                             <h5 class="card-title text-danger mb-4">
                                 <i class="fa-solid fa-trash"></i> Cancelled Requests
-            
+
                             </h5>
                             <div class="list-group">
                                 <a data-id="4" data-name="room_request"
@@ -582,7 +582,7 @@
                             $('.room_reserve4').text(deleted_counts ?? 0);
 
 
-                            
+
 
                             $('.transit_request_text1').text(e['vehicle_request']['pending_count'] ??
                                 0);
@@ -590,6 +590,12 @@
                                 0);
                             $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ??
                                 0);
+                            $('.transit_request_text4').text(e['vehicle_request'][
+                                'vehicle_cancelled'] ??
+                                0);
+
+
+
                             // $('.delivery_logistic1').text(0);
                             // $('delivery_logistic2').text(0);
                             // $('delivery_logistic3').text(0);
@@ -677,7 +683,6 @@
             @elseif (in_array(4, $roles))
 
                 function messenger_counter() {
-
                     $.ajax({
                         url: "{{ route('aits_dashboard_counts_messenger') }}",
                         type: "GET",
@@ -768,8 +773,8 @@
                         url: "room_request_dash/" + $(this).data('id'),
                     },
                     columns: columns_data($(this).data('name')),
-
                 })
+
             });
 
             $('.btn_transit').click(function() {
