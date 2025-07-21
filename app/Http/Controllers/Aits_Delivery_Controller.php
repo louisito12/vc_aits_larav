@@ -386,7 +386,7 @@ class Aits_Delivery_Controller extends Controller
                 $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
 
             } else {
-                $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
+                $stat = '<span class="badge rounded-pill bg-danger">Cancelled</span>';
             }
             return '<center><h5>' . $stat . '</h5></center>';
         }
@@ -400,7 +400,7 @@ class Aits_Delivery_Controller extends Controller
                 $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
 
             } else {
-                $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
+                $stat = '<span class="badge rounded-pill bg-danger">Cancelled</span>';
             }
             return '<center><h5>' . $stat . '</h5></center>';
         }
@@ -414,7 +414,7 @@ class Aits_Delivery_Controller extends Controller
                 $stat = ' <span class="badge rounded-pill bg-secondary">Rescheduled</span> ';
 
             } else {
-                $stat = '<span class="badge rounded-pill bg-danger">Error</span>';
+                $stat = '<span class="badge rounded-pill bg-danger">Cancelled</span>';
             }
             return '<center><h5>' . $stat . '</h5></center>';
 
@@ -430,7 +430,7 @@ class Aits_Delivery_Controller extends Controller
 
     public function delete_delivery_request($id, $remarks)
     {
-        $data = AitsDelivery::where('id', $id)->update(['status' => 0]);
+        $data = AitsDelivery::where('id', $id)->update(['request_status' => 'Cancelled']);
 
 
         $object = [

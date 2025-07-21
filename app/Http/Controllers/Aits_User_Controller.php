@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AitsDriver;
 use App\Models\AitsMessenger;
 use App\Models\UserProfile;
 use Carbon\Carbon;
@@ -213,6 +214,17 @@ class Aits_User_Controller extends Controller
 
                 ]);
             }
+            if (in_array(7, $request->roles_arr)) {
+                $insert_drive = AitsDriver::Create([
+                    'fname' => $request->firstname,
+                    'lname' => $request->lastname,
+                    'mname' => $request->middlename,
+                    'status' => 1,
+                    'cen_user_id' => $last_id,
+                    'date_created' => Carbon::now(),
+
+                ]);
+            }
 
         } catch (\Exception $e) {
             return response()->json([
@@ -314,6 +326,17 @@ class Aits_User_Controller extends Controller
                 $insert = AitsMessenger::create([
                     'fname' => $request->firstname,
                     'lname' => $request->lastname,
+                    'status' => 1,
+                    'cen_user_id' => $request->id,
+                    'date_created' => Carbon::now(),
+
+                ]);
+            }
+            if (in_array(7, $request->roles_arr)) {
+                $insert_drive = AitsDriver::Create([
+                    'fname' => $request->firstname,
+                    'lname' => $request->lastname,
+                    'mname' => $request->middlename,
                     'status' => 1,
                     'cen_user_id' => $request->id,
                     'date_created' => Carbon::now(),

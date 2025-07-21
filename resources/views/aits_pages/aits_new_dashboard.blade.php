@@ -183,7 +183,7 @@
                                     <span class="badge bg-danger  transit_request_text4">0</span>
                                 </a>
 
-                                {{-- <a  data-name="for_delivery" data-procedure="1" data-id="4"
+                                <a data-name="for_delivery" data-procedure="1" data-id="4"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
                                     For Delivery
                                     <span class="badge bg-danger  delivery_logistic4">0</span>
@@ -191,17 +191,17 @@
 
 
 
-                                <a  data-name="for_delivery" data-procedure="2" data-id="4"
+                                <a data-name="for_delivery" data-procedure="2" data-id="4"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
                                     For Collection
                                     <span class="badge bg-danger collection_logistic4">0</span>
                                 </a>
 
-                                <a  data-name="for_delivery" data-procedure="3" data-id="4"
+                                <a data-name="for_delivery" data-procedure="3" data-id="4"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics">
                                     For Pick Up
                                     <span class="badge bg-danger pickup_logistic4">0</span>
-                                </a> --}}
+                                </a>
 
 
                             </div>
@@ -591,7 +591,8 @@
                             $('.transit_request_text3').text(e['vehicle_request']['completed_count'] ??
                                 0);
                             $('.transit_request_text4').text(e['vehicle_request'][
-                                'vehicle_cancelled'] ??
+                                    'vehicle_cancelled'
+                                ] ??
                                 0);
 
 
@@ -640,6 +641,8 @@
                                 ]);
                                 $('.delivery_logistic2').text(logisticsRequests[index]['On_going']);
                                 $('.delivery_logistic3').text(logisticsRequests[index]['Approved']);
+                                $('.delivery_logistic4').text(logisticsRequests[index]['cancel_req']);
+
 
                             }
 
@@ -654,6 +657,9 @@
                                 $('.collection_logistic3').text(logisticsRequests[collection_index][
                                     'Approved'
                                 ]);
+                                $('.collection_logistic4').text(logisticsRequests[collection_index][
+                                    'cancel_req'
+                                ]);
                             }
 
 
@@ -666,6 +672,10 @@
                                 ]);
                                 $('.pickup_logistic3').text(logisticsRequests[pick_up_index][
                                     'Approved'
+                                ]);
+
+                                $('.pickup_logistic4').text(logisticsRequests[pick_up_index][
+                                    'cancel_req'
                                 ]);
 
                             }

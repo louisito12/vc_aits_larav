@@ -304,7 +304,7 @@ class Aits_Request_Room_Controller extends Controller
                 $array = ['Pending'];
                 $hidden = (!in_array($data->request_status, $array)) ? 'hidden' : '';
                 // $hidden = ($data->request_status != 'Pending' || $data->data_request_status == 'Cancelled' || $data->data_request_status != 'Approved') ? 'hidden' : '';
-                $array_2 = ['Pending', 'Approved'];
+                $array_2 = ['Pending', 'Approved','Disapproved'];
                 $cancel_hidden = (!in_array($data->request_status, $array_2)) ? 'hidden' : '';
 
                 return '

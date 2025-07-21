@@ -144,6 +144,7 @@ class Aits_logistics_approval extends Controller
             ->addColumn('action', function ($data) {
 
                 $hidden = $data->messenger_id != null ? 'hidden' : '';
+                $cancel = ($data->request_status == 'Cancelled') ? 'hidden' : '';
                 $hidden = 'hidden';
                 return '
              <div  class="btn-group dropstart input_spec my-1">
@@ -155,6 +156,8 @@ class Aits_logistics_approval extends Controller
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Assign Messenger</a></li>
                 <li hidden><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
                 <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+                    <li><a class="dropdown-item btn_delete" ' . $cancel . ' data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
+                
             </ul>
              </div>  ';
 

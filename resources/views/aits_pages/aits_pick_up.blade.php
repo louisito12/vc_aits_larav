@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Request for Pick Up</h5>
@@ -357,23 +356,17 @@
             </div>
         </div>
     </div>
-
-
-
-
 @endsection
 
 
 @section('scripts')
-
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#deliver_tbl').DataTable({
                 ajax: {
                     url: "show_delivery_request/3"
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "request_no"
                     },
 
@@ -388,7 +381,7 @@
                     },
                     {
                         data: 'get_area_request',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return row.get_area_request.area;
                         }
                     },
@@ -411,11 +404,11 @@
                 ]
             });
 
-            $('#add_request_btn').click(function () {
+            $('#add_request_btn').click(function() {
                 $('#add_delivery_request_modal').modal('show');
             });
 
-            $('#btn_delivery').click(function () {
+            $('#btn_delivery').click(function() {
                 const name_receiver = $('#name_receiver').val();
                 const company_name = $('#company_name').val();
                 const contact_receiver = $('#contact_receiver').val();
@@ -452,13 +445,13 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: function () {
-                    },
-                    success: function (e) {
+                    beforeSend: function() {},
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#add_delivery_request_modal').modal('hide');
@@ -472,19 +465,21 @@
                         $('#delivery_remarks').val('');
                         $('#del_file').val('');
                         $('#deliver_tbl').DataTable().ajax.reload();
-                        Swal.fire('Success!', 'Your request has been successfully added.', 'success');
+                        Swal.fire('Success!', 'Your request has been successfully added.',
+                            'success');
                     }
                 })
             });
 
-            $(document).on('click', '.btn_edit', function () {
+            $(document).on('click', '.btn_edit', function() {
                 $('#edit_delivery_request_modal').modal('show');
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
 
@@ -548,7 +543,7 @@
             }
 
 
-            $(document).on('click', '.btn_show_data', function () {
+            $(document).on('click', '.btn_show_data', function() {
 
                 $('#show_delivery_request_modal').modal('show');
 
@@ -559,9 +554,10 @@
 
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#show_id').val(e['data']['id']);
@@ -573,7 +569,8 @@
                         $('#show_count_documents').val(e['data']['count_documents']);
                         $('#show_complete_address').val(e['data']['complete_address']);
                         $('#show_delivery_remarks').val(e['data']['delivery_remarks']);
-                        $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
+                        $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] +
+                            ' ' + e['data']['get_requestor_fullname']['lastname'])
 
                         // if (e['data']['get_admin_data']) {
                         //     //if admin has assign messenger
@@ -594,14 +591,19 @@
                         // $('#mess_remarks').val(e['data']['messenger_remarks']);
 
 
-                        const stats_name = status_namer(e['data']['status'], e['data']['procedures'], e['data']['request_status']);
+                        const stats_name = status_namer(e['data']['status'], e['data'][
+                            'procedures'
+                        ], e['data']['request_status']);
                         $('#stat_logs').val(stats_name);
 
 
 
                         if (e['data']['request_status'] == 'Delivered') {
                             $('#row_messenger').removeClass('d-none');
-                            $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                            $('#messenger_file').html('<a href="' + e['data'][
+                                'messenger_file'] + '" target="_blank">' + e['data'][
+                                    'file_name'
+                                ] + '</a>');
                             $('#mess_remarks').val(e['data']['messenger_remarks']);
                         }
 
@@ -650,15 +652,15 @@
 
 
 
-            $(document).on('click', '.btn_delete', function () {
+            $(document).on('click', '.btn_delete', function() {
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "You want to delete this request?",
+                    text: "You want to cancel this request?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!",
+                    confirmButtonText: "Yes, cancel it!",
                     input: 'textarea',
                     inputPlaceholder: 'Reason for deletion?',
                     inputAttributes: {
@@ -673,19 +675,23 @@
                                 Swal.hideLoading();
                             } else {
                                 $.ajax({
-                                    url: "delete_delivery_request/" + $(this).data('id') + '/' + remarks,
-                                    success: function (e) {
+                                    url: "delete_delivery_request/" + $(this)
+                                        .data('id') + '/' + remarks,
+                                    success: function(e) {
                                         if (e['isValid'] == false) {
-                                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                            alertify.error(
+                                                '<span style="color: white;">' +
+                                                e['msg'] + '</span>');
                                             reject('Deletion failed');
                                         }
 
                                         Swal.fire({
-                                            title: "Deleted!",
-                                            text: "Your request has been deleted.",
+                                            title: "Cancelled!",
+                                            text: "Your request has been cancelled.",
                                             icon: "success"
                                         });
-                                        $('#deliver_tbl').DataTable().ajax.reload();
+                                        $('#deliver_tbl').DataTable().ajax
+                                            .reload();
                                         resolve();
 
                                     },
@@ -698,7 +704,7 @@
             });
 
 
-            $('#edit_delivery').click(function () {
+            $('#edit_delivery').click(function() {
                 const edit_id = $('#edit_id').val();
                 const edit_name_receiver = $('#edit_name_receiver').val();
                 const edit_company_name = $('#edit_company_name').val();
@@ -736,19 +742,20 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: function () {
-                    },
-                    success: function (e) {
+                    beforeSend: function() {},
+                    success: function(e) {
 
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
 
                         $('#edit_delivery_request_modal').modal('hide');
-                        Swal.fire('Success!', 'Your request has been successfully updated.', 'success');
+                        Swal.fire('Success!', 'Your request has been successfully updated.',
+                            'success');
                         $('#deliver_tbl').DataTable().ajax.reload();
 
 
@@ -827,6 +834,5 @@
 
         //     console.log(selectedValues);
         // });
-
     </script>
 @endsection

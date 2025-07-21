@@ -38,7 +38,7 @@ class Aits_Messenger_Controller extends Controller
         $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
             ->where('status', 1)
             ->where('messenger_id', Auth::user()->id)
-            ->whereNot('request_status', 'Delivered')
+            ->whereNotIn('request_status', ['Delivered', 'Cancelled'])
             ->orderBy('procedures', 'asc')
             ->get();
         return DataTables::of($data)
@@ -126,6 +126,7 @@ class Aits_Messenger_Controller extends Controller
             })
 
             ->addColumn('action', function ($data) {
+                $cancel = ($data->request_status == 'Cancelled') ? 'hidden' : '';
 
                 // $hidden = $data->messenger_id != null ? 'hidden' : '';
                 $hidden = '';
@@ -139,6 +140,7 @@ class Aits_Messenger_Controller extends Controller
                             Action
                         </button>
                         <ul class="dropdown-menu">
+                          <li><a class="dropdown-item btn_delete" ' . $cancel . ' data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                         </div> ';
@@ -154,7 +156,9 @@ class Aits_Messenger_Controller extends Controller
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="1" data-processs= "' . $data->procedures . '" data-id="' . $data->id . '" href="javascript:void(0);">' . $this->procedure_text($data->procedures) . '</a></li>
                             <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
+                                    <li><a class="dropdown-item btn_delete" ' . $cancel . ' data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+
                         </ul>
                         </div> ';
 

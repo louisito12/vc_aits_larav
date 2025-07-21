@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Request for Delivery</h5>
@@ -29,7 +28,8 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
                         <li><a class="dropdown-item log_types" value="2" href="javascript:void(0);">All</a></li>
-                        <li><a class="dropdown-item log_types" value="2" href="javascript:void(0);">For Delivery</a></li>
+                        <li><a class="dropdown-item log_types" value="2" href="javascript:void(0);">For Delivery</a>
+                        </li>
                         <li><a class="dropdown-item log_types" value="3" href="javascript:void(0);">For Collection</a>
                         </li>
                         <li><a class="dropdown-item log_types" value="4" href="javascript:void(0);">For Pick Up</a>
@@ -50,7 +50,8 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
                         <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
                         <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">Pending</a></li>
-                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a></li>
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">Rescheduled</a>
+                        </li>
                         <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">Completed</a>
                         </li>
 
@@ -154,11 +155,9 @@
                             <select class="form-control" id="messenger_id">
                                 <option value="">Choose a Messenger</option>
                                 @foreach ($messenger as $messengers)
-
                                     <option value="{{ $messengers->cen_user_id }}">{{ $messengers->fname }}
                                         {{ $messengers->lname }}
                                     </option>
-
                                 @endforeach
                             </select>
 
@@ -316,18 +315,15 @@
 
 
     <!-- End modal -->
-
-
 @endsection
 
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             function get_columns() {
-                return [
-                    {
+                return [{
                         data: "request_no"
                     },
                     {
@@ -348,7 +344,7 @@
                     },
                     {
                         data: 'get_area_request',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return row.get_area_request.area;
                         }
                     },
@@ -424,7 +420,7 @@
 
             $('#deliver_tbl').DataTable({
                 destroy: true,
-                scrollX: true,
+                // scrollX: true,
                 // scrollY: 'calc(95vh / 2.5)',
 
                 ajax: {
@@ -446,7 +442,7 @@
 
 
 
-            $(document).on('click', '.btn_approved', function () {
+            $(document).on('click', '.btn_approved', function() {
                 const params_val = $(this).data('val');
                 if (params_val == 1) {
                     //assign messenger
@@ -454,15 +450,18 @@
                     $.ajax({
                         url: "get_delivery_data/" + $(this).data('id'),
                         dataType: 'json',
-                        success: function (e) {
+                        success: function(e) {
                             if (e['isValid'] === false) {
-                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                alertify.error('<span style="color: white;">' + e['msg'] +
+                                    '</span>');
                                 return;
                             }
                             $('#date_requested').val(e['data']['date_requested']);
                             $('#request_number').val(e['data']['request_number']);
                             $('#request_status').val(e['data']['req_stat']);
-                            $('#requestor_name').val(e['data']['get_requestor_fullname']['firstname'] + ' ' + e['data']['get_requestor_fullname']['lastname'])
+                            $('#requestor_name').val(e['data']['get_requestor_fullname'][
+                                'firstname'
+                            ] + ' ' + e['data']['get_requestor_fullname']['lastname'])
                             $('#hidden_id').val(e['data']['id']);
 
                         },
@@ -474,7 +473,7 @@
 
             });
 
-            $('#assign_messenger').click(function () {
+            $('#assign_messenger').click(function() {
                 const logistics_id = $('#hidden_id').val();
                 const messenger_id = $('#messenger_id').val();
                 const process_date = $('#process_date').val();
@@ -492,9 +491,10 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#messenger_id').val('');
@@ -515,9 +515,59 @@
 
 
 
+            $(document).on('click', '.btn_delete', function() {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to cancel this request?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, cancel it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Reason for deletion?',
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "delete_delivery_request/" + $(this)
+                                        .data('id') + '/' + remarks,
+                                    success: function(e) {
+                                        if (e['isValid'] == false) {
+                                            alertify.error(
+                                                '<span style="color: white;">' +
+                                                e['msg'] + '</span>');
+                                            reject('Deletion failed');
+                                        }
+
+                                        Swal.fire({
+                                            title: "Cancelled!",
+                                            text: "Your request has been cancelled.",
+                                            icon: "success"
+                                        });
+                                        $('#deliver_tbl').DataTable().ajax
+                                            .reload();
+                                        resolve();
+
+                                    },
+
+                                });
+                            }
+                        });
+                    }
+                })
+            });
 
 
-            $(document).on('click', '.btn_show_data', function () {
+            $(document).on('click', '.btn_show_data', function() {
                 //delivery process
 
 
@@ -530,9 +580,10 @@
                 $('#show_delivery_request_modal').modal('show');
                 $.ajax({
                     url: "get_delivery_data/" + $(this).data('id'),
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#show_id').val(e['data']['id']);
@@ -546,7 +597,9 @@
                         $('#show_delivery_remarks').val(e['data']['delivery_remarks']);
                         $('#req_name').val(e['data']['get_requestor_fullname']['firstname'] +
                             ' ' + e['data']['get_requestor_fullname']['lastname'])
-                        $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data']['request_number']);
+                        $('#edit_header').text(e['data']['req_stat'] + ' Request #' + e['data'][
+                            'request_number'
+                        ]);
                         // $('#admin_name').val(
                         //     e['data']['get_admin_data']
                         //         ? e['data']['get_admin_data']['firstname'] + ' ' + e['data']['get_admin_data']['lastname']
@@ -554,14 +607,20 @@
                         // $('#date_assign').val(e['data']['date_assign']);
                         $('#hidden_id').val(e['data']['id'])
 
-                        const stats_name = status_namer(e['data']['status'], e['data']['procedures'], e['data']['request_status']);
+                        const stats_name = status_namer(e['data']['status'], e['data'][
+                            'procedures'
+                        ], e['data']['request_status']);
                         $('#stat_logs').val(stats_name);
 
 
 
                         if (e['data']['request_status'] == 'Delivered') {
                             $('#row_messenger').removeClass('d-none');
-                            $('#messenger_file').html('<a href="' + e['data']['messenger_file'] + '" target="_blank">' + e['data']['file_name'] + '</a>');
+                            $('#messenger_file').html('<a href="' + e['data'][
+                                'messenger_file'
+                            ] + '" target="_blank">' + e['data'][
+                                'file_name'
+                            ] + '</a>');
                             $('#mess_remarks').val(e['data']['messenger_remarks']);
                         }
 
@@ -582,19 +641,19 @@
             });
 
 
-            $('.filter_data').on('click', function () {
+            $('.filter_data').on('click', function() {
                 var filterValue = $(this).text().toLowerCase();
                 $('#filter_btn').text($(this).text());
             })
 
-            $('.log_types').on('click', function () {
+            $('.log_types').on('click', function() {
                 var log_value = $(this).text().toLowerCase();
                 $('#log_btn').text($(this).text());
             })
 
 
 
-            $('#filter_request').click(function () {
+            $('#filter_request').click(function() {
                 const filt_params = $('#filter_btn').text().trim().toLowerCase();
                 const logs_params = $('#log_btn').text().trim().toLowerCase();
                 const filter_array = ['all', 'pending', 'rescheduled', 'completed'];
@@ -631,6 +690,5 @@
 
 
         });
-
     </script>
 @endsection
