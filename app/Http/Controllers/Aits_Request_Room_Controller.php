@@ -176,8 +176,6 @@ class Aits_Request_Room_Controller extends Controller
     {
 
         //for requestor only
-
-
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])->where('is_transact', 1)
                 ->where('request_by', Auth::user()->id)

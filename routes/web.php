@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AitsAssignAreaController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\PdfController;
 use Carbon\Carbon;
 use App\Models\AitsDelivery;
@@ -208,7 +209,7 @@ Route::controller(PmsApprovalController::class)->group(function () {
 
 Route::controller(PmsvalidationController::class)->group(function () {
     Route::get('pms_alert', 'pms_alert')->name('pms_alert');
-    Route::get('save_cancellation_request/{date}', 'save_cancellation_request')->name('save_cancellation_request');
+    Route::get('save_cancellation_request/{date}/{start}', 'save_cancellation_request')->name('save_cancellation_request');
     Route::get('get_close_schedule', 'get_close_schedule')->name('get_close_schedule');
     Route::get('save_open_req', 'save_open_req')->name('save_open_req');
 });
@@ -239,6 +240,9 @@ Route::middleware(['auth'])->group(function () {
     //pms
     Route::get('pms_page', [Pms_Maintenance_Controller::class, 'pms_page'])->name('pms_page');
     Route::get('pms_approval_view', [PmsApprovalController::class, 'pms_approval_view'])->name('pms_approval_view');
+
+    //Driver
+    Route::get('driver_view', [DriverController::class, 'driver_view'])->name('driver_view');
 });
 
 

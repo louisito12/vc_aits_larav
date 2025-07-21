@@ -8,13 +8,15 @@
     <div class="main-sidebar-header">
         <a href="{{ route('aits_dashboard') }}" class="header-logo">
             <img style="width: 180px; height:80px; object-fit: cover;"
-                src="{{asset('aits_asset/assets/images/aits_logo.png')}}" alt="logo" class="desktop-logo">
+                src="{{ asset('aits_asset/assets/images/aits_logo.png') }}" alt="logo" class="desktop-logo">
 
-            <img src="{{asset('aits_asset/assets/images/brand-logos/vc_icon.png')}}" alt="logo" class="toggle-logo">
+            <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo"
+                class="toggle-logo">
 
             <img style="width: 180px; height:80px;" src="{{ asset('aits_asset/assets/images/aits_logo.png') }}"
                 alt="logo" class="desktop-white">
-            <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo" class="toggle-white">
+            <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo"
+                class="toggle-white">
         </a>
     </div>
     <!-- End::main-sidebar-header -->
@@ -25,7 +27,8 @@
         <!-- Start::nav -->
         <nav class="main-menu-container nav nav-pills flex-column sub-open">
             <div class="slide-left" id="slide-left">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24"
+                    viewBox="0 0 24 24">
                     <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
                 </svg>
             </div>
@@ -38,7 +41,7 @@
 
                 <!-- Start::slide -->
                 <li class="slide">
-                    <a href="{{route('aits_dashboard')}}"
+                    <a href="{{ route('aits_dashboard') }}"
                         class="side-menu__item {{ Request::is('aits_dashboard') ? 'active' : '' }} ">
                         <i style="width:30px;" class="fa-solid fa-table-columns"></i>
 
@@ -59,7 +62,6 @@
                     $romm_request = [
                         'request_room' => Request::is('request_room_view'),
                         'transit_request' => Request::is('transit_request_view'),
-
                     ];
 
                     $hospitals = [
@@ -68,34 +70,35 @@
                     ];
 
                     $admin = [
-                        "room_approval_view" => Request::is('room_approval_view'),
-                        "aits_car_view" => Request::is('aits_car_view'),
-                        "aits_transit_approval_view" => Request::is('aits_transit_approval_view'),
-                        "user_manage_view" => Request::is('user_manage_view'),
-                        "aits_deliver_assign" => Request::is('aits_deliver_assign'),
+                        'room_approval_view' => Request::is('room_approval_view'),
+                        'aits_car_view' => Request::is('aits_car_view'),
+                        'aits_transit_approval_view' => Request::is('aits_transit_approval_view'),
+                        'user_manage_view' => Request::is('user_manage_view'),
+                        'aits_deliver_assign' => Request::is('aits_deliver_assign'),
                     ];
 
                     $logistics = [
-                        "aits_delivery_view" => Request::is('aits_delivery_view'),
-                        "aits_collection_view" => Request::is('aits_collection_view'),
-                        "aits_pick_up_view" => Request::is('aits_pick_up_view'),
-
+                        'aits_delivery_view' => Request::is('aits_delivery_view'),
+                        'aits_collection_view' => Request::is('aits_collection_view'),
+                        'aits_pick_up_view' => Request::is('aits_pick_up_view'),
                     ];
-
 
                     $messenger = [
-                        "aits_messenger_view" => request::is('aits_messenger_view'),
+                        'aits_messenger_view' => request::is('aits_messenger_view'),
                     ];
-
 
                     $super_admin = [
-                        "aits_roles_view" => request::is('aits_roles_view'),
-                        "aits_usermanagement" => request::is('aits_usermanagement'),
-                        "aits_assign_area" => request::is('aits_assign_area'),
+                        'aits_roles_view' => request::is('aits_roles_view'),
+                        'aits_usermanagement' => request::is('aits_usermanagement'),
+                        'aits_assign_area' => request::is('aits_assign_area'),
                     ];
                     $pms = [
-                        "pms_page" => request::is('pms_page'),
-                        "pms_approval_view" => request::is('pms_approval_view'),
+                        'pms_page' => request::is('pms_page'),
+                        'pms_approval_view' => request::is('pms_approval_view'),
+                    ];
+
+                    $driver_page = [
+                        'driver_view' => request::is('driver_view'),
                     ];
 
                 @endphp
@@ -107,10 +110,10 @@
                 <!-- End::slide__category -->
 
                 <!-- Start::slide -->
-                @if(in_array(3, $roles))
-                    <li class="slide has-sub {{in_array(true, $romm_request) ? 'open' : ''}}">
+                @if (in_array(3, $roles))
+                    <li class="slide has-sub {{ in_array(true, $romm_request) ? 'open' : '' }}">
                         <a href="javascript:void(0);"
-                            class="side-menu__item {{in_array(true, $romm_request) ? 'active' : ''}}">
+                            class="side-menu__item {{ in_array(true, $romm_request) ? 'active' : '' }}">
                             <i style="width:30px;" class="fa-solid fa-hotel"></i>
                             <span class="side-menu__label">Service/Room Request</span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -140,9 +143,9 @@
 
                     <br>
                     <!-- Logistics Request -->
-                    <li class="slide has-sub {{in_array(true, $logistics) ? 'open' : ''}}">
+                    <li class="slide has-sub {{ in_array(true, $logistics) ? 'open' : '' }}">
                         <a href="javascript:void(0);"
-                            class="side-menu__item {{in_array(true, $logistics) ? 'active' : ''}}">
+                            class="side-menu__item {{ in_array(true, $logistics) ? 'active' : '' }}">
                             <i style="width:30px;" class="fa-solid fa-truck-ramp-box"></i>
                             <span class="side-menu__label">Logistics Request</span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -176,11 +179,12 @@
                 @endif
 
 
-                @if(in_array(2, $roles))
+                @if (in_array(2, $roles))
                     <br>
                     <!-- Admin Slide -->
-                    <li class="slide has-sub {{in_array(true, $admin) ? 'open' : ''}}">
-                        <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $admin) ? 'active' : ''}}">
+                    <li class="slide has-sub {{ in_array(true, $admin) ? 'open' : '' }}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{ in_array(true, $admin) ? 'active' : '' }}">
                             <i style="width:30px;" class="fa-solid fa-user-tie"></i>
                             <span class="side-menu__label">Admin Approval</span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -223,15 +227,14 @@
 
                         </ul>
                     </li>
-
                 @endif
 
-                @if(in_array(4, $roles))
+                @if (in_array(4, $roles))
                     <br>
                     <!-- Messenger Side -->
-                    <li class="slide has-sub {{in_array(true, $messenger) ? 'open' : ''}}">
+                    <li class="slide has-sub {{ in_array(true, $messenger) ? 'open' : '' }}">
                         <a href="javascript:void(0);"
-                            class="side-menu__item {{in_array(true, $messenger) ? 'active' : ''}}">
+                            class="side-menu__item {{ in_array(true, $messenger) ? 'active' : '' }}">
                             <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i>
 
                             <span class="side-menu__label">Messenger Logistics</span>
@@ -251,16 +254,14 @@
 
                         </ul>
                     </li>
-
-
                 @endif
 
 
-                @if(in_array(1, $roles) || Auth::user()->id == 1)
+                @if (in_array(1, $roles) || Auth::user()->id == 1)
                     <br>
-                    <li class="slide has-sub {{in_array(true, $super_admin) ? 'open' : ''}}">
+                    <li class="slide has-sub {{ in_array(true, $super_admin) ? 'open' : '' }}">
                         <a href="javascript:void(0);"
-                            class="side-menu__item {{in_array(true, $super_admin) ? 'active' : ''}}">
+                            class="side-menu__item {{ in_array(true, $super_admin) ? 'active' : '' }}">
                             <!-- <i style="width:30px;" class="fa-solid fa-envelopes-bulk"></i> -->
                             <i style="width:30px;" class="fa-solid fa-person-rifle"> </i>
 
@@ -294,18 +295,17 @@
 
                         </ul>
                     </li>
-
-
                 @endif
 
 
 
 
-                @if(in_array(5, $roles))
+                @if (in_array(5, $roles))
                     <br>
                     <!-- Messenger Side -->
-                    <li class="slide has-sub {{in_array(true, $pms) ? 'open' : ''}}">
-                        <a href="javascript:void(0);" class="side-menu__item {{in_array(true, $pms) ? 'active' : ''}}">
+                    <li class="slide has-sub {{ in_array(true, $pms) ? 'open' : '' }}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{ in_array(true, $pms) ? 'active' : '' }}">
                             <i style="width: 30px;" class="fa-solid fa-screwdriver-wrench"></i>
 
                             <span class="side-menu__label">PMS Management</span>
@@ -322,7 +322,7 @@
                             </li>
 
 
-                            @if(in_array(6, $roles) && in_array(5, $roles))
+                            @if (in_array(6, $roles) && in_array(5, $roles))
                                 <li class="slide">
                                     <a href="{{ route('pms_approval_view') }}"
                                         class="side-menu__item {{ Request::is('pms_approval_view') ? 'active' : '' }}">
@@ -537,7 +537,8 @@
                                     <a href="file-manager-list.html" class="side-menu__item">File-Manager-List</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="file-manager-details.html" class="side-menu__item">File-Manager-details</a>
+                                    <a href="file-manager-details.html"
+                                        class="side-menu__item">File-Manager-details</a>
                                 </li>
                             </ul>
                         </li>
@@ -550,8 +551,8 @@
 
 
             </ul>
-            <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24"
-                    height="24" viewBox="0 0 24 24">
+            <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
+                    width="24" height="24" viewBox="0 0 24 24">
                     <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
                 </svg></div>
         </nav>

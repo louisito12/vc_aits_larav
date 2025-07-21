@@ -423,11 +423,15 @@
                             $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e['data'][
                                 'request_status'
                             ]);
-                            $('#show_approver').val(e['data']['get_approver_data'] ? e['data'][
-                                    'get_approver_data'
-                                ]['firstname'] +
-                                ' ' + e['data']['get_approver_data']['lastname'] : '');
-                            $('#show_approve_date').val(e['data']['date_approved']);
+
+                            if (e['data']['request_status'] != 'Cancelled') {
+                                $('#show_approver').val(e['data']['get_approver_data'] ? e['data'][
+                                        'get_approver_data'
+                                    ]['firstname'] +
+                                    ' ' + e['data']['get_approver_data']['lastname'] : '');
+                                $('#show_approve_date').val(e['data']['date_approved']);
+                            }
+
 
 
                             // if (e['data']['get_approver_data']) {

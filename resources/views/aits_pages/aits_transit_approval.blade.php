@@ -3,8 +3,6 @@
 
 
 @section('content')
-
-
     <style>
         #tbl_transit th,
         #tbl_transit td {
@@ -55,9 +53,12 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDate">
                         <li><a class="dropdown-item filter_data" value="1" href="javascript:void(0);">All</a></li>
-                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">All Pending</a></li>
-                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a></li>
-                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Disapproved</a>
+                        <li><a class="dropdown-item filter_data" value="2" href="javascript:void(0);">All Pending</a>
+                        </li>
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a>
+                        </li>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All
+                                Disapproved</a>
                         </li>
 
                     </ul>
@@ -88,12 +89,10 @@
             <div class="card custom-card">
                 <div class="card-header d-flex justify-content-between align-items-center p-0">
                     <div class="card-title m-1 p-3">Vehicle Request</div>
-                    @if($close_params == 1)
+                    @if ($close_params == 1)
                         <button id="open_reqeust_btn" class="btn btn-success m-3 ">Open Request</button>
-
                     @else
                         <button id="close_request_btn" class="btn btn-danger m-3 ">Close Request</button>
-
                     @endif
 
                 </div>
@@ -257,9 +256,8 @@
                             <select name="" class="form-control" id="driver_id">
                                 <option value="">Select Driver</option>
                                 @foreach ($driver as $drivers)
-
-                                    <option value="{{ $drivers->id }}">{{ $drivers->fname }} {{ $drivers->lname }}</option>
-
+                                    <option value="{{ $drivers->id }}">{{ $drivers->fname }} {{ $drivers->lname }}
+                                    </option>
                                 @endforeach
                             </select>
                             <input type="text" hidden id="approve_id">
@@ -269,9 +267,7 @@
                             <select name="" class="form-control" id="car_id">
                                 <option value="">Select Car</option>
                                 @foreach ($car as $cars)
-
-                                    <option value="{{ $cars->id }}">{{ $cars->plate_number}} </option>
-
+                                    <option value="{{ $cars->id }}">{{ $cars->plate_number }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -324,8 +320,9 @@
     </div>
 
 
-    <div class="modal fade" id="close_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <div class="modal fade" id="close_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title" id=""> Close Shuttle Request
@@ -334,8 +331,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
-                            <label>Date and Time</label>
+                        <div class="col-6">
+                            <label>Date and Time Start</label>
+                            <input type="datetime-local" class="form-control spec_input" id="start_cancellation_date">
+                        </div>
+                        <div class="col-6">
+                            <label>Date and Time End</label>
                             <input type="datetime-local" class="form-control spec_input" id="cancellation_date">
                         </div>
                     </div>
@@ -351,8 +352,9 @@
     </div>
 
 
-    <div class="modal fade" id="open_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <div class="modal fade" id="open_request_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h6 class="modal-title" id=""> Open Vehicle Request
@@ -361,7 +363,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
+                            <label>Start of Closing Request</label>
+                            <input type="datetime-local" class="form-control spec_input" readonly id="start_date">
+                        </div>
+                        <div class="col-6">
                             <label>The request is close until</label>
                             <input type="datetime-local" class="form-control spec_input" readonly id="until_date">
                         </div>
@@ -378,20 +384,14 @@
     </div>
 
     <!-- Modal end -->
-
-
-
-
 @endsection
 
 
 @section('scripts')
-
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             function get_columns() {
-                return [
-                    {
+                return [{
                         data: "request_no"
                     },
                     {
@@ -457,7 +457,7 @@
             });
 
 
-            $(document).on('click', '.btn_approved', function () {
+            $(document).on('click', '.btn_approved', function() {
                 // alert($(this).data('val'));
 
                 if ($(this).data('val') == 1 || $(this).data('val') == 3) {
@@ -474,13 +474,15 @@
                     $.ajax({
                         url: "retrieve_shuttle_request/" + $(this).data('id'),
                         type: "GET",
-                        success: function (e) {
+                        success: function(e) {
                             if (e['isValid'] == false) {
-                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                alertify.error('<span style="color: white;">' + e['msg'] +
+                                    '</span>');
                                 return
                             }
 
-                            $('#approve_data_header').text('Approve Shuttle Request  #' + e['data']['request_number'])
+                            $('#approve_data_header').text('Approve Shuttle Request  #' + e[
+                                'data']['request_number'])
                             $('#departure_date').val(e['data']['departure_date']);
                             $('#pick_up_date_app').val(e['data']['pick_up_date']);
 
@@ -554,10 +556,14 @@
                                     Swal.hideLoading();
                                 } else {
                                     $.ajax({
-                                        url: "disapprove_shuttle/" + $(this).data('id') + '/' + remarks,
-                                        success: function (e) {
+                                        url: "disapprove_shuttle/" + $(this)
+                                            .data('id') + '/' + remarks,
+                                        success: function(e) {
                                             if (e['isValid'] == false) {
-                                                alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                                alertify.error(
+                                                    '<span style="color: white;">' +
+                                                    e['msg'] + '</span>'
+                                                );
                                                 reject('Deletion failed');
                                             }
 
@@ -566,7 +572,8 @@
                                                 text: "Your request has been Disapproved.",
                                                 icon: "success"
                                             });
-                                            $('#tbl_transit').DataTable().ajax.reload();
+                                            $('#tbl_transit').DataTable()
+                                                .ajax.reload();
                                             resolve();
 
                                         },
@@ -590,14 +597,15 @@
             });
 
 
-            $(document).on('click', '.btn_show_data', function () {
+            $(document).on('click', '.btn_show_data', function() {
 
                 $.ajax({
                     url: "retrieve_shuttle_request/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return
                         }
 
@@ -612,19 +620,41 @@
                         $('#show_remarks').val(e['data']['remarks']);
                         $('#show_client_name').val(e['data']['client_name']);
                         $('#show_passenger_number').val(e['data']['passenger_number']);
-                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' + e['data']['get_manager_data']['lastname']);
-                        $('#view_data_header').text('View Shuttle Request  #' + e['data']['request_number'])
-                        $('#show_req_stats').val(e['data']['request_status']);
-                        $('#show_approver').val(e['data']['get_approver_data'] ? e['data']['get_approver_data']['firstname']
-                            + ' ' + e['data']['get_approver_data']['lastname'] : '');
-                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] + ' ' + e['data']['get_requestor_data']['lastname']);
-                        $('#show_approve_date').val(e['data']['date_approved']);
-                        if (e['data']['get_approver_data']) {
-                            $('#show_approver').val(e['data']['get_approver_data']['firstname'] + ' ' + e['data']['get_approver_data']['lastname']);
-                            $('#show_approve_date').val(e['data']['date_approved'])
-                            $('#show_req_stats').val(e['data']['request_status'])
-                        }
+                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
+                            ' ' + e['data']['get_manager_data']['lastname']);
 
+                        $('#view_data_header').text('View Shuttle Request  #' + e['data'][
+                            'request_number'
+                        ]);
+
+                        $('#show_req_stats').val(e['data']['request_status']);
+
+
+                        if (e['data']['request_status'] == 'Cancelled') {
+
+                        } else {
+                            if (e['data']['get_approver_data']) {
+                                $('#show_approver').val(e['data']['get_approver_data'][
+                                    'firstname'
+                                ] + ' ' + e['data']['get_approver_data'][
+                                    'lastname'
+                                ]);
+                                $('#show_approve_date').val(e['data']['date_approved'])
+                                $('#show_req_stats').val(e['data']['request_status'])
+
+                                $('#show_approver').val(e['data']['get_approver_data'] ? e[
+                                        'data'][
+                                        'get_approver_data'
+                                    ]['firstname'] +
+                                    ' ' + e['data']['get_approver_data']['lastname'] : '');
+                                $('#show_requestor').val(e['data']['get_requestor_data'][
+                                        'firstname'
+                                    ] +
+                                    ' ' + e['data']['get_requestor_data']['lastname']);
+                                $('#show_approve_date').val(e['data']['date_approved']);
+                            }
+
+                        }
 
 
                     }
@@ -638,10 +668,10 @@
             })
 
 
-            $('#car_id').change(function () {
+            $('#car_id').change(function() {
                 $.ajax({
                     url: "get_car_details/" + $(this).val(),
-                    success: function (e) {
+                    success: function(e) {
                         $('#model').val(e['data']['model'])
                         $('#brand').val(e['data']['brand'])
 
@@ -650,7 +680,7 @@
             })
 
 
-            $('#approve_shuttle_btn').click(function () {
+            $('#approve_shuttle_btn').click(function() {
                 // car_id, driver_id, approve_id
 
                 const car_id_approve = $('#car_id').val();
@@ -676,9 +706,10 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return
                         }
 
@@ -707,13 +738,13 @@
 
 
 
-            $('.filter_data').on('click', function () {
+            $('.filter_data').on('click', function() {
                 var filterValue = $(this).text().toLowerCase();
                 $('#filter_btn').text($(this).text());
             })
 
 
-            $('#filter_request').click(function () {
+            $('#filter_request').click(function() {
                 const filter_params = $('#filter_btn').text().toLowerCase();
                 const filter_array = ['all', 'all pending', 'all approved', 'all disapproved'];
 
@@ -731,7 +762,8 @@
                         url: "{{ route('get_approval_transit') }}",
                         type: "POST",
                         data: {
-                            filter_data: filter_params, apt_date
+                            filter_data: filter_params,
+                            apt_date
                         },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -746,24 +778,26 @@
             });
 
 
-            $('#close_request_btn').click(function () {
+            $('#close_request_btn').click(function() {
                 $('#close_request_modal').modal('show');
             })
 
 
-            $('#save_close_request').click(function () {
+            $('#save_close_request').click(function() {
                 const cancellation_date = $('#cancellation_date').val();
+                const start_cancellation_date = $('#start_cancellation_date').val();
 
-                if (cancellation_date == "") {
+                if (cancellation_date == "" || start_cancellation_date == "") {
                     alertify.error('<span style="color: white;"> Cancellation Date is Required</span>');
                     return;
                 }
 
 
                 $.ajax({
-                    url: "save_cancellation_request/" + cancellation_date,
+                    url: "save_cancellation_request/" + cancellation_date + '/' +
+                        start_cancellation_date,
                     type: "Get",
-                    success: function (e) {
+                    success: function(e) {
                         $('#cancellation_date').val('');
                         Swal.fire({
                             title: "Closed!",
@@ -780,23 +814,24 @@
 
 
 
-            $('#open_reqeust_btn').click(function () {
+            $('#open_reqeust_btn').click(function() {
                 $('#open_request_modal').modal('show');
 
                 $.ajax({
                     url: "{{ route('get_close_schedule') }}",
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         $('#until_date').val(e['close_date']);
+                        $('#start_date').val(e['start_date']);
                     }
                 })
             });
 
-            $('#save_open_btn').click(function () {
+            $('#save_open_btn').click(function() {
                 $.ajax({
                     url: "{{ route('save_open_req') }}",
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
 
                         $('#open_request_modal').modal('hide');
 
@@ -810,7 +845,61 @@
                         location.reload();
                     }
                 })
-            })
+            });
+
+
+            $(document).on('click', '.btn_delete', function() {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to cancel this request?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, cancel it!",
+                    input: 'textarea',
+                    inputPlaceholder: 'Reason for cancellation?',
+                    inputAttributes: {
+                        'aria-label': 'Enter your remarks'
+                    },
+                    showLoaderOnConfirm: true,
+                    preConfirm: (remarks) => {
+                        return new Promise((resolve, reject) => {
+                            if (!remarks || remarks.trim() === '') {
+                                Swal.showValidationMessage('Remarks are required!');
+                                reject('Remarks are required!');
+                                Swal.hideLoading();
+                            } else {
+                                $.ajax({
+                                    url: "delete_shuttle_request/" + $(this)
+                                        .data('id') + '/' + remarks,
+                                    success: function(e) {
+                                        if (e['isValid'] == false) {
+                                            // alertify.set('notifier', 'position', 'top-right');
+                                            // alertify.set('notifier', 'delay', 5);
+                                            alertify.error(
+                                                '<span style="color: white;">' +
+                                                e['msg'] + '</span>');
+                                            reject('Deletion failed');
+                                        }
+
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            text: "Your request has been deleted.",
+                                            icon: "success"
+                                        });
+                                        $('#tbl_transit').DataTable().ajax
+                                            .reload();
+                                        resolve();
+                                    },
+
+                                });
+                            }
+                        });
+                    }
+                })
+            });
+
 
         })
     </script>

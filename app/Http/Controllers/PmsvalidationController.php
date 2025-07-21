@@ -71,7 +71,7 @@ class PmsvalidationController extends Controller
     }
 
 
-    public function save_cancellation_request($date)
+    public function save_cancellation_request($date, $start)
     {
 
         AitsRequestCloser::where('status', 1)->update([
@@ -79,14 +79,15 @@ class PmsvalidationController extends Controller
         ]);
 
         $date_time = Carbon::parse($date)->format('Y-m-d H:i:s.v');
-
+        $date_time_start = Carbon::parse($start)->format('Y-m-d H:i:s.v');
 
         AitsRequestCloser::create([
             'date_start' => Carbon::now(),
             'date_end' => $date_time,
             'date_created' => Carbon::now(),
             'user_id' => Auth::user()->id,
-            'table_name' => 'aits_shuttle_requests'
+            'table_name' => 'aits_shuttle_requests',
+            'date_from' => $date_time_start,
         ]);
     }
 
@@ -96,6 +97,7 @@ class PmsvalidationController extends Controller
 
 
         $data->close_date = date_coverters_transit($data->date_end);
+        $data->start_date = date_coverters_transit($data->date_from);
 
         return $data;
     }

@@ -370,6 +370,7 @@ class Aits_Transit_Controller extends Controller
             })
             ->addColumn('admin_action', function ($data) {
                 $hidden = ($data->request_status != 'Pending' || $data->status == 0) ? 'hidden' : '';
+                $cancell_hidden = ($data->request_status == 'Cancelled') ? 'hidden' : '';
                 return '
                     <div  class="btn-group dropstart input_spec my-1">
                         <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
@@ -380,6 +381,7 @@ class Aits_Transit_Controller extends Controller
                             <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
                             <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
                             <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="3" data-id="' . $data->id . '" href="javascript:void(0);">Special Approval</a></li>
+                             <li><a class="dropdown-item btn_delete" ' . $cancell_hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel Request</a></li>
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                     </div>
