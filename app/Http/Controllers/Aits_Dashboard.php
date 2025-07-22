@@ -69,7 +69,6 @@ class Aits_Dashboard extends Controller
         $roles = roles_array(Auth::user()->id);
 
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
-            // ->where('user_id', Auth::user()->id)->get();
             ->where('is_transact', 1)
             ->where('status', 1);
         if (!in_array(2, $roles)) {
@@ -103,27 +102,7 @@ class Aits_Dashboard extends Controller
     {
         try {
 
-            // $room_request = "
-            //     SELECT SUM(CASE WHEN request_status = 'Approved' THEN 1 ELSE 0 END) AS approved_count,
-            //     SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            //     COUNT(*) AS total_requests
-            //     FROM aits_request_room_models
-            //     WHERE request_status IN ('Approved', 'Pending') AND (is_transact=1 AND status=1)
-            //     GROUP BY request_status";
-            // $shuttle_request = "SELECT SUM(CASE WHEN request_status = 'Approved' THEN 1 ELSE 0 END) AS approved_count,
-            // SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            // COUNT(*) AS total_requests FROM aits_shuttle_requests
-            // WHERE is_transact = 1 AND status = 1";
-            // $shuttle_request = "
-            //         SELECT
-            //         SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            //         SUM(CASE WHEN request_status = 'Approved' AND appointment_date = CONVERT(VARCHAR, GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
-            //         SUM(CASE WHEN request_status = 'Approved' AND appointment_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
-            //         FROM aits_shuttle_requests WHERE (is_transact = 1 AND status = 1) $shuttle_request_id";
 
-
-
-            //row queries counts 
 
 
             $room_request = "";
@@ -138,17 +117,11 @@ class Aits_Dashboard extends Controller
             $user_id = Auth::user()->id;
 
             if (!in_array(2, $roles)) {
-                //if roles is not an admin then should have $user_id
-                // $data->where('request_by', Auth::user()->id);
                 $room_request = " AND request_by =$user_id";
                 $shuttle_request_id = " AND user_id =$user_id";
             }
 
 
-            // $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            // SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
-            // SUM(CASE WHEN request_status = 'Approved' AND date_to < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
-            // FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
 
 
             $now = Carbon::now();
@@ -170,8 +143,8 @@ class Aits_Dashboard extends Controller
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
-              END AS procedure_status,SUM(CASE WHEN request_status != 'Delivered' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
-	          SUM (CASE WHEN request_status !='Delivered' AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
+              END AS procedure_status,SUM(CASE WHEN request_status NOT IN ('Delivered','Cancelled')  AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
+	          SUM (CASE WHEN request_status NOT IN ('Delivered','Cancelled') AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
                    SUM (CASE WHEN request_status ='Cancelled' THEN 1 ELSE 0 END) cancel_req,
 	          SUM(CASE WHEN request_status ='Delivered' THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) $shuttle_request_id GROUP BY procedures ";
 
@@ -218,8 +191,8 @@ class Aits_Dashboard extends Controller
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
-              END AS procedure_status,SUM(CASE WHEN request_status != 'Delivered' AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
-	          SUM (CASE WHEN request_status !='Delivered' AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
+              END AS procedure_status,SUM(CASE WHEN request_status NOT IN ('Delivered','Cancelled') AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
+	          SUM (CASE WHEN request_status NOT IN ('Delivered','Cancelled') AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
 	          SUM(CASE WHEN request_status ='Delivered'  THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) AND messenger_id=$user_id   GROUP BY procedures ";
 
 
@@ -258,11 +231,11 @@ class Aits_Dashboard extends Controller
             ->where('status', 1);
 
         if ($params == 1) {
-            $data->whereNot('request_status', 'Delivered')->where('procedure_date', '<', Carbon::now()->toDateString());
+            $data->whereNotIn('request_status', ['Cancelled', 'Delivered'])->where('procedure_date', '<', Carbon::now()->toDateString());
         }
 
         if ($params == 2) {
-            $data->whereNot('request_status', 'Delivered')->where('procedure_date', '=', Carbon::now()->toDateString());
+            $data->whereNotIn('request_status', ['Cancelled', 'Delivered'])->where('procedure_date', '=', Carbon::now()->toDateString());
         }
         if ($params == 3) {
             $data->where('request_status', 'Delivered');
@@ -299,27 +272,15 @@ class Aits_Dashboard extends Controller
             ->where('procedures', $procedure)
             ->where('status', 1);
 
-
-        // if ($params == 1) {
-        //     $data->whereNot('request_status', 'Approved')->where('procedure_date', '<', Carbon::now()->toDateString());
-        // }
-
-        // if ($params == 2) {
-        //     $data->whereNot('request_status', 'Approved')->where('procedure_date', '=', Carbon::now()->toDateString());
-        // }
-
-
-
-
         if ($params == 1) {
-            $data->whereNot('request_status', 'Delivered')
+            $data->whereNotIn('request_status', ['Delivered', 'Cancelled'])
                 ->where('messenger_id', Auth::user()->id)
                 ->where('procedure_date', '<', Carbon::now()->toDateString());
 
         }
 
         if ($params == 2) {
-            $data->where('messenger_id', Auth::user()->id)->whereNot('request_status', 'Delivered')
+            $data->where('messenger_id', Auth::user()->id)->whereNotIn('request_status', ['Delivered', 'Cancelled'])
                 ->whereDate('procedure_date', '=', Carbon::now()->toDateString());
 
         }
@@ -410,3 +371,61 @@ class Aits_Dashboard extends Controller
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// if ($params == 1) {
+//     $data->whereNot('request_status', 'Approved')->where('procedure_date', '<', Carbon::now()->toDateString());
+// }
+
+// if ($params == 2) {
+//     $data->whereNot('request_status', 'Approved')->where('procedure_date', '=', Carbon::now()->toDateString());
+// }
+
+
+
+
+// $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+// SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
+// SUM(CASE WHEN request_status = 'Approved' AND date_to < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
+// FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
+
+
+// $room_request = "
+//     SELECT SUM(CASE WHEN request_status = 'Approved' THEN 1 ELSE 0 END) AS approved_count,
+//     SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+//     COUNT(*) AS total_requests
+//     FROM aits_request_room_models
+//     WHERE request_status IN ('Approved', 'Pending') AND (is_transact=1 AND status=1)
+//     GROUP BY request_status";
+// $shuttle_request = "SELECT SUM(CASE WHEN request_status = 'Approved' THEN 1 ELSE 0 END) AS approved_count,
+// SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+// COUNT(*) AS total_requests FROM aits_shuttle_requests
+// WHERE is_transact = 1 AND status = 1";
+// $shuttle_request = "
+//         SELECT
+//         SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+//         SUM(CASE WHEN request_status = 'Approved' AND appointment_date = CONVERT(VARCHAR, GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
+//         SUM(CASE WHEN request_status = 'Approved' AND appointment_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count
+//         FROM aits_shuttle_requests WHERE (is_transact = 1 AND status = 1) $shuttle_request_id";
+
+
+
+//row queries counts 
+
+//if roles is not an admin then should have $user_id
+// $data->where('request_by', Auth::user()->id);
+
+
+// ->where('user_id', Auth::user()->id)->get();

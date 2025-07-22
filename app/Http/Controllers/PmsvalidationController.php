@@ -28,6 +28,7 @@ class PmsvalidationController extends Controller
                 ->select('pms_files.id', 'pms_details.id as pms_details_id', 'pms_files.pms_date', 'pms_files.pms_id')
                 ->leftJoin('pms_details', 'pms_files.pms_id', '=', 'pms_details.id')
                 ->where('pms_details.status', 1)
+                ->where('pms_files.status', 1)
                 ->where('pms_details.pms_status', 'Approved')
                 ->get();
 

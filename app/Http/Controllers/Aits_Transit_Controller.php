@@ -65,6 +65,7 @@ class Aits_Transit_Controller extends Controller
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],
+                    'ecv' => ['required'],
                 ],
             );
 
@@ -123,14 +124,25 @@ class Aits_Transit_Controller extends Controller
             $closer_request = AitsRequestCloser::
                 where('date_end', '>', Carbon::now())
                 ->where('status', 1)
+                // ->where('date_from', '<', Carbon::now())
                 ->first();
 
             if ($closer_request) {
-                return response()->json([
-                    'msg' => 'The current system is close for request for vehicle service',
-                    'status' => 402,
-                    "isValid" => false,
-                ]);
+                $now = Carbon::now();
+                $date_from = $formatted = Carbon::parse($closer_request->date_from, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+                $date_end = $formatted = Carbon::parse($closer_request->date_end, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+                if ($now > $date_from) {
+                    return response()->json([
+                        'msg' => 'The current system is close for request for vehicle service',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                } else {
+                    if ($now > $date_end) {
+                        AitsRequestCloser::where('status', 1)->update(['status' => 0]);
+                    }
+                }
+
             }
 
 
@@ -178,9 +190,7 @@ class Aits_Transit_Controller extends Controller
             ];
             insert_audit($object);
 
-            AitsRequestCloser::where('status', 1)->update([
-                'status' => 0
-            ]);
+
 
 
             return [
@@ -200,6 +210,14 @@ class Aits_Transit_Controller extends Controller
                 "isValid" => false,
             ]);
         }
+
+    }
+
+    public function tester_date()
+    {
+
+
+        // $from_date = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
 
     }
 
@@ -280,7 +298,7 @@ class Aits_Transit_Controller extends Controller
     public function get_shuttel_request_data()
     {
 
-        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data', 'get_car_data', 'get_driver_data'])
             ->where('user_id', Auth::user()->id)->get();
 
         return $this->transit_data_table($data);
@@ -367,6 +385,24 @@ class Aits_Transit_Controller extends Controller
                    <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>
                 
                         ';
+            })
+            ->addColumn('driver', function ($data) {
+                $driver = '';
+                if ($data['get_driver_data']) {
+                    $driver = $data['get_driver_data']['fname'] . ' ' . $data['get_driver_data']['lname'];
+
+                }
+
+                return $driver;
+                // get_car_data
+                // get_driver_data
+            })
+            ->addColumn('vehicle', function ($data) {
+                $vehicle = '';
+                if ($data['get_car_data']) {
+                    $vehicle = $data['get_car_data']['plate_number'];
+                }
+                return $vehicle;
             })
             ->addColumn('admin_action', function ($data) {
                 $hidden = ($data->request_status != 'Pending' || $data->status == 0) ? 'hidden' : '';
@@ -555,6 +591,7 @@ class Aits_Transit_Controller extends Controller
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],
+                    'ecv' => ['required'],
                 ],
             );
 
@@ -604,13 +641,30 @@ class Aits_Transit_Controller extends Controller
                 ->where('status', 1)
                 ->first();
 
+            $closer_request = AitsRequestCloser::
+                where('date_end', '>', Carbon::now())
+                ->where('status', 1)
+                // ->where('date_from', '<', Carbon::now())
+                ->first();
+
             if ($closer_request) {
-                return response()->json([
-                    'msg' => 'The current system is close for updating data',
-                    'status' => 402,
-                    "isValid" => false,
-                ]);
+                $now = Carbon::now();
+                $date_from = $formatted = Carbon::parse($closer_request->date_from, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+                $date_end = $formatted = Carbon::parse($closer_request->date_end, 'Asia/Manila')->format('Y-m-d H:i:s.u');
+                if ($now > $date_from) {
+                    return response()->json([
+                        'msg' => 'The current system is close for request for vehicle service',
+                        'status' => 402,
+                        "isValid" => false,
+                    ]);
+                } else {
+                    if ($now > $date_end) {
+                        AitsRequestCloser::where('status', 1)->update(['status' => 0]);
+                    }
+                }
+
             }
+
 
             $request->merge([
                 'departure_date' => Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
@@ -636,6 +690,7 @@ class Aits_Transit_Controller extends Controller
                     'remarks' => $data_logs->remarks,
                     'orig_id' => $data_logs->id,
                     'edited_by' => Auth::user()->id,
+                    'ecv' => $request->ecv,
                 ]
             );
 
@@ -660,9 +715,7 @@ class Aits_Transit_Controller extends Controller
             insert_audit($object);
 
 
-            AitsRequestCloser::where('status', 1)->update([
-                'status' => 0
-            ]);
+
 
 
             return [

@@ -28,7 +28,19 @@ class Aits_Car_Management_Controller extends Controller
     public function save_vehicle(Request $request)
     {
         $request->merge(['status' => 1, 'date_created' => Carbon::now(), 'user_id' => Auth::user()->id, 'is_transact' => 1]);
-        AitsVehicleModel::create($request->all());
+        $data = AitsVehicleModel::create($request->all());
+
+        $object = [
+            'user_id' => Auth::user()->id,
+            'page' => 'Vehicle Management',
+            'description' => 'Edit Vehicle Details',
+            'table_name' => 'aits_vehicle_model',
+            'transact_id' => $data->id,
+            'status' => 1,
+            'date_created' => Carbon::now(),
+        ];
+        insert_audit($object);
+
 
     }
 
@@ -133,6 +145,23 @@ class Aits_Car_Management_Controller extends Controller
             $data = AitsVehicleModel::find($request->id);
             $this->vehicle_insert_logs($data);
             AitsVehicleModel::where('id', $request->id)->update($request->except(['id']));
+
+
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Vehicle Management',
+                'description' => 'Edit Vehicle Details',
+                'table_name' => 'aits_vehicle_model',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+
+
+            insert_audit($object);
+
 
         } catch (\Exception $e) {
             return response()->json([

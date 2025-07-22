@@ -44,6 +44,18 @@ class PmsApprovalController extends Controller
             ]);
 
 
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'PMS Approval',
+                'description' => $stat . ' PMS status',
+                'table_name' => 'Pms_Details',
+                'transact_id' => $id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
             return response()->json([
                 'msg' => 'Successfully Provided',
                 'data' => $data,

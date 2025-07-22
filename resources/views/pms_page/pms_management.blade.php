@@ -50,13 +50,14 @@
                     <div class="col d-flex justify-content-end">
                         <div class="input-group input-group-sm w-25">
                             <button id="view_tbl_pms" class="btn  btn-info">View PMS</button>
-                            <select style="width: 10px !important;" name="" id="pms_year" class="form-select spec_input">
+                            <select style="width: 10px !important;" name="" id="pms_year"
+                                class="form-select spec_input">
                                 <!-- options from now minu 10 years and plus 1 from year now -->
                                 @php
                                     $currentYear = date('Y');
-                                 @endphp
-                                @for($i = $currentYear - 10; $i <= $currentYear + 1; $i++)
-                                    <option value={{ $i }}>{{ $i}}</option>
+                                @endphp
+                                @for ($i = $currentYear - 10; $i <= $currentYear + 1; $i++)
+                                    <option value={{ $i }}>{{ $i }}</option>
                                 @endfor
                             </select>
                         </div>
@@ -75,7 +76,7 @@
                                         <tr>
                                             <th class="text-center">PMS Name</th>
                                             <th class="text-center">PMS Description</th>
-                                            <th class="text-center">PMS Scheudle</th>
+                                            <th class="text-center">PMS Schedule</th>
                                             <th class="text-center">PMS Start</th>
                                             <th class="text-center">Conducted By</th>
                                             <th class="text-center">Noted By</th>
@@ -125,7 +126,7 @@
                             <label>PMS Schedule</label>
                             <select class="form-control spec_input" id="pms_type">
                                 <option value="">Select Schedule</option>
-                                @foreach($schedule as $schedules)
+                                @foreach ($schedule as $schedules)
                                     <option value="{{ $schedules->schedule }}">{{ ucfirst($schedules->schedule) }}</option>
                                 @endforeach
                             </select>
@@ -133,10 +134,10 @@
                     </div>
                     <br>
                     <div class="row">
-                        <di class="col-6">
+                        <diV class="col-6">
                             <label>Noted By</label>
                             <select id="noted_by" class="form-control spec_input"></select>
-                        </di>
+                        </diV>
                         <div class="col-6">
                             <label>Conducted By</label>
                             <input id="conducted_by" type="text" class="form-control spec_input">
@@ -199,7 +200,8 @@
 
 
 
-    <div class="modal fade" id="edit_pms_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+    <div class="modal fade" id="edit_pms_modal" tabindex="-1" aria-labelledby="exampleModalLgLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -225,7 +227,7 @@
                             <label>PMS Schedule</label>
                             <select class="form-control spec_input" id="edit_pms_date_types">
                                 <option value="">Select Schedule</option>
-                                @foreach($schedule as $schedules)
+                                @foreach ($schedule as $schedules)
                                     <option value="{{ $schedules->schedule }}">{{ ucfirst($schedules->schedule) }}</option>
                                 @endforeach
                             </select>
@@ -258,8 +260,8 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-check">
-                                <input class="form-check-input radio_btn" type="radio" name="edit_selection" id="email"
-                                    value="1">
+                                <input class="form-check-input radio_btn" type="radio" name="edit_selection"
+                                    id="email" value="1">
                                 <label class="form-check-label" for="email">Email</label>
                             </div>
 
@@ -438,16 +440,14 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            $('#add_pms_btn').click(function () {
+            $('#add_pms_btn').click(function() {
                 $('#add_pms_modal').modal('show');
                 $('.send_to_row').attr('hidden', true);
                 $('#is_email').val('');
@@ -460,8 +460,7 @@
                 },
 
 
-                columns: [
-                    {
+                columns: [{
                         data: "pms_name"
                     },
                     {
@@ -493,7 +492,7 @@
                 ],
             });
 
-            $('#add_pms_save').click(function () {
+            $('#add_pms_save').click(function() {
                 const pms_name = $('#pms_name').val();
                 const pms_start = $('#pms_start').val();
                 const pms_type = $('#pms_type').val();
@@ -509,20 +508,26 @@
                     url: "{{ route('save_pms_request') }}",
                     type: "POST",
                     data: {
-                        pms_name: pms_name, pms_description: pms_description,
-                        pms_date_types: pms_type, date_start: pms_start,
-                        send_to: send_to, cc_to: cc_to, is_email, noted_by: noted_by,
+                        pms_name: pms_name,
+                        pms_description: pms_description,
+                        pms_date_types: pms_type,
+                        date_start: pms_start,
+                        send_to: send_to,
+                        cc_to: cc_to,
+                        is_email,
+                        noted_by: noted_by,
                         conducted_by: conducted_by,
 
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -533,7 +538,8 @@
                         $('#pms_description').val('');
                         $('#add_pms_modal').modal('hide');
                         $('#tbl_pms').DataTable().ajax.reload();
-                        Swal.fire('Success!', 'Your PMS has been successfully added.', 'success');
+                        Swal.fire('Success!', 'Your PMS has been successfully added.',
+                            'success');
                         $('#cc_to').val(null).trigger('change');
                         $('#send_to').val(null).trigger('change');
                         $('input[name="selection"]').prop('checked', false);
@@ -543,7 +549,7 @@
                 })
             });
 
-            $(document).on('click', '.btn_edit', function () {
+            $(document).on('click', '.btn_edit', function() {
                 $('#edit_is_email').val("");
                 $('#edit_cc_to').val(null).trigger('change');
                 $('#edit_send_to').val(null).trigger('change');
@@ -557,11 +563,12 @@
                 $.ajax({
                     url: "get_pms_details/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -575,12 +582,11 @@
                         // $('#edit_noted_bt').val(e['data']['conducted_by']);
 
 
-                        const get_noted_by = [
-                            {
-                                id: e['data']['get_noted_by']['user_id'],
-                                text: e['data']['get_noted_by']['firstname'] + ' ' + e['data']['get_noted_by']['lastname'],
-                            }
-                        ];
+                        const get_noted_by = [{
+                            id: e['data']['get_noted_by']['user_id'],
+                            text: e['data']['get_noted_by']['firstname'] + ' ' + e[
+                                'data']['get_noted_by']['lastname'],
+                        }];
                         $('#edit_noted_by').empty().select2({
                             data: get_noted_by,
                             placeholder: "Select a category",
@@ -596,22 +602,24 @@
                         var cc_to = e['data']['cc_to'];
                         // var send_to_arr = send_to.split(",");
 
-                        var send_to_diff = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
+                        var send_to_diff = new Option("allemailusers@valuecarehealth.com",
+                            "allemailusers@valuecarehealth.com", true, true);
                         $('#edit_send_to').prepend(send_to_diff).trigger('change');
 
-                        var cc_def_option = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
+                        var cc_def_option = new Option("{{ Auth::user()->user_email }}",
+                            "{{ Auth::user()->user_email }}", true, true);
                         $('#edit_cc_to').prepend(cc_def_option).trigger('change');
 
 
                         if (e['data']['is_email'] == 1) {
                             $('#edit_cc_to').val(null).trigger('change');
                             $('#edit_send_to').val(null).trigger('change');
-                            send_to.forEach(function (email) {
+                            send_to.forEach(function(email) {
                                 var newOption = new Option(email, email, true, true);
                                 $('#edit_send_to').append(newOption).trigger('change');
                             });
 
-                            cc_to.forEach(function (email) {
+                            cc_to.forEach(function(email) {
                                 var newOption = new Option(email, email, true, true);
                                 $('#edit_cc_to').append(newOption).trigger('change');
                             });
@@ -627,7 +635,8 @@
                             isEmail = 2;
                         }
                         $('input[name="edit_selection"]').prop('checked', false);
-                        $('input[name="edit_selection"][value="' + isEmail + '"]').prop('checked', true);
+                        $('input[name="edit_selection"][value="' + isEmail + '"]').prop(
+                            'checked', true);
 
 
 
@@ -635,7 +644,7 @@
                 })
             });
 
-            $('#edit_pms_modal').on('shown.bs.modal', function () {
+            $('#edit_pms_modal').on('shown.bs.modal', function() {
                 $('#edit_noted_by').select2({
                     dropdownParent: $('#edit_pms_modal .modal-content'),
                     ajax: {
@@ -646,12 +655,12 @@
                         type: "post",
                         dataType: 'json',
                         delay: 250,
-                        data: function (params) {
+                        data: function(params) {
                             return {
                                 searchTerm: params.term
                             };
                         },
-                        processResults: function (response) {
+                        processResults: function(response) {
                             return {
                                 results: response
                             };
@@ -663,18 +672,19 @@
 
 
 
-            $(document).on('click', '.btn_pms', function () {
+            $(document).on('click', '.btn_pms', function() {
                 $('#add_pms_remarks_modal').modal('show');
 
                 $.ajax({
                     url: "get_pms_details/" + $(this).data('id'),
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
 
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             // alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                             return;
                         }
@@ -686,7 +696,7 @@
                 })
             });
 
-            $('#edit_pms_btn').click(function () {
+            $('#edit_pms_btn').click(function() {
                 const edit_id = $('#edit_id').val();
                 const edit_pms_name = $('#edit_pms_name').val();
                 const edit_date_start = $('#edit_date_start').val();
@@ -703,31 +713,38 @@
                     url: "{{ route('pms_edit_details') }}",
                     type: "POST",
                     data: {
-                        id: edit_id, pms_name: edit_pms_name,
-                        date_start: edit_date_start, pms_date_types: edit_pms_date_types,
-                        pms_description: edit_pms_description, is_email: edit_is_email,
-                        cc_to: edit_cc_to, send_to: edit_send_to, conducted_by: edit_conducted_by,
+                        id: edit_id,
+                        pms_name: edit_pms_name,
+                        date_start: edit_date_start,
+                        pms_date_types: edit_pms_date_types,
+                        pms_description: edit_pms_description,
+                        is_email: edit_is_email,
+                        cc_to: edit_cc_to,
+                        send_to: edit_send_to,
+                        conducted_by: edit_conducted_by,
                         noted_by: edit_noted_by
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
 
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#edit_pms_modal').modal('hide');
                         $('#tbl_pms').DataTable().ajax.reload();
-                        Swal.fire('Updated!', 'Your PMS has been updated successfully .', 'success');
+                        Swal.fire('Updated!', 'Your PMS has been updated successfully .',
+                            'success');
                     },
                 })
             });
 
-            $(document).on('click', '.btn_delete', function () {
+            $(document).on('click', '.btn_delete', function() {
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -741,11 +758,12 @@
                         $.ajax({
                             url: "delete_pms_request/" + $(this).data('id'),
                             type: "GET",
-                            success: function (e) {
+                            success: function(e) {
                                 if (e['isValid'] == false) {
                                     alertify.set('notifier', 'position', 'top-right');
                                     alertify.set('notifier', 'delay', 5);
-                                    alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                                    alertify.error('<span style="color: white;">' + e[
+                                        'msg'] + '</span>');
                                     return;
                                 }
                                 $('#tbl_pms').DataTable().ajax.reload();
@@ -763,7 +781,7 @@
 
             });
 
-            $('#save_remarks_pms').click(function () {
+            $('#save_remarks_pms').click(function() {
                 const pms_remarks = $('#pms_remarks').val();
                 const pms_files = $('#pms_files')[0].files[0];
                 const pms_hid_id = $('#pms_hid_id').val();
@@ -799,14 +817,16 @@
                     data: pms_data,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }, beforeSend: function () {
+                    },
+                    beforeSend: function() {
 
                     },
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
 
@@ -828,14 +848,13 @@
 
             })
 
-            $('input[name="selection"]').change(function () {
+            $('input[name="selection"]').change(function() {
                 var select_radio = $(this).val();
                 $('#is_email').val('');
                 if (select_radio == 1) {
                     $('#is_email').val(1);
                     $('.send_to_row').removeAttr('hidden');
-                }
-                else {
+                } else {
                     $('#is_email').val(0);
                     $('.send_to_row').attr('hidden', true);
                 }
@@ -844,21 +863,22 @@
                 $('#cc_to').val(null).trigger('change');
                 $('#send_to').val(null).trigger('change');
 
-                var send_opt = new Option("allemailusers@valuecarehealth.com", "allemailusers@valuecarehealth.com", true, true);
+                var send_opt = new Option("allemailusers@valuecarehealth.com",
+                    "allemailusers@valuecarehealth.com", true, true);
                 $('#send_to').prepend(send_opt).trigger('change');
 
 
-                var cc_def_opt = new Option("{{ Auth::user()->user_email }}", "{{ Auth::user()->user_email }}", true, true);
+                var cc_def_opt = new Option("{{ Auth::user()->user_email }}",
+                    "{{ Auth::user()->user_email }}", true, true);
                 $('#cc_to').prepend(cc_def_opt).trigger('change');
             });
 
-            $('input[name="edit_selection"]').change(function () {
+            $('input[name="edit_selection"]').change(function() {
                 var select_radio = $(this).val();
                 if (select_radio == 1) {
                     $('#edit_is_email').val(1);
                     $('.edit_send_to_row').removeAttr('hidden');
-                }
-                else {
+                } else {
                     $('#edit_is_email').val(0);
                     $('.edit_send_to_row').attr('hidden', true);
                 }
@@ -884,7 +904,7 @@
                 tokenSeparators: [',', ' ']
             });
 
-            $('#view_tbl_pms').click(function () {
+            $('#view_tbl_pms').click(function() {
 
                 const pms_year = $('#pms_year').val();
 
@@ -897,11 +917,12 @@
                         pms_year: pms_year,
                     },
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
-                            alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
+                            alertify.error('<span style="color: white;">' + e['msg'] +
+                                '</span>');
                             return;
                         }
                         $('#pms_sched_table tbody').empty();
@@ -926,12 +947,12 @@
                     type: "post",
                     dataType: 'json',
                     delay: 250,
-                    data: function (params) {
+                    data: function(params) {
                         return {
                             searchTerm: params.term
                         };
                     },
-                    processResults: function (response) {
+                    processResults: function(response) {
                         return {
                             results: response
                         };
@@ -941,6 +962,5 @@
             })
 
         });
-
     </script>
 @endsection

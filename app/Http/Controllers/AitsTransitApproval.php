@@ -73,7 +73,7 @@ class AitsTransitApproval extends Controller
 
 
 
-        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+        $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data', 'get_car_data', 'get_driver_data'])
             ->where('status', 1);
         if ($request->pending_data) {
             $data->where('request_status', 'Pending');

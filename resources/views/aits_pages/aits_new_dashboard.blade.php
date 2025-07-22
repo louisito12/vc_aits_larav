@@ -30,7 +30,49 @@
     <div class="container mt-5">
 
 
-        @if (in_array(2, $roles) || in_array(3, $roles))
+
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Admin Information Tracking System</h5>
+                            <p class="card-text">
+                                The Admin Information Tracking System is a comprehensive platform crafted to simplify and
+                                streamline various administrative workflows. This system enables users to submit requests
+                                related to room reservations, vehicle services, and logistical assistance through a unified
+                                interface. Each request type—be it for scheduling a meeting room, arranging transportation,
+                                or coordinating resource delivery—is categorized and tracked efficiently, ensuring that no
+                                request is overlooked.
+                            </p>
+                            <p class="card-text">
+                                Central to the system is a dynamic dashboard that provides real-time visibility into all
+                                pending, approved, and completed requests. Administrators and support personnel can easily
+                                monitor request statuses, assign tasks, generate reports, and ensure timely action,
+                                enhancing operational transparency and accountability.
+                            </p>
+                            <p class="card-text"><strong>User Roles:</strong></p>
+                            <p class="card-text">• <strong>Requestor:</strong> Submits and manages service requests such as
+                                room bookings, vehicle support, or logistical needs.</p>
+                            <p class="card-text">• <strong>Admin:</strong> Oversees incoming requests, assigns tasks,
+                                updates statuses, and ensures prompt handling.</p>
+                            <p class="card-text">• <strong>Messenger:</strong> Responsible for executing courier-like
+                                logistics tasks and delivering messages or items.</p>
+                            <p class="card-text">• <strong>Driver:</strong> Handles transportation requests by allocating
+                                and operating vehicles as needed.</p>
+                            <p class="card-text">• <strong>Super Admin:</strong> Holds full system control—configuring
+                                settings, managing users and roles, and auditing all operations.</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @if (in_array(2, $roles) || in_array(3, $roles) || in_array(7, $roles))
             <div class="row g-4">
                 <!-- Pending Requests -->
                 <div class="col-md-3">

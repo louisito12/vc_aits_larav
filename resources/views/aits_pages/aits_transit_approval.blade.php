@@ -110,11 +110,13 @@
                                         <th>Departure Date</th>
                                         <th>Appointment Date</th>
                                         <th>Pick Up Date</th>
-                                        <th>Distanation</th>
+                                        <th>Destination</th>
                                         <th>Requested By</th>
                                         <th>Type</th>
                                         <th>OB File</th>
                                         <th>Status</th>
+                                        <th>Driver</th>
+                                        <th>Vehicle</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -256,7 +258,7 @@
                             <select name="" class="form-control" id="driver_id">
                                 <option value="">Select Driver</option>
                                 @foreach ($driver as $drivers)
-                                    <option value="{{ $drivers->id }}">{{ $drivers->fname }} {{ $drivers->lname }}
+                                    <option value="{{ $drivers->cen_user_id }}">{{ $drivers->fname }} {{ $drivers->lname }}
                                     </option>
                                 @endforeach
                             </select>
@@ -429,7 +431,13 @@
                         data: "status_html"
                     },
 
+                    {
+                        data: "driver"
+                    },
 
+                    {
+                        data: "vehicle"
+                    },
 
                     {
                         data: "admin_action"

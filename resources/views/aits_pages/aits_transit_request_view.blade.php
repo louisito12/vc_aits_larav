@@ -44,11 +44,14 @@
                                         <th>Departure Date</th>
                                         <th>Appointment Date</th>
                                         <th>Pick Up Date</th>
-                                        <th>Distanation</th>
+                                        <th>Destination</th>
                                         <th>Requested By</th>
                                         <th>Type</th>
                                         <th>OB File</th>
                                         <th>Status</th>
+                                        <th>Driver</th>
+                                        <th>Vehicle</th>
+
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -122,13 +125,19 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>Client Name</label>
                             <input type="text" id="client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>Number of Passengers</label>
                             <input type="number" id="number_pass" min="1" class="form-control spec_input">
+                        </div>
+
+
+                        <div class="col-2">
+                            <label>Estimated Contract Value</label>
+                            <input type="text" id="ecv" class="form-control spec_input">
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
@@ -225,14 +234,19 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>Client Name</label>
                             <input type="text" id="edit_client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <label>Number of Passengers</label>
                             <input type="number" id="edit_passenger_number" min="1"
                                 class="form-control spec_input">
+                        </div>
+
+                        <div class="col-2">
+                            <label>Estimated Contract Value</label>
+                            <input type="text" id="edit_ecv" class="form-control spec_input">
                         </div>
                         <div class="col-3">
                             <label>Manager</label>
@@ -397,6 +411,7 @@
                             $('#edit_client_name').val(e['data']['client_name']);
                             $('#edit_passenger_number').val(e['data']['passenger_number']);
                             $('#edit_manager_id').val(e['data']['manager_id']);
+                            $('#edit_ecv').val(e['data']['ecv'] ? e['data']['ecv'] : '');
                         }
 
                         if (procedure == "show_data") {
@@ -489,6 +504,12 @@
                     {
                         data: "status_html"
                     },
+                    {
+                        data: "driver"
+                    },
+                    {
+                        data: "vehicle"
+                    },
 
 
 
@@ -515,6 +536,7 @@
                 const manager_app = $('#manager_app').val();
                 const ob_form_file = $('#ob_form_file')[0].files[0];
                 const add_shuttle_data = new FormData();
+                const ecv = $('#ecv').val();
                 if (ob_form_file == undefined) {
                     alertify.error('<span style="color: white;">OB form file is required</span>');
                     return;
@@ -531,6 +553,7 @@
                 add_shuttle_data.append('destination', destination);
                 add_shuttle_data.append('remarks', remarks);
                 add_shuttle_data.append('file[]', ob_form_file);
+                add_shuttle_data.append('ecv', ecv);
 
                 $.ajax({
                     url: "{{ route('aits_save_shuttle_request') }}",
@@ -564,6 +587,7 @@
                         $('#number_pass').val('');
                         $('#manager_app').val('');
                         $('#ob_form_file').val('');
+                        $('#ecv').val('');
                         $('#add_transit_room').modal('hide');
                         $('#tbl_transit').DataTable().ajax.reload();
                         Swal.fire('Success!', 'Your request has been successfully added.',
@@ -715,7 +739,7 @@
                 const edit_passenger_number = $('#edit_passenger_number').val();
                 const edit_manager_id = $('#edit_manager_id').val();
                 const edit_ob_form = $('#edit_ob_form')[0].files[0];
-
+                const edit_ecv = $('#edit_ecv').val();
                 const edit_shuttle_data = new FormData();
 
 
@@ -731,6 +755,7 @@
                 edit_shuttle_data.append('client_name', edit_client_name);
                 edit_shuttle_data.append('passenger_number', edit_passenger_number);
                 edit_shuttle_data.append('manager_id', edit_manager_id);
+                edit_shuttle_data.append('ecv', edit_ecv);
 
                 // Append the file if it exists
                 if (edit_ob_form) {

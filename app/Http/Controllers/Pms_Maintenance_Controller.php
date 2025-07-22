@@ -169,6 +169,18 @@ class Pms_Maintenance_Controller extends Controller
             $start_date = next_date_pms($request->date_start, $request->pms_date_types);
             $this->insert_pms_alert($pms_id, $request->date_start);
 
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Request Room Module',
+                'description' => 'Add PMS',
+                'table_name' => 'Pms_Details',
+                'transact_id' => $pms_id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
             return response()->json([
                 'msg' => 'Successfully Inserted PMS',
                 'status' => 200,
@@ -214,8 +226,8 @@ class Pms_Maintenance_Controller extends Controller
                 }
                 return '
                     <center>
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
-                    <button type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>'
+                    <button title="Edit" type="button" data-id=' . $data->id . ' class="btn btn-primary btn-sm btn_edit spec_input"><i class="bi bi-pencil"></i></button> 
+                    <button title="Delete"  type="button" data-id=' . $data->id . ' class="btn btn-danger btn-sm btn_delete spec_input"><i class="bi bi-trash"></i></button>'
                     . $pms_button .
                     ' </center> ';
             })
@@ -640,6 +652,18 @@ class Pms_Maintenance_Controller extends Controller
             $start_date = next_date_pms($request->date_start, $request->pms_date_types);
             $this->insert_pms_alert($request->id, $request->date_start);
 
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'PMS Management',
+                'description' => 'Edit Request',
+                'table_name' => 'Pms_Details',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
             return response()->json([
                 'msg' => 'Successfully Updated PMS',
                 'status' => 200,
@@ -665,6 +689,16 @@ class Pms_Maintenance_Controller extends Controller
             ]);
 
             PmsFiles::where('pms_id', $id)->update(['status' => 0]);
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'PMS Management',
+                'description' => 'Delete Request',
+                'table_name' => 'Pms_Details',
+                'transact_id' => $id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
 
         } catch (\Exception $e) {
             return response()->json([

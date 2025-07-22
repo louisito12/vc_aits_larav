@@ -219,6 +219,10 @@ Route::controller(PdfController::class)->group(function () {
     Route::get('oximeter_pdf_view', 'oximeter_pdf_view')->name('oximeter_pdf_view');
 });
 
+
+Route::controller(DriverController::class)->group(function () {
+    Route::get('/driver_data', 'driver_data')->name('driver_data');
+});
 //pages authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('aits_dashboard', [LoginController::class, 'aits_dashboard'])->name('aits_dashboard');
@@ -261,6 +265,20 @@ Route::Get('test_time', function () {
     }
     return 'Sige';
 });
+
+// Route::Get('test_data', function () {
+//     $now = Carbon::now();
+//     $date_pick_up = $formatted = Carbon::parse('2025-07-22 12:00:00.000', 'Asia/Manila')->format('Y-m-d H:i:s.u');
+
+
+//     if ($now > $date_pick_up) {
+//         return 'Wag';
+//     }
+
+//     return 'Sige lang';
+
+
+// });
 
 
 

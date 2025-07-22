@@ -72,7 +72,7 @@
                                         <tr>
                                             <th class="text-center">PMS Name</th>
                                             <th class="text-center">PMS Description</th>
-                                            <th class="text-center">PMS Scheudle</th>
+                                            <th class="text-center">PMS Schedule</th>
                                             <th class="text-center">PMS Start</th>
                                             <th class="text-center">Conducted By</th>
                                             <th class="text-center">Noted By</th>

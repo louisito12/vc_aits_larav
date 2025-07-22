@@ -340,6 +340,37 @@
 
                 @endif
 
+                @if (in_array(7, $roles))
+                    <br>
+                    <!-- Messenger Side -->
+                    <li class="slide has-sub {{ in_array(true, $driver_page) ? 'open' : '' }}">
+                        <a href="javascript:void(0);"
+                            class="side-menu__item {{ in_array(true, $driver_page) ? 'active' : '' }}">
+                            <i style="width: 30px;" class="fa-solid fa-truck-pickup"></i>
+                            <span class="side-menu__label">My Itenerary</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                            <li class="slide side-menu__label1 ">
+                                <a href="javascript:void(0);">My Itenerary</a>
+                            </li>
+                            <li class="slide">
+                                <a href="{{ route('driver_view') }}"
+                                    class="side-menu__item {{ Request::is('driver_view') ? 'active' : '' }}">
+                                    My Itenerary</a>
+                            </li>
+
+
+
+
+
+
+
+                        </ul>
+                    </li>
+                @endif
+
+
 
 
                 <!-- Start::slide -->
