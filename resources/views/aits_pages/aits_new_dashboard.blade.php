@@ -72,7 +72,7 @@
 
 
 
-        @if (in_array(2, $roles) || in_array(3, $roles) || in_array(7, $roles))
+        @if (in_array(2, $roles) || in_array(3, $roles))
             <div class="row g-4">
                 <!-- Pending Requests -->
                 <div class="col-md-3">

@@ -148,6 +148,18 @@ class AitsTransitApproval extends Controller
                 'date_created' => Carbon::now(),
                 'remarks' => $request->remarks,
             ]);
+            //driver remarks
+
+            AitsNotif::create([
+                'aits_table' => "aits_shuttle_requests",
+                'aits_id' => $request->id,
+                'aits_process' => 'Approve',
+                'send_to_user_id' => $request->driver_id,
+                'date_created' => Carbon::now(),
+                'remarks' => $request->driver_remarks,
+                'is_driver' => 1,
+
+            ]);
 
 
 

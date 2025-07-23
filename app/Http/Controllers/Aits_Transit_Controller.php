@@ -331,6 +331,23 @@ class Aits_Transit_Controller extends Controller
 
                 return date_converter($data->departure_date);
             })
+            ->addColumn('driver_action', function ($data) {
+                // $upload_validation = 
+
+                return '
+                    <div  class="btn-group dropstart input_spec my-1">
+                        <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item btn_upload"  data-id="' . $data->id . '" href="javascript:void(0);">Upload</a></li>
+                            <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+                        </ul>
+                    </div>
+                ';
+
+            })
             ->addColumn('request_no', function ($data) {
                 $number = $data->request_no;
                 $request_number = sprintf('%03d', $number);
@@ -423,7 +440,7 @@ class Aits_Transit_Controller extends Controller
                     </div>
                 ';
             })
-            ->rawColumns(['action', 'status_html', 'action_file', 'admin_action'])
+            ->rawColumns(['action', 'status_html', 'action_file', 'admin_action', 'driver_action'])
             ->make(true);
     }
 
@@ -454,7 +471,7 @@ class Aits_Transit_Controller extends Controller
         try {
 
             $data = AitsShuttleRequest::
-                with(['get_event_data', 'get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data'])
+                with(['get_event_data', 'get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data', 'get_car_data', 'get_driver_data', 'get_app_remarks'])
                 ->find($id);
 
             $number = $data->request_no;
@@ -561,6 +578,16 @@ class Aits_Transit_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
+
+
+            AitsNotif::create([
+                'aits_table' => "aits_shuttle_requests",
+                'aits_id' => $id,
+                'aits_process' => 'Cancell_request',
+                'cancelled_by' => Auth::user()->id,
+                'date_created' => Carbon::now(),
+                'remarks' => $remarks,
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([

@@ -554,9 +554,10 @@
                         if (e['data']['request_status'] == 'Delivered') {
                             $('#row_messenger').removeClass('d-none');
                             $('#messenger_file').html('<a href="' + e['data'][
-                                'messenger_file'] + '" target="_blank">' + e['data'][
-                                    'file_name'
-                                ] + '</a>');
+                                'messenger_file'
+                            ] + '" target="_blank">' + e['data'][
+                                'file_name'
+                            ] + '</a>');
                             $('#mess_remarks').val(e['data']['messenger_remarks']);
                             $('#status_logs').val('Delivered');
                         }
@@ -571,7 +572,7 @@
 
 
 
-                        if (e['data']['status'] == 0) {
+                        if (e['data']['request_status'] == 'Cancelled') {
                             $('#status_logs').val('Cancelled');
                         }
 

@@ -601,9 +601,10 @@
                         if (e['data']['request_status'] == 'Delivered') {
                             $('#row_messenger').removeClass('d-none');
                             $('#messenger_file').html('<a href="' + e['data'][
-                                'messenger_file'] + '" target="_blank">' + e['data'][
-                                    'file_name'
-                                ] + '</a>');
+                                'messenger_file'
+                            ] + '" target="_blank">' + e['data'][
+                                'file_name'
+                            ] + '</a>');
                             $('#mess_remarks').val(e['data']['messenger_remarks']);
                         }
 
@@ -612,6 +613,11 @@
                             $('#reschedule_remarks').val(e['data']['messenger_remarks'] || '');
                             $('#date_rescheduled').val(e['data']['procedure_date'] || '');
                         }
+
+                        if (e['data']['request_status'] == 'Cancelled') {
+                            $('#stat_logs').val('Cancelled');
+                        }
+
 
 
 

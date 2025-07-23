@@ -81,7 +81,7 @@ class TransactJobs implements ShouldQueue
                     }
                 }
             }
-        
+
 
 
 
@@ -118,6 +118,18 @@ class TransactJobs implements ShouldQueue
                     if ($req->aits_process == "Disapproved") {
                         $status = 'the Request is Disapproved';
                     }
+                    $is_cancel = 0;
+                    $cancel_rem = "";
+                    $cancel_by_name = "";
+                    if ($req->aits_process == "Cancell_request") {
+                        $status = "Request is Cancelled";
+                        $is_cancel = 1;
+                        $cancel_by = get_person_fname($req->cancelled_by);
+
+                        $cancel_by_name = $cancel_by['firstname'] . ' ' . $cancel_by['lastname'];
+                        $cancel_rem = $req->remarks;
+
+                    }
 
 
                     $data_req = [
@@ -129,6 +141,9 @@ class TransactJobs implements ShouldQueue
                         'schedule_to' => $date_to,
                         'process' => $status,
                         "trans_process" => 1,
+                        "is_cancel" => $is_cancel,
+                        'cancel_by' => $cancel_by_name,
+                        'cancel_remarks' => $cancel_rem,
 
                     ];
                     Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($data_req));
@@ -151,10 +166,7 @@ class TransactJobs implements ShouldQueue
             $transit_data = [];
 
             foreach ($transit as $transits) {
-
-
-
-                $transit_data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data'])
+                $transit_data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data', 'get_car_data', 'get_driver_data'])
                     ->where('id', $transits->aits_id)->first();
                 if ($transit_data) {
                     $number = $transit_data->request_no;
@@ -166,13 +178,42 @@ class TransactJobs implements ShouldQueue
                         $status = 'For Approval';
                     }
 
+                    $driver = "";
+                    $vehicle = "";
+                    $app_remarks = "";
+                    $is_approve = 0;
                     if ($transits->aits_process == "Approve") {
                         $status = 'Request is Approved';
+                        $driver_data = get_person_fname($transit_data->driver_id);
+                        $driver = $driver_data['firstname'] . ' ' . $driver_data['lastname'];
+                        $vehicle = $transit_data['get_car_data']['plate_number'];
+                        $is_approve = 1;
+                        $app_remarks = $transits->remarks;
                     }
 
                     if ($transits->aits_process == "Disapprove") {
                         $status = 'Request is Disapproved';
                     }
+
+                    // if ($transit->ats_process == "Approve_driver") {
+                    //     $status = 'Email for Driver';
+                    // }
+
+                    $is_cancel = 0;
+                    $cancel_rem = "";
+                    $cancel_by_name = "";
+                    if ($transits->aits_process == "Cancell_request") {
+                        $status = "Request is Cancelled";
+                        $is_cancel = 1;
+                        $cancel_by = get_person_fname($transits->cancelled_by);
+                        $cancel_by_name = $cancel_by['firstname'] . ' ' . $cancel_by['lastname'];
+                        $cancel_rem = $transits->remarks;
+                    }
+
+
+
+
+
 
                     $transit_data = [
                         'requestor' => $transit_data['get_requestor_data']['firstname'] . ' ' . $transit_data['get_requestor_data']['lastname'],
@@ -184,6 +225,13 @@ class TransactJobs implements ShouldQueue
                         'client_name' => $transit_data->client_name,
                         'status' => $status,
                         "trans_process" => 2,
+                        "is_cancel" => $is_cancel,
+                        'cancel_by' => $cancel_by_name,
+                        'cancel_remarks' => $cancel_rem,
+                        'driver' => $driver,
+                        'vehicle' => $vehicle,
+                        'is_approve' => $is_approve,
+                        'app_remarks' => $app_remarks,
                     ];
 
                     Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($transit_data));
@@ -237,6 +285,19 @@ class TransactJobs implements ShouldQueue
                     if ($email_logistic->aits_process == 'Reschedule messenger') {
                         $process = $stat . ' ' . 'is rescheduled';
                     }
+                    $is_cancel = 0;
+                    $cancel_rem = "";
+                    $cancel_by_name = "";
+                    if ($email_logistic->aits_process == "Cancell_request") {
+                        $process = "Request is Cancelled";
+                        $is_cancel = 1;
+                        $cancel_by = get_person_fname($email_logistic->cancelled_by);
+
+                        $cancel_by_name = $cancel_by['firstname'] . ' ' . $cancel_by['lastname'];
+                        $cancel_rem = $email_logistic->remarks;
+                    }
+
+
                     $logistic_data = [
                         'requestor' => $data_log['get_requestor_fullname']['firstname'] . ' ' . $data_log['get_requestor_fullname']['lastname'],
                         'request_number' => $req_number,
@@ -249,6 +310,9 @@ class TransactJobs implements ShouldQueue
                         "trans_process" => 3,
                         'process' => $process,
                         "subject" => $subject,
+                        "is_cancel" => $is_cancel,
+                        'cancel_by' => $cancel_by_name,
+                        'cancel_remarks' => $cancel_rem,
                     ];
 
 

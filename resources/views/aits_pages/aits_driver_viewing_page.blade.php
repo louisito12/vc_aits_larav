@@ -124,7 +124,7 @@
 
 
                     {
-                        data: "action"
+                        data: "driver_action"
                     },
                 ]
             }
@@ -144,6 +144,14 @@
 
                 columns: get_columns(),
 
+            });
+
+            $(document).on('click', '.btn_upload', function() {
+                var id = $(this).data('id');
+                alert(id);
+
+                // $('#upload_file_modal').modal('show');
+                // $('#upload_file_id').val(id);
             });
         })
     </script>

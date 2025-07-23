@@ -456,6 +456,18 @@ class Aits_Delivery_Controller extends Controller
             'date_created' => Carbon::now(),
         ];
 
+
+
+        AitsNotif::create([
+            'aits_table' => "aits_deliveries",
+            'aits_id' => $id,
+            'aits_process' => 'Cancell_request',
+            'cancelled_by' => Auth::user()->id,
+            'date_created' => Carbon::now(),
+            'remarks' => $remarks,
+        ]);
+
+
         insert_audit($object);
 
     }

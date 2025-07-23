@@ -18,7 +18,33 @@ class DriverController extends Controller
 
     public function driver_view()
     {
-        return view('aits_pages.aits_driver_viewing_page');
+
+
+        $vehicle = AitsVehicleModel::where('status', 1)
+            ->where('expiry_date', '>=', Carbon::now())
+            ->get();
+        $type = AitsShuttleType::where('status', 1)->get();
+        // $manager = DB::connection('main_user')
+        //     ->table('tbl_personal_datas')
+        //     ->where('poslevel_id', 1003)
+        //     ->orderBy('firstname','asc')
+        //     ->get();
+
+        $manager_sql = "
+        SELECT users.id as user_id,tbl_personal_datas.firstname,tbl_personal_datas.lastname FROM users 
+        LEFT JOIN tbl_personal_datas  ON users.id = tbl_personal_datas.user_id
+        WHERE tbl_personal_datas.poslevel_id = 1003 AND users.isactive= 1
+        ORDER BY  tbl_personal_datas.firstname ASC";
+
+
+        $manager = DB::connection('main_user')->select(
+            $manager_sql,
+            []
+        );
+
+
+
+        return view('aits_pages.aits_driver_viewing_page', compact('vehicle', 'type', 'manager'));
     }
 
 
@@ -39,7 +65,9 @@ class DriverController extends Controller
     public function upload_driver(Request $request)
     {
         try {
-            $this->uploade_file_transit($request->id, "driver_file", 'driver_file', $request->file('file'));
+
+            $transit_cotroller = new Aits_Transit_Controller();
+            $transit_cotroller->uploade_file_transit($request->id, "driver_file", 'driver_file', $request->file('file'));
 
         } catch (\Exception $e) {
             return response()->json([

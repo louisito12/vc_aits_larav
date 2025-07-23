@@ -48,6 +48,7 @@
                                         <th>Requested By</th>
                                         <th>Type</th>
                                         <th>OB File</th>
+                                        <th>ECV</th>
                                         <th>Status</th>
                                         <th>Driver</th>
                                         <th>Vehicle</th>
@@ -372,6 +373,25 @@
 
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Driver</label>
+                            <input type="text" disabled class="form-control spec_input" id="show_driver">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Vehicle</label>
+                            <input type="text" disabled class="form-control spec_input" id="show_vehicle">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Approve Remarks</label>
+                            {{-- <input type="text" disabled class="form-control spec_input" id="app_remarks"> --}}
+
+                            <textarea disabled name="" class="form-control spec_input" id="app_remarks"></textarea>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -445,6 +465,27 @@
                                     ]['firstname'] +
                                     ' ' + e['data']['get_approver_data']['lastname'] : '');
                                 $('#show_approve_date').val(e['data']['date_approved']);
+
+                                $('#show_driver').val(
+                                    e['data']['get_driver_data'] ?
+                                    e['data']['get_driver_data']['fname'] + ' ' +
+                                    e['data']['get_driver_data']['lname'] :
+                                    ''
+                                );
+
+                                $('#show_vehicle').val(e['data']['get_car_data'] ? e['data'][
+                                    'get_car_data'
+                                ]['plate_number'] : '');
+
+
+                                $('#app_remarks').val(
+                                    e['data']['get_app_remarks'] ? e['data']['get_app_remarks'][
+                                        'remarks'
+                                    ] :
+                                    ''
+                                );
+
+
                             }
 
 
@@ -493,6 +534,16 @@
                     },
                     {
                         data: "action_file",
+                        // createdCell: function (td, cellData, rowData, row, col) {
+                        //     $(td).css({
+                        //         'max-width': '1000px',
+                        //         'white-space': 'pre-wrap',
+                        //         'text-align': 'center',
+                        //     });
+                        // },
+                    },
+                    {
+                        data: "ecv",
                         // createdCell: function (td, cellData, rowData, row, col) {
                         //     $(td).css({
                         //         'max-width': '1000px',

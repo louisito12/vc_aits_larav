@@ -61,4 +61,10 @@ class AitsShuttleRequest extends Model
     }
 
 
+    public function get_app_remarks()
+    {
+        return $this->hasOne(AitsProcessRemarks::class, 'attachment_id', 'id')->where('procedures', 'Approve- Shuttle Request');
+
+    }
+
 }

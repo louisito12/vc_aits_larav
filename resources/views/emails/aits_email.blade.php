@@ -120,7 +120,7 @@
             </b>
             <br>
 
-            @if($mail_data['trans_process'] == 1)
+            @if ($mail_data['trans_process'] == 1)
                 <table>
                     <tbody>
                         <tr>
@@ -151,7 +151,7 @@
                 </table>
             @endif
 
-            @if($mail_data['trans_process'] == 2)
+            @if ($mail_data['trans_process'] == 2)
                 <table>
                     <tbody>
                         <tr>
@@ -182,12 +182,31 @@
                             <th>Request for</th>
                             <td>{{ $mail_data['status'] }}</td>
                         </tr>
+
+                        @if ($mail_data['is_approve'] == 1)
+                            <tr>
+                                <th>Driver</th>
+                                <td>{{ $mail_data['driver'] }}</td>
+                            </tr>
+                            <tr>
+                                <th>Vehicle</th>
+                                <td>{{ $mail_data['vehicle'] }}</td>
+                            </tr>
+                            <tr>
+                                <th>Remarks</th>
+                                <td>{{ $mail_data['app_remarks'] }}</td>
+                            </tr>
+                        @endif
+
+
+
+                   
+
                     </tbody>
                 </table>
-
             @endif
 
-            @if($mail_data['trans_process'] == 3)
+            @if ($mail_data['trans_process'] == 3)
                 <table>
                     <tbody>
                         <tr>
@@ -229,9 +248,25 @@
                         </tr>
                     </tbody>
                 </table>
-
             @endif
-            <br><br><br>
+            <br><br>
+
+            @if ($mail_data['is_cancel'] == 1)
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Cancelled By</th>
+                            <td>{{ $mail_data['cancel_by'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Cancel Remarks</th>
+                            <td>{{ $mail_data['cancel_remarks'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br><br>
+            @endif
 
             <p>If you have any questions, feel free to reach out to our support team.</p>
 

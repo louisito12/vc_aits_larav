@@ -304,7 +304,7 @@ class Aits_Request_Room_Controller extends Controller
                 $array = ['Pending'];
                 $hidden = (!in_array($data->request_status, $array)) ? 'hidden' : '';
                 // $hidden = ($data->request_status != 'Pending' || $data->data_request_status == 'Cancelled' || $data->data_request_status != 'Approved') ? 'hidden' : '';
-                $array_2 = ['Pending', 'Approved','Disapproved'];
+                $array_2 = ['Pending', 'Approved', 'Disapproved'];
                 $cancel_hidden = (!in_array($data->request_status, $array_2)) ? 'hidden' : '';
 
                 return '
@@ -316,7 +316,7 @@ class Aits_Request_Room_Controller extends Controller
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
                 <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
-             <li><a class="dropdown-item btn_delete" ' . $cancel_hidden  . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
+             <li><a class="dropdown-item btn_delete" ' . $cancel_hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
                 <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
             </ul></div>    ';
 
@@ -535,12 +535,12 @@ class Aits_Request_Room_Controller extends Controller
 
             $object = [
                 'attachment_id' => $id,
-                'remarks' => $remarks,
                 'procedures' => 'Cancel of Room Request',
                 'table_name' => 'aits_request_room_models',
                 'users_id' => Auth::user()->id,
                 'status' => 1,
                 'ate_created' => Carbon::now(),
+                'remarks' => $remarks,
 
             ];
             process_remarks($object);
@@ -567,6 +567,18 @@ class Aits_Request_Room_Controller extends Controller
 
 
             insert_audit($object);
+
+
+
+            AitsNotif::create([
+                'aits_table' => "aits_request_room_models",
+                'aits_id' => $id,
+                'aits_process' => 'Cancell_request',
+                'cancelled_by' => Auth::user()->id,
+                'date_created' => Carbon::now(),
+                'remarks' => $remarks,
+            ]);
+
 
         } catch (\Exception $e) {
             return response()->json([

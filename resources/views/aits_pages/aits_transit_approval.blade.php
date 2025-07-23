@@ -114,6 +114,7 @@
                                         <th>Requested By</th>
                                         <th>Type</th>
                                         <th>OB File</th>
+                                        <th>ECV</th>
                                         <th>Status</th>
                                         <th>Driver</th>
                                         <th>Vehicle</th>
@@ -284,6 +285,14 @@
                     </div>
                     <br>
 
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Driver Remarks</label>
+                            <textarea class="form-control" id="driver_remarks"></textarea>
+                        </div>
+                    </div>
+                    <br>
+
 
                     <div class="row">
                         <div class="col-6">
@@ -426,6 +435,10 @@
                         //         'text-align': 'center',
                         //     });
                         // },
+                    },
+                    {
+                        data: "ecv",
+
                     },
                     {
                         data: "status_html"
@@ -696,7 +709,9 @@
                 const approve_id_approve = $('#approve_id').val();
                 const approve_remarks = $('#remarks').val();
                 const spec_approval = $('#spec_approval').val();
-                if (car_id_approve == "" || driver_id_approve == "") {
+                const driver_remarks = $('#driver_remarks').val();
+                if (car_id_approve == "" || driver_id_approve == "" || driver_remarks == "" ||
+                    approve_remarks == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
                     return;
                 }
@@ -710,6 +725,7 @@
                         id: approve_id_approve,
                         remarks: approve_remarks,
                         spec_approval: spec_approval,
+                        driver_remarks: driver_remarks
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -733,6 +749,7 @@
                         $('#driver_id').val('');
                         $('#car_id').val('');
                         $('#remarks').val('');
+                        $('#driver_remarks').val('');
 
                     }
 
