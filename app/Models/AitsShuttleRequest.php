@@ -63,7 +63,7 @@ class AitsShuttleRequest extends Model
 
     public function get_app_remarks()
     {
-        return $this->hasOne(AitsProcessRemarks::class, 'attachment_id', 'id')->where('procedures', 'Approve- Shuttle Request');
+        return $this->hasOne(AitsProcessRemarks::class, 'attachment_id', 'id')->where('procedures', 'Approve- Shuttle Request')->where('table_name', 'aits_shuttle_requests');
 
     }
 

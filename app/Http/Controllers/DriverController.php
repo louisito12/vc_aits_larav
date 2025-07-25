@@ -62,12 +62,30 @@ class DriverController extends Controller
     }
 
 
-    public function upload_driver(Request $request)
+    public function driver_upload_remarks(Request $request)
     {
         try {
+            $driver_remarks = AitsShuttleRequest::where('id', $request->id)->update([
+                'driver_stamp' => Carbon::now(),
+                'driver_remarks' => $request->driver_remarks,
+            ]);
 
             $transit_cotroller = new Aits_Transit_Controller();
             $transit_cotroller->uploade_file_transit($request->id, "driver_file", 'driver_file', $request->file('file'));
+
+
+            $object = [
+                'user_id' => Auth::user()->id,
+                'page' => 'Driver page',
+                'description' => 'Upload a file',
+                'table_name' => 'aits_shuttle_requests',
+                'transact_id' => $request->id,
+                'status' => 1,
+                'date_created' => Carbon::now(),
+            ];
+            insert_audit($object);
+
+
 
         } catch (\Exception $e) {
             return response()->json([

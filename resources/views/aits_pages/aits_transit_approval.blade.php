@@ -139,7 +139,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title" id="view_data_header"> View Shuttle Request
+                    <h6 class="modal-title" id=""> View Vehicle Request
                     </h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -175,7 +175,6 @@
                         <div class="col-2 show_purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input disabled type="text" id="show_purpose" class="form-control spec_input">
-                            <input type="text" hidden id="spec_approval">
                         </div>
 
                     </div>
@@ -183,11 +182,11 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Destination</label>
-                            <textarea disabled class="form-control" name="" id="show_destination"></textarea>
+                            <textarea disabled class="form-control" id="show_destination"></textarea>
                         </div>
                         <div class="col-6">
                             <label>Remarks</label>
-                            <textarea disabled class="form-control" name="" id="show_remarks"></textarea>
+                            <textarea disabled class="form-control" id="show_remarks"></textarea>
                         </div>
                     </div>
                     <br><br>
@@ -208,12 +207,12 @@
                             <label>Requestor Name</label>
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
-
                         <div hidden class="col-3">
                             <label>OB Form</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>
                     </div>
+
                     <br>
                     <div class="row">
                         <div class="col-4">
@@ -231,6 +230,40 @@
 
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Driver</label>
+                            <input type="text" disabled class="form-control spec_input" id="show_driver">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Vehicle</label>
+                            <input type="text" disabled class="form-control spec_input" id="show_vehicle">
+                        </div>
+
+                        <div class="col-4">
+                            <label>Approve Remarks</label>
+                            {{-- <input type="text" disabled class="form-control spec_input" id="app_remarks"> --}}
+
+                            <textarea disabled name="" class="form-control spec_input" id="app_remarks"></textarea>
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <div class="row driver_row">
+                        <div class="col-6">
+                            <label>Driver Remarks</label>
+                            <textarea class="form-control spec_input" disabled id="driver_remarks"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <label>Driver File</label>
+                            <div id="driver_file">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -239,7 +272,6 @@
             </div>
         </div>
     </div>
-
 
 
 
@@ -288,7 +320,7 @@
                     <div class="row">
                         <div class="col-12">
                             <label>Driver Remarks</label>
-                            <textarea class="form-control" id="driver_remarks"></textarea>
+                            <textarea class="form-control" id="driver_remarks_text"></textarea>
                         </div>
                     </div>
                     <br>
@@ -619,7 +651,7 @@
 
 
             $(document).on('click', '.btn_show_data', function() {
-
+                $('.driver_row').attr('hidden', true);
                 $.ajax({
                     url: "retrieve_shuttle_request/" + $(this).data('id'),
                     type: "GET",
@@ -641,41 +673,60 @@
                         $('#show_remarks').val(e['data']['remarks']);
                         $('#show_client_name').val(e['data']['client_name']);
                         $('#show_passenger_number').val(e['data']['passenger_number']);
-                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
-                            ' ' + e['data']['get_manager_data']['lastname']);
-
+                        $('#show_manager_id').val(e['data']['manager_id']);
+                        $('#show_passenger_number').val(e['data']['passenger_number']);
                         $('#view_data_header').text('View Shuttle Request  #' + e['data'][
                             'request_number'
+                        ])
+                        $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
+                            ' ' + e['data']['get_requestor_data']['lastname']);
+                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
+                            ' ' +
+                            e['data']['get_manager_data']['lastname']);
+                        $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e[
+                            'data'][
+                            'request_status'
                         ]);
 
-                        $('#show_req_stats').val(e['data']['request_status']);
+                        if (e['data']['request_status'] != 'Cancelled') {
+                            $('#show_approver').val(e['data']['get_approver_data'] ? e['data'][
+                                    'get_approver_data'
+                                ]['firstname'] +
+                                ' ' + e['data']['get_approver_data']['lastname'] : '');
+                            $('#show_approve_date').val(e['data']['date_approved']);
+
+                            $('#show_driver').val(
+                                e['data']['get_driver_data'] ?
+                                e['data']['get_driver_data']['fname'] + ' ' +
+                                e['data']['get_driver_data']['lname'] :
+                                ''
+                            );
+
+                            $('#show_vehicle').val(e['data']['get_car_data'] ? e['data'][
+                                'get_car_data'
+                            ]['plate_number'] : '');
 
 
-                        if (e['data']['request_status'] == 'Cancelled') {
+                            $('#app_remarks').val(
+                                e['data']['get_app_remarks'] ? e['data']['get_app_remarks'][
+                                    'remarks'
+                                ] :
+                                ''
+                            );
 
-                        } else {
-                            if (e['data']['get_approver_data']) {
-                                $('#show_approver').val(e['data']['get_approver_data'][
-                                    'firstname'
-                                ] + ' ' + e['data']['get_approver_data'][
-                                    'lastname'
-                                ]);
-                                $('#show_approve_date').val(e['data']['date_approved'])
-                                $('#show_req_stats').val(e['data']['request_status'])
 
-                                $('#show_approver').val(e['data']['get_approver_data'] ? e[
-                                        'data'][
-                                        'get_approver_data'
-                                    ]['firstname'] +
-                                    ' ' + e['data']['get_approver_data']['lastname'] : '');
-                                $('#show_requestor').val(e['data']['get_requestor_data'][
-                                        'firstname'
-                                    ] +
-                                    ' ' + e['data']['get_requestor_data']['lastname']);
-                                $('#show_approve_date').val(e['data']['date_approved']);
+                            if (e['data']['driver_remarks']) {
+                                $('.driver_row').removeAttr('hidden');
+                                $('#driver_remarks').val(e['data']['driver_remarks'])
+
+                                $('#driver_file').html(e['data']['driver_file'] ? e['data'][
+                                    'driver_file'
+                                ] : '');
                             }
 
                         }
+
+
 
 
                     }
@@ -709,7 +760,7 @@
                 const approve_id_approve = $('#approve_id').val();
                 const approve_remarks = $('#remarks').val();
                 const spec_approval = $('#spec_approval').val();
-                const driver_remarks = $('#driver_remarks').val();
+                const driver_remarks = $('#driver_remarks_text').val();
                 if (car_id_approve == "" || driver_id_approve == "" || driver_remarks == "" ||
                     approve_remarks == "") {
                     alertify.error('<span style="color: white;"> All fileds is required </span>');
@@ -749,7 +800,7 @@
                         $('#driver_id').val('');
                         $('#car_id').val('');
                         $('#remarks').val('');
-                        $('#driver_remarks').val('');
+                        $('#driver_remarks_text').val('');
 
                     }
 

@@ -392,6 +392,21 @@
                             <textarea disabled name="" class="form-control spec_input" id="app_remarks"></textarea>
                         </div>
                     </div>
+
+                    <br><br>
+                    <div class="row driver_row">
+                        <div class="col-6">
+                            <label>Driver Remarks</label>
+                            <textarea class="form-control spec_input" disabled id="driver_remarks"></textarea>
+                        </div>
+
+                        <div class="col-6">
+                            <label>Driver File</label>
+                            <div id="driver_file">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -485,6 +500,15 @@
                                     ''
                                 );
 
+
+                                if (e['data']['driver_remarks']) {
+                                    $('.driver_row').removeAttr('hidden');
+                                    $('#driver_remarks').val(e['data']['driver_remarks'])
+
+                                    $('#driver_file').html(e['data']['driver_file'] ? e['data'][
+                                        'driver_file'
+                                    ] : '');
+                                }
 
                             }
 
@@ -588,7 +612,7 @@
                 const ob_form_file = $('#ob_form_file')[0].files[0];
                 const add_shuttle_data = new FormData();
                 const ecv = $('#ecv').val();
-                if (ob_form_file == undefined) {
+                if (ob_form_file == undefined || ob_form_file == null || ob_form_file == '') {
                     alertify.error('<span style="color: white;">OB form file is required</span>');
                     return;
                 }
@@ -676,7 +700,7 @@
             });
 
             $(document).on('click', '.btn_show_data', function() {
-
+                $('.driver_row').attr('hidden', true);
                 retrieve_shuttle($(this).data('id'), 'show_data')
 
             });

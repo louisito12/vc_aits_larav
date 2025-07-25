@@ -222,6 +222,7 @@ Route::controller(PdfController::class)->group(function () {
 
 Route::controller(DriverController::class)->group(function () {
     Route::get('/driver_data', 'driver_data')->name('driver_data');
+    Route::post('driver_upload_remarks', 'driver_upload_remarks')->name('driver_upload_remarks');
 });
 //pages authentication
 Route::middleware(['auth'])->group(function () {

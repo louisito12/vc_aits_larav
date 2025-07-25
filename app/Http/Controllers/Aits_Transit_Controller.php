@@ -287,7 +287,15 @@ class Aits_Transit_Controller extends Controller
                 "file_link" => url('/'),
                 "date_created" => Carbon::now()
             ]);
-            $item->move('aits_shuttle_file/' . $year . '/', $format_name . '.' . $ext);
+
+
+
+            if ($folder_name == 'driver_file') {
+                $item->move('driver_file/' . $year . '/', $format_name . '.' . $ext);
+
+            } else {
+                $item->move('aits_shuttle_file/' . $year . '/', $format_name . '.' . $ext);
+            }
         }
 
 
@@ -333,7 +341,24 @@ class Aits_Transit_Controller extends Controller
             })
             ->addColumn('driver_action', function ($data) {
                 // $upload_validation = 
-
+    
+                //       $data_file = AitsFileModel::where('table_name', 'AitsShuttleRequest')
+                //     ->where('status', 1)
+                //     ->where('attachment_id', $data->id)
+                //     ->first();
+                // $link = $data_file->file_link;
+                // $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
+                // $url = dynamic_file($path, $link);
+                // return '
+    
+                //    <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>
+    
+                //         ';
+    
+                $action = '<li><a class="dropdown-item btn_upload"  data-id="' . $data->id . '" href="javascript:void(0);">Upload</a></li>';
+                if ($data->driver_remarks) {
+                    $action = '';
+                }
                 return '
                     <div  class="btn-group dropstart input_spec my-1">
                         <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
@@ -341,7 +366,7 @@ class Aits_Transit_Controller extends Controller
                             Action
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item btn_upload"  data-id="' . $data->id . '" href="javascript:void(0);">Upload</a></li>
+                           ' . $action . '
                             <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
                         </ul>
                     </div>
@@ -470,9 +495,30 @@ class Aits_Transit_Controller extends Controller
 
         try {
 
+            $driver_file = '';
             $data = AitsShuttleRequest::
                 with(['get_event_data', 'get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data', 'get_car_data', 'get_driver_data', 'get_app_remarks'])
                 ->find($id);
+
+
+            $notif = AitsNotif::where('aits_id', $id)
+                ->where('aits_table', 'aits_shuttle_requests')
+                ->where('aits_process', 'Approve')
+                ->where('is_driver', 1)
+                ->first();
+
+            $data_file = AitsFileModel::where('table_name', 'driver_file')
+                ->where('status', 1)
+                ->where('attachment_id', $id)
+                ->first();
+            if ($data_file) {
+                $link = $data_file->file_link;
+                $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
+                $url = dynamic_file($path, $link);
+                $driver_file = '<a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
+            }
+
+            $driver_remarks = $notif ? $notif->remarks : '';
 
             $number = $data->request_no;
             $request_number = sprintf('%03d', $number);
@@ -482,6 +528,8 @@ class Aits_Transit_Controller extends Controller
             $data->pick_up_date = date_coverters_transit($data->pick_up_date);
             $data->date_approved = date_converter($data->date_approved);
             $data->request_number = $req_no;
+            $data->driver_app_remarks = $driver_remarks;
+            $data->driver_file = $driver_file;
 
             if ($data->type == null) {
                 $data->type == "remarks";
