@@ -267,6 +267,10 @@ Route::Get('test_time', function () {
     return 'Sige';
 });
 
+
+
+
+
 // Route::Get('test_data', function () {
 //     $now = Carbon::now();
 //     $date_pick_up = $formatted = Carbon::parse('2025-07-22 12:00:00.000', 'Asia/Manila')->format('Y-m-d H:i:s.u');
