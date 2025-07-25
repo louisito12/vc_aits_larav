@@ -63,7 +63,8 @@ class AitsTransitApproval extends Controller
         $filters_arr = [
             'all pending' => 'Pending',
             'all approved' => 'Approved',
-            'all disapproved' => 'Disapproved'
+            'all disapproved' => 'Disapproved',
+            'all cancelled' => 'Cancelled'
         ];
         $filters = 'Pending';
 

@@ -296,6 +296,21 @@
 
             $('#room_request_tbl').DataTable({
                 destroy: true,
+                dom: 'Bfrtip',
+                buttons: [
+
+                    'excel',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        text: 'PDF',
+                        title: 'Messenger Logistics Report',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
                 ajax: {
                     url: "{{ route('get_room_approval_data') }}",
                     type: "POST",
@@ -537,6 +552,21 @@
 
                 $('#room_request_tbl').DataTable({
                     destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+
+                        'excel',
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            text: 'PDF',
+                            title: 'Messenger Logistics Report',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        }
+                    ],
                     ajax: {
                         url: "{{ route('get_room_approval_data') }}",
                         type: "POST",

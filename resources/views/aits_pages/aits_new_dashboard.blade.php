@@ -259,7 +259,7 @@
         @if (in_array(4, $roles))
             <div class="row g-4">
                 <!-- Pending Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-warning shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-warning mb-4">
@@ -291,7 +291,7 @@
                 </div>
 
                 <!-- Total Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-primary shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-4">
@@ -320,7 +320,7 @@
                 </div>
 
                 <!-- Approved Requests -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-success shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-success mb-4">
@@ -351,6 +351,39 @@
                     </div>
                 </div>
 
+
+                <!--  Cancelled Request-->
+
+                <div class="col-md-3">
+                    <div class="card border-danger shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger mb-4">
+                                <i class="fa-solid fa-trash"></i> Cancelled Requests Messenger
+                            </h5>
+                            <div class="list-group">
+                                <a data-name="for_delivery" data-procedure="1" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics_mess">
+                                    For Delivery
+                                    <span class="badge bg-danger  delivery_mess_logistic4">0</span>
+                                </a>
+
+
+                                <a data-name="for_delivery" data-procedure="2" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics_mess">
+                                    For Collection
+                                    <span class="badge bg-danger collection_mess_logistic4">0</span>
+                                </a>
+
+                                <a data-name="for_delivery" data-procedure="3" data-id="4"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center btn_logistics_mess">
+                                    For Pick Up
+                                    <span class="badge bg-danger pickup_mess_logistic4">0</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     </div>
@@ -804,6 +837,9 @@
                                     pick_up_index_messenger]['On_going']);
                                 $('.pickup_mess_logistic3').text(logisticsRequests[
                                     pick_up_index_messenger]['Approved']);
+
+                                $('.pickup_mess_logistic4').text(logisticsRequests[
+                                    pick_up_index_messenger]['cancelled']);
 
                             }
 

@@ -422,6 +422,21 @@
                 destroy: true,
                 // scrollX: true,
                 // scrollY: 'calc(95vh / 2.5)',
+                dom: 'Bfrtip',
+                buttons: [
+
+                    'excel',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        text: 'PDF',
+                        title: 'Messenger Logistics Report',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
 
                 ajax: {
                     url: "{{ route('get_logistics_request') }}",
@@ -666,6 +681,21 @@
                 }
                 $('#deliver_tbl').DataTable({
                     destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+
+                        'excel',
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            text: 'PDF',
+                            title: 'Messenger Logistics Report',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        }
+                    ],
                     ajax: {
                         url: "{{ route('get_logistics_request') }}",
                         type: "POST",

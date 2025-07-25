@@ -193,6 +193,7 @@ class Aits_Dashboard extends Controller
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
               END AS procedure_status,SUM(CASE WHEN request_status NOT IN ('Delivered','Cancelled') AND  procedure_date < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS pending_counts,
 	          SUM (CASE WHEN request_status NOT IN ('Delivered','Cancelled') AND CONVERT(VARCHAR(10), procedure_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) On_going,
+                 SUM (CASE WHEN request_status='Cancelled' THEN 1 ELSE 0 END) cancelled,
 	          SUM(CASE WHEN request_status ='Delivered'  THEN 1 ELSE 0 END) Approved FROM aits_deliveries WHERE (is_transact = 1  AND status = 1) AND messenger_id=$user_id   GROUP BY procedures ";
 
 
@@ -286,6 +287,9 @@ class Aits_Dashboard extends Controller
         }
         if ($params == 3) {
             $data->where('request_status', 'Delivered')->where('messenger_id', Auth::user()->id);
+        }
+        if ($params == 4) {
+            $data->where('request_status', 'Cancelled')->where('messenger_id', Auth::user()->id);
         }
 
 

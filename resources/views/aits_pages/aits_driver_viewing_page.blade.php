@@ -368,6 +368,21 @@
                     },
 
                 },
+                dom: 'Bfrtip',
+                buttons: [
+
+                    'excel',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        text: 'PDF',
+                        title: 'Messenger Logistics Report',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
 
                 columns: get_columns(),
 
@@ -436,7 +451,6 @@
                             if (e['data']['driver_remarks']) {
                                 $('.driver_row').removeAttr('hidden');
                                 $('#driver_remarks').val(e['data']['driver_remarks'])
-
                                 $('#driver_file').html(e['data']['driver_file'] ? e['data'][
                                     'driver_file'
                                 ] : '');
@@ -444,13 +458,8 @@
 
                         }
 
-
-
-
                     }
                 })
-
-
 
 
 

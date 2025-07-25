@@ -60,7 +60,8 @@
                         <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All
                                 Disapproved</a>
                         </li>
-
+                        <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Cancelled</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -493,6 +494,21 @@
 
             $('#tbl_transit').DataTable({
                 destroy: true,
+                dom: 'Bfrtip',
+                buttons: [
+
+                    'excel',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        text: 'PDF',
+                        title: 'Messenger Logistics Report',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    }
+                ],
                 ajax: {
                     url: "{{ route('get_approval_transit') }}",
                     type: "POST",
@@ -502,7 +518,21 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    dom: 'Bfrtip',
+                    buttons: [
 
+                        'excel',
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            text: 'PDF',
+                            title: 'Messenger Logistics Report',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        }
+                    ]
                 },
 
                 columns: get_columns(),
@@ -822,7 +852,9 @@
 
             $('#filter_request').click(function() {
                 const filter_params = $('#filter_btn').text().toLowerCase();
-                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved'];
+                const filter_array = ['all', 'all pending', 'all approved', 'all disapproved',
+                    'all cancelled'
+                ];
 
                 const apt_date = $('#apt_date').val();
                 if (!filter_array.includes(filter_params)) {
@@ -834,6 +866,21 @@
 
                 $('#tbl_transit').DataTable({
                     destroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+
+                        'excel',
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            text: 'PDF',
+                            title: 'Messenger Logistics Report',
+                            exportOptions: {
+                                columns: ':visible'
+                            }
+                        }
+                    ],
                     ajax: {
                         url: "{{ route('get_approval_transit') }}",
                         type: "POST",
