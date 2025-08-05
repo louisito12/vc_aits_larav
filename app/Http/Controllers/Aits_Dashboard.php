@@ -32,7 +32,8 @@ class Aits_Dashboard extends Controller
             $data->where('request_by', Auth::user()->id);
         }
         if ($params == 1) {
-            $data->where('request_status', 'Pending');
+            $data->whereIn('request_status', ['Pending', 'Approved'])->where('date_to', '>', Carbon::now())
+                ->whereDate('date_to', '>', Carbon::today());
         }
         if ($params == 2 || $params == 3) {
             // $date_ex = '=';
@@ -75,7 +76,10 @@ class Aits_Dashboard extends Controller
             $data->where('user_id', Auth::user()->id);
         }
         if ($params == 1) {
-            $data->where('request_status', 'Pending');
+            $data->whereIn('request_status', ['Pending', 'Approved'])
+                ->where('pick_up_date', '>', Carbon::now())
+                ->whereDate('pick_up_date', '>', Carbon::today())
+                ->get();
         }
         if ($params == 2 || $params == 3) {
             $date_ex = $params == 3 ? '<' : '=';
@@ -125,7 +129,8 @@ class Aits_Dashboard extends Controller
 
 
             $now = Carbon::now();
-            $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+            $room_request = "SELECT SUM(CASE WHEN request_status IN ('Pending','Approved') AND (date_to >  '$now' AND  
+            CONVERT(VARCHAR(10), date_to, 23) > CONVERT(VARCHAR(10), GETDATE(), 23)) THEN 1 ELSE 0 END) AS pending_count,
             SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) AND date_to > '$now'
              THEN 1 ELSE 0 END) AS ongoing_count,
             SUM(CASE WHEN request_status = 'Approved' AND date_to < '$now' THEN 1 ELSE 0 END) AS completed_count,
@@ -133,9 +138,11 @@ class Aits_Dashboard extends Controller
             FROM aits_request_room_models  WHERE (is_transact = 1 AND status = 1) $room_request";
 
             $shuttle_request = "
-            SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
-            SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), appointment_date, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1 ELSE 0 END) AS ongoing_count,
-            SUM(CASE WHEN request_status = 'Approved' AND appointment_date  < CAST(GETDATE() AS DATE) THEN 1 ELSE 0 END) AS completed_count,
+            SELECT SUM(CASE WHEN request_status IN ('Pending','Approved') AND (pick_up_date >'$now' AND CONVERT(VARCHAR(10), pick_up_date, 23) > 
+            CONVERT(VARCHAR(10), GETDATE(), 23) )  THEN 1 ELSE 0 END) AS pending_count, 
+            SUM(CASE WHEN request_status = 'Approved' AND (CONVERT(VARCHAR(10), pick_up_date, 23) =
+            CONVERT(VARCHAR(10), GETDATE(), 23) AND pick_up_date >'$now') THEN 1 ELSE 0 END) AS ongoing_count,
+            SUM(CASE WHEN request_status = 'Approved' AND pick_up_date  < '$now' THEN 1 ELSE 0 END) AS completed_count,
             SUM(CASE WHEN request_status ='Cancelled' Then 1 ELSE 0 END) AS vehicle_cancelled
                         FROM aits_shuttle_requests WHERE (is_transact = 1  AND status = 1) $shuttle_request_id";
 

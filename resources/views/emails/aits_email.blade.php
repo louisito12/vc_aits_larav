@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@php
+    $is_cancel = 0;
+    if ($mail_data['is_cancel']) {
+        $is_cancel = 1;
+    }
+@endphp
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,7 +207,7 @@
 
 
 
-                   
+
 
                     </tbody>
                 </table>
@@ -251,6 +258,7 @@
             @endif
             <br><br>
 
+
             @if ($mail_data['is_cancel'] == 1)
                 <table>
                     <tbody>
@@ -267,6 +275,36 @@
 
                 <br><br>
             @endif
+
+
+
+            @if ($mail_data['trans_process'] == 10)
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Announcement</th>
+                            <td>{{ $mail_data['message'] }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date Start</th>
+                            <td>{{ $mail_data['date_from'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date End</th>
+                            <td>{{ $mail_data['date_to'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br><br>
+            @endif
+
+
+
+
+
+
 
             <p>If you have any questions, feel free to reach out to our support team.</p>
 

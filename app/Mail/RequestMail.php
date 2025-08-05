@@ -33,6 +33,9 @@ class RequestMail extends Mailable
         if ($this->record['trans_process'] == 3) {
             $subject = $this->record['subject'];
         }
+        if ($this->record['trans_process'] == 10) {
+            $subject = 'This is anouncement regarding Reqeust for Vehicles';
+        }
 
         $this->subject($subject)
             ->view('emails.testmail')

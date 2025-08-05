@@ -29,8 +29,7 @@
                         </li>
                         <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a>
                         </li>
-                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All
-                                Disapproved</a>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Disapproved</a>
                         <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Cancelled</a>
 
                         </li>
@@ -539,8 +538,10 @@
 
             $('#filter_request').click(function() {
                 const filter_params = $('#filter_btn').text().toLowerCase();
+
+                console.log(filter_params);
                 const filter_array = ['all', 'all pending', 'all approved', 'all disapproved',
-                    'all cancelled'
+                    'all cancelled', 
                 ];
 
                 if (!filter_array.includes(filter_params)) {

@@ -57,8 +57,7 @@
                         </li>
                         <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Approved</a>
                         </li>
-                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All
-                                Disapproved</a>
+                        <li><a class="dropdown-item filter_data" value="4" href="javascript:void(0);">All Disapproved</a>
                         </li>
                         <li><a class="dropdown-item filter_data" value="3" href="javascript:void(0);">All Cancelled</a>
                         </li>

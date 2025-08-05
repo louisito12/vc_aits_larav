@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AitsAssignAreaController;
-use App\Http\Controllers\DriverController;
-use App\Http\Controllers\PdfController;
 use Carbon\Carbon;
+use App\Mail\RequestMail;
 use App\Models\AitsDelivery;
 use App\Models\AitsRoleList;
+use App\Models\AitsRequestCloser;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Aits_Dashboard;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\AitsDeliveryApprove;
 use App\Http\Controllers\AitsTransitApproval;
 use App\Http\Controllers\Aits_User_Controller;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Aits_logistics_approval;
 use App\Http\Controllers\Aits_Transit_Controller;
 use App\Http\Controllers\PmsvalidationController;
 use App\Http\Controllers\Aits_Delivery_Controller;
+use App\Http\Controllers\AitsAssignAreaController;
 use App\Http\Controllers\Aits_Messenger_Controller;
 use App\Http\Controllers\Pms_Maintenance_Controller;
 use App\Http\Controllers\Aits_Request_Room_Controller;
@@ -125,7 +127,7 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
 Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::post('aits_save_delivery', 'aits_save_delivery')->name('aits_save_delivery');
     Route::get('show_delivery_request/{procedure}', 'show_delivery_request')->name('show_delivery_request');
-    Route::get('show_delivery_request', 'show_delivery_request')->name('show_delivery_request');
+
     Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
     Route::get('delete_delivery_request/{id}/{remarks}', 'delete_delivery_request')->name('delete_delivery_request');
     Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');

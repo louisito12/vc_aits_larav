@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\AitsRequestCloser;
 use App\Models\PmsFiles;
 use Carbon\Carbon;
 use App\Mail\PmsMailer;
@@ -130,13 +131,17 @@ class TransactJobs implements ShouldQueue
                         $cancel_rem = $req->remarks;
 
                     }
+                    $event_name = $aits_data->remarks;
+                    if ($aits_data->get_event_data) {
+                        $event_name = $aits_data->get_event_data->event;
+                    }
 
 
                     $data_req = [
                         'request_no' => $req_number,
                         'requestor' => $aits_data->get_requestor_data->firstname . ' ' . $aits_data->get_requestor_data->lastname,
                         'room_name' => $aits_data->get_room_data->room_name,
-                        'event_name' => $aits_data->get_event_data->event,
+                        'event_name' =>   $event_name,
                         'schedule_from' => $date_from,
                         'schedule_to' => $date_to,
                         'process' => $status,
@@ -146,7 +151,7 @@ class TransactJobs implements ShouldQueue
                         'cancel_remarks' => $cancel_rem,
 
                     ];
-                    Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($data_req));
+                    Mail::to(['johnpaultanion001@gmail.com', 'louisitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($data_req));
 
                     AitsNotif::where('id', $req->id)->update([
                         'notif' => 1,
@@ -234,7 +239,7 @@ class TransactJobs implements ShouldQueue
                         'app_remarks' => $app_remarks,
                     ];
 
-                    Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($transit_data));
+                    Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($transit_data));
                     AitsNotif::where('id', $transits->id)->update([
                         'notif' => 1,
                     ]);
@@ -316,7 +321,7 @@ class TransactJobs implements ShouldQueue
                     ];
 
 
-                    Mail::to('louie.ojide@valuecarehealth.com')->send(new RequestMail($logistic_data));
+                    Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($logistic_data));
                     AitsNotif::where('id', $email_logistic->id)->update([
                         'notif' => 1,
                     ]);
@@ -329,6 +334,90 @@ class TransactJobs implements ShouldQueue
 
 
 
+
+
+
+
+            $closer_data = AitsRequestCloser::where('status', 1)->first();
+
+            if ($closer_data) {
+                $date_end = $closer_data->date_end;
+                $date_now = carbon::now()->format('Y-m-d H:i:s.v');
+                $date_yes = Carbon::parse($date_end)->format('Y-m-d H:i:s.v');
+
+
+                $closer_id = $closer_data->id;
+                if ($closer_data->initial_notif == 0) {
+                    $value = 1;
+                    $message = 'Announcement that for Vehicle Request is Closed fo this time Frame.';
+                    $emailer_data = [
+                        'message' => $message,
+                        'date_from' => date_converter($closer_data->date_from),
+                        'date_to' => date_converter($closer_data->date_end),
+                        "trans_process" => 10,
+                        "is_cancel" => 0,
+
+                    ];
+
+
+
+                    AitsRequestCloser::where('id', $closer_id)->update([
+                        'initial_notif' => 1,
+                    ]);
+
+                    Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($emailer_data));
+
+                }
+
+                if ($closer_data->initial_notif == 1) {
+                    if ($date_now > $date_yes) {
+                        $message = 'Announcement that for Vehicle Reqeust is now Open For request.';
+                        $value = 1;
+
+                        $emailer_data = [
+                            'message' => $message,
+                            'date_from' => date_converter($closer_data->date_from),
+                            'date_to' => date_converter($closer_data->date_end),
+                            "trans_process" => 10,
+                            "is_cancel" => 0,
+
+                        ];
+
+                        AitsRequestCloser::where('id', $closer_id)->update([
+                            'status' => 0,
+                            'notif' => 1,
+                        ]);
+
+
+                        Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($emailer_data));
+
+
+
+                    }
+
+
+
+
+                }
+
+
+
+
+            }
+
+
+
+
+
+            // $closer_data = AitsRequestCloser::where('status', 1)->get();
+            // foreach ($closer_data as $closer_datas) {
+            //     //    "trans_process" => 10,
+            //     $emailer_data = [
+            //         'appointment_date' => date_converter($transit_data->appointment_date),
+            //         'date_requested' => date_converter($transit_data->date_created),.
+            //             "trans_process" => 10,
+            //     ];
+            // }
 
 
             sleep(120);
