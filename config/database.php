@@ -104,7 +104,7 @@ return [
             'prefix' => '',
         ],
 
-           'main_user' => [
+        'main_user' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST_Tickets', '192.170.11.58'),
             'port' => env('DB_PORT_Tickets', '1433'),
@@ -116,7 +116,7 @@ return [
         ],
 
 
-        
+
         'sqlsrv_secondary' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST_SECONDARY', '192.170.11.58'),
@@ -124,6 +124,17 @@ return [
             'database' => env('DB_DATABASE_SECONDARY', 'another_database'),
             'username' => env('DB_USERNAME_SECONDARY', 'another_user'),
             'password' => env('DB_PASSWORD_SECONDARY', 'another_password'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+        'manulife_conn' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST_MANULIFE', '192.170.11.58'),
+            'port' => env('DB_PORT_MANULIFE', '1433'),
+            'database' => env('DB_DATABASE_MANULIFE', 'another_database'),
+            'username' => env('DB_USERNAME_MANULIFE', 'another_user'),
+            'password' => env('DB_PASSWORD_MANULIFE', 'another_password'),
             'charset' => 'utf8',
             'prefix' => '',
         ],

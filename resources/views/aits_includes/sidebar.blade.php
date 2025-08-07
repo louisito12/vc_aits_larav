@@ -582,7 +582,8 @@
 
             <li class="slide">
                 <a href="{{ route('logout') }}"
-                    class="side-menu__item {{ Request::is('logout') ? 'active' : '' }} ">    <i style="width: 30px;" class="bx bx-log-out fs-18 me-2 op-7"></i>
+                    class="side-menu__item {{ Request::is('logout') ? 'active' : '' }} "> <i style="width: 30px;"
+                        class="bx bx-log-out fs-18 me-2 op-7"></i>
 
                     <span class="side-menu__label">Logout</span>
                     <!-- <span class="badge bg-success ms-auto menu-badge">1</span> -->

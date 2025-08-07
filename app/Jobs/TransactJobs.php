@@ -2,16 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\AitsRequestCloser;
-use App\Models\PmsFiles;
 use Carbon\Carbon;
 use App\Mail\PmsMailer;
+use App\Models\PmsFiles;
 use App\Mail\RequestMail;
 use App\Models\AitsNotif;
+use App\Mail\ManulifeMail;
 use App\Models\Pms_Details;
 use App\Models\AitsDelivery;
 use Illuminate\Bus\Queueable;
+use App\Models\AitsRequestCloser;
 use App\Models\AitsShuttleRequest;
+use Illuminate\Support\Facades\DB;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
@@ -141,7 +143,7 @@ class TransactJobs implements ShouldQueue
                         'request_no' => $req_number,
                         'requestor' => $aits_data->get_requestor_data->firstname . ' ' . $aits_data->get_requestor_data->lastname,
                         'room_name' => $aits_data->get_room_data->room_name,
-                        'event_name' =>   $event_name,
+                        'event_name' => $event_name,
                         'schedule_from' => $date_from,
                         'schedule_to' => $date_to,
                         'process' => $status,
@@ -418,6 +420,85 @@ class TransactJobs implements ShouldQueue
             //             "trans_process" => 10,
             //     ];
             // }
+
+
+
+            $manulife_emailers = DB::connection('manulife_conn')
+                ->table('loa_cancel_emailer')
+                ->where('notif', 0)->get();
+
+            foreach ($manulife_emailers as $manulife_emailer) {
+
+                $availment_type = "";
+                $send_to = ['louie.ojide@valuecarehealth.com'];
+                $get_request_data = DB::connection('manulife_conn')
+                    ->table('Manulife_Availment')
+                    ->where('Transaction_Code', $manulife_emailer->loa_id)->first();
+                $email_rec = 'no_email';
+                if ($get_request_data) {
+                    if ($get_request_data->member_email != null) {
+                        // $send_to[] = $get_request_data->member_email;
+                        $email_rec = $get_request_data->member_email;
+                    }
+
+
+                    $manulife_id = $get_request_data->HealthID;
+                    $requestor_name = '';
+                    $get_member_data = DB::connection('manulife_conn')
+                        ->table('Member_data')
+                        ->where(
+                            'HealthID',
+                            $manulife_id
+                        )->first();
+
+                    if ($get_member_data) {
+                        $requestor_name = $get_member_data->InsuredFirstName . ' ' . $get_member_data->InsuredLastName;
+                    }
+
+
+
+                    if ($get_request_data->Availment_type == 'EIP') {
+                        $availment_type = 'Elective - In Patient';
+                    }
+                    if ($get_request_data->Availment_type == 'OPS') {
+                        $availment_type = 'Elective - Special Procedure';
+                    }
+                    if ($get_request_data->Availment_type == 'OP') {
+                        $availment_type = 'Out Patient';
+                    }
+                    if ($get_request_data->Availment_type == 'ACU') {
+                        $availment_type = 'Out Patient';
+                    }
+
+                    $mailer_obs = [
+                        'loa_id' => $manulife_emailer->loa_id,
+                        'type_request' => $availment_type,
+                        'cancellation_date' => date_converter($manulife_emailer->date_created),
+                        'reason_cancellation' => $manulife_emailer->remarks,
+                        'requestor' => $requestor_name,
+                        'emailer' => $email_rec,
+
+                    ];
+
+                    $mail_manulife = Mail::to(['louie.ojide@valuecarehealth.com'])->send(new ManulifeMail($mailer_obs));
+                    if ($mail_manulife) {
+
+                        $update = DB::connection('manulife_conn')
+                            ->table('loa_cancel_emailer')
+                            ->where('id', $manulife_emailer->id)->update([
+                                    'notif' => 1,
+                                ]);
+
+
+                    }
+
+
+
+
+                }
+
+            }
+
 
 
             sleep(120);

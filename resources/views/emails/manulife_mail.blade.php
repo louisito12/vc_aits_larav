@@ -70,8 +70,8 @@
                                     call us</p>
 
                                 <div style="margin-top: 15px;">
-                                    <img src="aits_asset/assets/images/manulife_logs.png" alt="Company Logo"
-                                        style="width: 200px; height: auto; margin-bottom: 10px;" />
+                                    <img src="{{ $message->embed(public_path('aits_asset/assets/images/manulife_logs.png')) }}"
+                                        alt="Company Logo" style="width: 100px; height: auto; margin-bottom: 10px;" />
                                     <p style="margin: 0; font-size: 14px;">+632 8884 7000, Toll-free: 1-800-1-888-6268
                                     </p>
                                     <p style="margin: 0; font-size: 14px;">Main office: 10th Floor NEX Tower, 6786 Ayala

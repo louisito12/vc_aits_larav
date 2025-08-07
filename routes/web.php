@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\ManulifeMail;
 use Carbon\Carbon;
 use App\Mail\RequestMail;
 use App\Models\AitsDelivery;
@@ -100,6 +101,7 @@ Route::controller(Aits_Request_Room_approval_Controller::class)->group(function 
     Route::post('get_room_approval_data', 'get_room_approval_data')->name('get_room_approval_data');
     Route::get('approved_room_request/{id}/{approve}/{remarks}', 'approved_room_request')->name('approved_room_request');
 });
+
 
 
 Route::controller(Aits_Dashboard::class)->group(function () {

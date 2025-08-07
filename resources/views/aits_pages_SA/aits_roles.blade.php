@@ -3,14 +3,13 @@
 
 
 @section('content')
-
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Roles</h5>
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Pages</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                    <li class="breadcrumb-item active" aria-current="page">Roles </li>
                 </ol>
             </nav>
         </div>
@@ -90,21 +89,17 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#tbl_roles').DataTable({
                 ajax: {
                     url: "{{ route('roles_data') }}"
                 },
 
-                columns: [
-                    {
+                columns: [{
                         data: "role"
                     },
                     {
@@ -113,11 +108,11 @@
                 ]
             });
 
-            $('#add_request_btn').click(function () {
+            $('#add_request_btn').click(function() {
                 $('#add_roles_modal').modal('show');
             });
 
-            $('#save_roles_btn').click(function () {
+            $('#save_roles_btn').click(function() {
                 const roles = $('#roles').val();
                 if (roles == "") {
                     alertify.error('<span style="color: white;">Role Input is required</span>');
@@ -127,10 +122,11 @@
                 $.ajax({
                     url: "{{ route('save_roles') }}",
                     data: {
-                        roles, _token: "{{ csrf_token() }}"
+                        roles,
+                        _token: "{{ csrf_token() }}"
                     },
                     type: "POST",
-                    success: function (e) {
+                    success: function(e) {
                         $('#roles').val('');
                         $('#add_roles_modal').modal('hide');
                         $('#tbl_roles').DataTable().ajax.reload();
@@ -145,13 +141,13 @@
             })
 
 
-            $(document).on('click', '.btn_edit ', function () {
+            $(document).on('click', '.btn_edit ', function() {
                 $('#edit_roles').val($(this).data('role'))
                 $('#edit_id').val($(this).data('id'))
                 $('#edit_roles_modal').modal('show');
             });
 
-            $('#edit_roles_btn').click(function () {
+            $('#edit_roles_btn').click(function() {
                 const edit_id = $('#edit_id').val();
                 const edit_role = $('#edit_roles').val();
 
@@ -164,12 +160,13 @@
                     url: "{{ route('edit_roles') }}",
                     type: "POST",
                     data: {
-                        id: edit_id, role: edit_role,
+                        id: edit_id,
+                        role: edit_role,
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function (e) {
+                    success: function(e) {
                         $('#edit_roles_modal').modal('hide');
                         $('#tbl_roles').DataTable().ajax.reload();
                         Swal.fire({
@@ -181,7 +178,7 @@
                 })
             })
 
-            $(document).on('click', '.btn_delete', function () {
+            $(document).on('click', '.btn_delete', function() {
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -194,7 +191,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "role_delete/" + $(this).data('id'),
-                            success: function (e) {
+                            success: function(e) {
                                 $('#tbl_roles').DataTable().ajax.reload();
                                 Swal.fire({
                                     title: "Deleted!",
@@ -211,10 +208,9 @@
 
 
 
-            
+
 
 
         });
     </script>
-
 @endsection
