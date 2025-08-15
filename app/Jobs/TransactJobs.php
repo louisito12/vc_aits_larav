@@ -61,27 +61,44 @@ class TransactJobs implements ShouldQueue
                 ->where('notif', 0)
                 ->get();
             foreach ($pms_data as $pms_datas) {
-                $records = Pms_Details::where('status', 1)
+                $records = Pms_Details::with(['get_noted_by'])->where('status', 1)
                     ->where('pms_status', 'Approved')
                     ->where('id', $pms_datas->pms_id)
                     ->where('is_email', 1)
                     ->first();
                 $pms_start = $pms_datas->pms_date;
-                if ($pms_start < Carbon::now()) {
-                    if ($records) {
-
+                if ($records) {
+                    if ($records->pms_notif == 0) {
                         $data = [
                             'pms_name' => $records->pms_name,
                             'pms_description' => $records->pms_description,
                             'date_start' => date_converter_date($records->date_start),
                             'schedule' => ucfirst($records->pms_date_types),
+                            'noted_by' => $records['get_noted_by']['firstname'] . ' ' . $records['get_noted_by']['lastname'],
+                            'conducted_by' => $records['conducted_by'],
                         ];
-
                         Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
-                        PmsFiles::where('id', $pms_datas->id)->update(
-                            ['notif' => 1]
+                        Pms_Details::where('id', $pms_datas->pms_id)->update(
+                            ['pms_notif' => 1]
                         );
+                    } else {
+                        if ($pms_start < Carbon::now()) {
+                            $data = [
+                                'pms_name' => $records->pms_name,
+                                'pms_description' => $records->pms_description,
+                                'date_start' => date_converter_date($records->date_start),
+                                'schedule' => ucfirst($records->pms_date_types),
+                                'noted_by' => $records['get_noted_by']['firstname'] . ' ' . $records['get_noted_by']['lastname'],
+                                'conducted_by' => $records['conducted_by'],
+                            ];
+                            Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
+                            PmsFiles::where('id', $pms_datas->id)->update(
+                                ['notif' => 1]
+                            );
+                        }
                     }
+
+
                 }
             }
 

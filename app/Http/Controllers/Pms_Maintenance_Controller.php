@@ -161,7 +161,8 @@ class Pms_Maintenance_Controller extends Controller
                 'user_id' => Auth::user()->id,
                 'date_created' => Carbon::now(),
                 'send_to' => implode(',', $request->send_to),
-                'cc_to' => implode(',', $request->cc_to)
+                'cc_to' => implode(',', $request->cc_to),
+                'pms_notif' => 0,
             ]);
 
             $pms = Pms_Details::create($request->all());
@@ -644,7 +645,8 @@ class Pms_Maintenance_Controller extends Controller
 
             $request->merge([
                 'send_to' => implode(',', $request->send_to),
-                'cc_to' => implode(',', $request->cc_to)
+                'cc_to' => implode(',', $request->cc_to),
+                'pms_notif' => 0,
             ]);
 
 

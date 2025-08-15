@@ -18,8 +18,5 @@ class Pms_Details extends Model
     public function get_noted_by()
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'noted_by');
-
-
-
     }
 }

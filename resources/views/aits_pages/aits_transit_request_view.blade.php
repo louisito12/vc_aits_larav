@@ -531,6 +531,7 @@
                     url: "{{ route('get_shuttel_request_data') }}",
 
                 },
+   
                 dom: 'Bfrtip',
                 buttons: [
 
@@ -631,6 +632,15 @@
                     alertify.error('<span style="color: white;">OB form file is required</span>');
                     return;
                 }
+
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+                if (ob_form_file.size > maxSize) {
+                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
+                    return;
+                }
+
+
                 add_shuttle_data.append('departure_date', departure_date);
                 add_shuttle_data.append('appointment_date', appointment_date);
                 add_shuttle_data.append('pick_up_date', pickup_date);
@@ -849,9 +859,14 @@
 
                 // Append the file if it exists
                 if (edit_ob_form) {
+                    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                    if (edit_ob_form.size > maxSize) {
+                        alertify.error(
+                            '<span style="color: white;">OB form file must not exceed 5MB</span>');
+                        return;
+                    }
                     edit_shuttle_data.append('ob_form[]', edit_ob_form, edit_ob_form.name);
                 }
-
 
 
                 $.ajax({
@@ -872,21 +887,14 @@
                                 '</span>');
                             return;
                         }
-
                         $('#edit_shuttle_modal').modal('hide');
                         Swal.fire('Success!', 'Your request has been successfully Updated.',
                             'success');
                         $('#tbl_transit').DataTable().ajax.reload();
-
-
-
                     }
-                })
+                });
 
             });
-
-
-
 
         });
     </script>

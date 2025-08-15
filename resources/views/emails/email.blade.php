@@ -18,6 +18,7 @@
             background-color: #f4f4f4;
             padding: 20px;
         }
+
         .email-container {
             background-color: #ffffff;
             border-radius: 8px;
@@ -135,16 +136,21 @@
                         <th>PMS Schedule</th>
                         <td>{{ $mail_data['schedule'] }}</td>
                     </tr>
+                    <tr>
+                        <th>Noted By</th>
+                        <td>{{ $mail_data['noted_by'] }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Conducted By</th>
+                        <td>{{ $mail_data['conducted_by'] }}</td>
+                    </tr>
                 </tbody>
             </table>
-
             <p>If you have any questions, feel free to reach out to our support team.</p>
-
         </div>
-
         <div class="email-footer">
             <p>&copy; 2025 Valucare All rights reserved.</p>
-        
         </div>
     </div>
 

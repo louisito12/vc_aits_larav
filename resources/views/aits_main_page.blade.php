@@ -15,7 +15,7 @@
         position: relative !important;
         overflow: auto !important;
         width: 100% !important;
-       /*  max-height: calc(31.6667vh);
+        /*  max-height: calc(31.6667vh);
         height: calc(31.6667vh); */
     }
 
@@ -54,8 +54,8 @@
                         data-bs-target="#switcher-home" type="button" role="tab" aria-controls="switcher-home"
                         aria-selected="true">Theme Styles</button>
                     <button class="nav-link" id="switcher-profile-tab" data-bs-toggle="tab"
-                        data-bs-target="#switcher-profile" type="button" role="tab" aria-controls="switcher-profile"
-                        aria-selected="false">Theme Colors</button>
+                        data-bs-target="#switcher-profile" type="button" role="tab"
+                        aria-controls="switcher-profile" aria-selected="false">Theme Colors</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -376,9 +376,9 @@
                                         id="switcher-menu-primary">
                                 </div>
                                 <div class="form-check switch-select me-3">
-                                    <input class="form-check-input color-input color-gradient" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Gradient Menu" type="radio" name="menu-colors"
-                                        id="switcher-menu-gradient">
+                                    <input class="form-check-input color-input color-gradient"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Gradient Menu"
+                                        type="radio" name="menu-colors" id="switcher-menu-gradient">
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-transparent"
@@ -394,23 +394,23 @@
                             <div class="d-flex switcher-style pb-2">
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-white" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Light Header" type="radio" name="header-colors"
-                                        id="switcher-header-light" checked>
+                                        data-bs-placement="top" title="Light Header" type="radio"
+                                        name="header-colors" id="switcher-header-light" checked>
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-dark" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Dark Header" type="radio" name="header-colors"
-                                        id="switcher-header-dark">
+                                        data-bs-placement="top" title="Dark Header" type="radio"
+                                        name="header-colors" id="switcher-header-dark">
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-primary" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Color Header" type="radio" name="header-colors"
-                                        id="switcher-header-primary">
+                                        data-bs-placement="top" title="Color Header" type="radio"
+                                        name="header-colors" id="switcher-header-primary">
                                 </div>
                                 <div class="form-check switch-select me-3">
-                                    <input class="form-check-input color-input color-gradient" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Gradient Header" type="radio"
-                                        name="header-colors" id="switcher-header-gradient">
+                                    <input class="form-check-input color-input color-gradient"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Gradient Header"
+                                        type="radio" name="header-colors" id="switcher-header-gradient">
                                 </div>
                                 <div class="form-check switch-select me-3">
                                     <input class="form-check-input color-input color-transparent"
@@ -592,9 +592,10 @@
 
                     <div class="header-element Search-element d-block d-lg-none">
                         <!-- Start::header-link|dropdown-toggle -->
-                        <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside"
-                            data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="header-link-icon">
+                        <a href="javascript:void(0);" class="header-link dropdown-toggle"
+                            data-bs-auto-close="outside" data-bs-toggle="dropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                                class="header-link-icon">
                                 <path
                                     d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
                             </svg>
@@ -656,7 +657,8 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
 
                             </div>
                         </div>
@@ -699,19 +701,22 @@
     @endphp
 
     <script>
-        @if(in_array(5, $roles))
-            $(document).ready(function () {
+        @if (in_array(5, $roles))
+            $(document).ready(function() {
                 $.ajax({
                     url: "{{ route('pms_alert') }}",
                     type: "GET",
-                    success: function (e) {
+                    success: function(e) {
                         if (e['count'] != 0) {
                             $('#pms_modal').modal('show');
                         }
                         $('#pms_body').empty();
-                        $.each(e['data'], function (index, item) {
-                            if (item['get_pms_details'] && item['get_pms_details']['pms_name']) {
-                                $('#pms_body').append('<li>' + item['get_pms_details']['pms_name'] + '</li>');
+                        $.each(e['data'], function(index, item) {
+                            if (item['get_pms_details'] && item['get_pms_details'][
+                                'pms_name']) {
+                                $('#pms_body').append('<li>' + item['get_pms_details'][
+                                    'pms_name'
+                                ] + '</li>');
                             }
                         });
                     }
@@ -739,8 +744,8 @@
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('.date_time_input').change(function () {
+        $(document).ready(function() {
+            $('.date_time_input').change(function() {
                 const forbiddenMinutes = ['05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
                 let timeValue = $(this).val();
                 console.log("Original Time: ", timeValue);

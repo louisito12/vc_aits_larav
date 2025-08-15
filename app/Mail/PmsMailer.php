@@ -23,6 +23,7 @@ class PmsMailer extends Mailable
         $this->subject('This notification is for PMS ' . $this->record['pms_name'])
             ->view('emails.testmail')
             ->markdown('emails.email', ['mail_data' => $this->record]);
+      
 
         // ->markdown('emails.test_mail', ['mail_data' => $this->record]);
     }
