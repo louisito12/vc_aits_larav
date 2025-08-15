@@ -147,8 +147,6 @@ class Aits_Car_Management_Controller extends Controller
             AitsVehicleModel::where('id', $request->id)->update($request->except(['id']));
 
 
-
-
             $object = [
                 'user_id' => Auth::user()->id,
                 'page' => 'Vehicle Management',

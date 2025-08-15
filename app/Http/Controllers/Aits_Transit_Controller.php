@@ -260,8 +260,6 @@ class Aits_Transit_Controller extends Controller
 
 
 
-
-
         return ['stat' => $val, 'msg' => $message];
 
 
@@ -287,8 +285,6 @@ class Aits_Transit_Controller extends Controller
                 "file_link" => url('/'),
                 "date_created" => Carbon::now()
             ]);
-
-
 
             if ($folder_name == 'driver_file') {
                 $item->move('driver_file/' . $year . '/', $format_name . '.' . $ext);
