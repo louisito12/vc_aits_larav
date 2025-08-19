@@ -440,6 +440,15 @@
                     return;
                 }
 
+
+                const maxSize = 5 * 1024 * 1024;
+
+                if (file.size > maxSize) {
+                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
+                    return;
+                }
+
+
                 const form_data = new FormData();
                 form_data.append('name_receiver', name_receiver);
                 form_data.append('company_name', company_name);
@@ -758,6 +767,14 @@
                     edit_form_data.append('file[]', edit_file);
                 }
 
+
+
+                const maxSize_edit = 5 * 1024 * 1024; // 5MB in bytes
+
+                if (edit_file.size > maxSize_edit) {
+                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
+                    return;
+                }
 
                 $.ajax({
                     url: "{{ route('edit_delivery_request') }}",
