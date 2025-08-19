@@ -275,7 +275,8 @@ Route::Get('test_time', function () {
 
 
 route::get('test_fullname', function () {
-    return $dept_id = get_person_fname(Auth::user()->id);
+    // return $dept_id = get_person_fname(Auth::user()->id);
+    phpinfo();
 });
 
 
