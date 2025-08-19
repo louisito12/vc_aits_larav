@@ -436,6 +436,16 @@
                     return;
                 }
 
+
+                const maxSize = 5 * 1024 * 1024;
+
+                if (file.size > maxSize) {
+                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
+                    return;
+                }
+
+
+
                 const form_data = new FormData();
                 form_data.append('name_receiver', name_receiver);
                 form_data.append('company_name', company_name);
@@ -688,6 +698,15 @@
                 edit_form_data.append('delivery_remarks', edit_delivery_remarks);
                 edit_form_data.append('id', edit_id);
                 edit_form_data.append('procedures', 1);
+
+
+                const maxSize_edit = 5 * 1024 * 1024; // 5MB in bytes
+
+                if (edit_file.size > maxSize_edit) {
+                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
+                    return;
+                }
+
 
 
                 if (edit_file != undefined) {

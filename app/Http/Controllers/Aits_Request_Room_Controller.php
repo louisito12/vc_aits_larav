@@ -102,6 +102,8 @@ class Aits_Request_Room_Controller extends Controller
             }
 
 
+            $dept_id = get_person_fname(Auth::user()->id);
+
 
             $request->merge([
                 'status' => 1,
@@ -113,7 +115,7 @@ class Aits_Request_Room_Controller extends Controller
                 'is_transact' => 1,
                 'date_from' => Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'date_to' => Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A'),
-
+                'dept_id' => $dept_id['deparment_id'],
             ]);
 
 
@@ -172,15 +174,21 @@ class Aits_Request_Room_Controller extends Controller
 
 
 
-    public function get_request_data()
+    public function get_request_data(Request $request)
     {
 
         //for requestor only
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])->where('is_transact', 1)
-                ->where('request_by', Auth::user()->id)
-                // ->where('date_created', '<', Carbon::now())
-                ->get();
+                ->where('request_by', Auth::user()->id);
+            // ->where('date_created', '<', Carbon::now())
+            $search = $request->input('search.value');
+            $data = $data->get();
+
+
+
+
+
             return $this->room_request_datatable($data);
 
         } catch (\Exception $e) {

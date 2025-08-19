@@ -355,6 +355,7 @@
             // })
 
             $('#room_request_tbl').DataTable({
+                serverSide: true,
                 ajax: {
                     url: "{{ route('get_request_data') }}",
 

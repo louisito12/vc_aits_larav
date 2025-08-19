@@ -138,13 +138,14 @@ class Aits_Transit_Controller extends Controller
                         "isValid" => false,
                     ]);
                 } else {
-                    if ($now > $date_end) {
-                        AitsRequestCloser::where('status', 1)->update(['status' => 0]);
-                    }
+                    // if ($now > $date_end) {
+                    //     // AitsRequestCloser::where('status', 1)->update(['status' => 0]);
+                    // }
                 }
 
             }
 
+            $dept_id = get_person_fname(Auth::user()->id);
 
             $request->merge([
                 'status' => 1,
@@ -156,6 +157,8 @@ class Aits_Transit_Controller extends Controller
                 'pick_up_date' => Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s'),
                 'request_status' => 'Pending',
                 'request_no' => $this->request_no(),
+                'dept_id' => $dept_id['deparment_id'],
+
             ]);
 
 
@@ -693,7 +696,6 @@ class Aits_Transit_Controller extends Controller
             $appointment_date = $formatted = Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $departure = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $date_pick_up = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-
             $validation_date = $this->date_validations($date_pick_up, $departure, $appointment_date);
             if ($validation_date['stat'] == 1) {
                 return response()->json([
@@ -729,9 +731,9 @@ class Aits_Transit_Controller extends Controller
                         "isValid" => false,
                     ]);
                 } else {
-                    if ($now > $date_end) {
-                        AitsRequestCloser::where('status', 1)->update(['status' => 0]);
-                    }
+                    // if ($now > $date_end) {
+                    //     AitsRequestCloser::where('status', 1)->update(['status' => 0]);
+                    // }
                 }
 
             }
@@ -784,9 +786,6 @@ class Aits_Transit_Controller extends Controller
             ];
 
             insert_audit($object);
-
-
-
 
 
             return [

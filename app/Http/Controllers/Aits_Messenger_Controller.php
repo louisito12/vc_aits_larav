@@ -157,7 +157,7 @@ class Aits_Messenger_Controller extends Controller
                             <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="1" data-processs= "' . $data->procedures . '" data-id="' . $data->id . '" href="javascript:void(0);">' . $this->procedure_text($data->procedures) . '</a></li>
                             <li><a class="dropdown-item btn_deliver" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Reschedule</a></li>
                                     <li><a class="dropdown-item btn_delete" ' . $cancel . ' data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
-                            <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+                            <li><a class="dropdown-item btn_show_data" hidden data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
 
                         </ul>
                         </div> ';

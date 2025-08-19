@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Pms_Details;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PmsApprovalController extends Controller
@@ -69,5 +70,21 @@ class PmsApprovalController extends Controller
                 "isValid" => false,
             ]);
         }
+    }
+
+
+    public function test_api_data()
+    {
+        $sql = "SELECT room_tbl.date_created,FORMAT(room_tbl.date_created, 'MMM dd, yyyy, h:mm tt') as dates
+        FROM [192.170.11.55].[aits_db].[dbo].[aits_request_room_models] AS room_tbl
+        LEFT JOIN [192.170.11.55].[aits_users].[dbo].[tbl_personal_datas] AS personal_data
+        ON room_tbl.request_by = personal_data.user_id LEFT JOIN [192.170.11.34].[cenuser_db].[dbo].[ref_departments] as department_tbl
+        ON personal_data.deparment_id = department_tbl.id";
+
+     return   $data = DB::connection('sqlsrv')->select($sql, [
+       
+        ]);
+
+
     }
 }

@@ -128,6 +128,7 @@ class Aits_Delivery_Controller extends Controller
 
 
 
+            $dept_id = get_person_fname(Auth::user()->id);
 
 
             $request->merge([
@@ -139,6 +140,7 @@ class Aits_Delivery_Controller extends Controller
                 'request_status' => 'Pending',
                 'messenger_id' => $area_val['data']->messenger_id,
                 'procedure_date' => $process_date,
+                'dept_id' => $dept_id['deparment_id'],
             ]);
 
 

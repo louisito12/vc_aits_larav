@@ -98,10 +98,6 @@ class Aits_Dashboard extends Controller
                     });
             });
 
-
-
-
-
         }
         if ($params == 2 || $params == 3) {
             $date_ex = $params == 3 ? '<' : '=';
@@ -128,12 +124,8 @@ class Aits_Dashboard extends Controller
     {
         try {
 
-
-
-
             $room_request = "";
             $shuttle_request_id = "";
-
             $roles = DB::table('aits_role_access')
                 ->where('user_id', Auth::user()->id)
                 ->where('status', 1)

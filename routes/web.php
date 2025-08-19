@@ -132,7 +132,6 @@ Route::controller(Aits_Transit_Controller::class)->group(function () {
 Route::controller(Aits_Delivery_Controller::class)->group(function () {
     Route::post('aits_save_delivery', 'aits_save_delivery')->name('aits_save_delivery');
     Route::get('show_delivery_request/{procedure}', 'show_delivery_request')->name('show_delivery_request');
-
     Route::get('get_delivery_data/{id}', 'get_delivery_data')->name('get_delivery_data');
     Route::get('delete_delivery_request/{id}/{remarks}', 'delete_delivery_request')->name('delete_delivery_request');
     Route::post('edit_delivery_request', 'edit_delivery_request')->name('edit_delivery_request');
@@ -275,8 +274,12 @@ Route::Get('test_time', function () {
 });
 
 
+route::get('test_fullname', function () {
+    return $dept_id = get_person_fname(Auth::user()->id);
+});
 
 
+Route::get('test_api_data', [PmsApprovalController::class, 'test_api_data']);
 
 
 
