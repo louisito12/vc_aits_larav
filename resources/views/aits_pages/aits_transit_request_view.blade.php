@@ -531,7 +531,7 @@
                     url: "{{ route('get_shuttel_request_data') }}",
 
                 },
-   
+
                 dom: 'Bfrtip',
                 buttons: [
 
@@ -628,6 +628,7 @@
                 const ob_form_file = $('#ob_form_file')[0].files[0];
                 const add_shuttle_data = new FormData();
                 const ecv = $('#ecv').val();
+
                 if (ob_form_file == undefined || ob_form_file == null || ob_form_file == '') {
                     alertify.error('<span style="color: white;">OB form file is required</span>');
                     return;
@@ -665,10 +666,17 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function() {
+                        $('#loader-overlay').addClass('show');
+                        // $('#add_transit_room').modal('hide');
 
                     },
                     success: function(e) {
+                        $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
+                            $('#add_room_request').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal').modal('show');
+                            });
+
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] +
@@ -842,7 +850,7 @@
                 const edit_ecv = $('#edit_ecv').val();
                 const edit_shuttle_data = new FormData();
 
-
+                $('#edit_shuttle_modal').modal('hide');
 
                 edit_shuttle_data.append('departure_date', edit_departure_date);
                 edit_shuttle_data.append('appointment_date', edit_appointment_date);
@@ -879,15 +887,21 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function() {
-
+                        $('#loader-overlay').addClass('show');
                     },
                     success: function(e) {
+                        $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
+                            $('#edit_shuttle_modal').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal').modal('show');
+                            });
+
                             alertify.error('<span style="color: white;">' + e['msg'] +
                                 '</span>');
                             return;
+
                         }
-                        $('#edit_shuttle_modal').modal('hide');
+
                         Swal.fire('Success!', 'Your request has been successfully Updated.',
                             'success');
                         $('#tbl_transit').DataTable().ajax.reload();

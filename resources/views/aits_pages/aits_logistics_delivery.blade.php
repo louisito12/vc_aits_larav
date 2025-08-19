@@ -435,7 +435,7 @@
                     alertify.error('<span style="color: white;">All fields Required !</span>');
                     return;
                 }
-
+                $('#add_delivery_request_modal').modal('hide');
 
                 const maxSize = 5 * 1024 * 1024;
 
@@ -466,16 +466,24 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: function() {},
+                    beforeSend: function() {
+                        $('#loader-overlay').addClass('show');
+
+                    },
                     success: function(e) {
+                        $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] +
                                 '</span>');
+                            $('#add_delivery_request_modal').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal').modal('show');
+                            });
+
                             return;
                         }
-                        $('#add_delivery_request_modal').modal('hide');
+
                         $('#name_receiver').val('');
                         $('#company_name').val('');
                         $('#contact_receiver').val('');
@@ -699,18 +707,20 @@
                 edit_form_data.append('id', edit_id);
                 edit_form_data.append('procedures', 1);
 
-
-                const maxSize_edit = 5 * 1024 * 1024; // 5MB in bytes
-
-                if (edit_file.size > maxSize_edit) {
-                    alertify.error('<span style="color: white;">OB form file must not exceed 5MB</span>');
-                    return;
-                }
+                $('#edit_delivery_request_modal').modal('hide');
 
 
 
-                if (edit_file != undefined) {
+
+                if (edit_file != undefined || edit_file == "") {
                     edit_form_data.append('file[]', edit_file);
+
+                    const maxSize_edit = 5 * 1024 * 1024; // 5MB in bytes
+                    if (edit_file.size > maxSize_edit) {
+                        alertify.error(
+                            '<span style="color: white;">OB form file must not exceed 5MB</span>');
+                        return;
+                    }
                 }
 
 
@@ -723,17 +733,24 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    beforeSend: function() {},
+                    beforeSend: function() {
+                        $('#loader-overlay').addClass('show');
+                    },
                     success: function(e) {
+                        $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
                             alertify.set('notifier', 'position', 'top-right');
                             alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] +
                                 '</span>');
+                            $('#edit_delivery_request_modal').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal').modal('show');
+                            });
+
                             return;
                         }
 
-                        $('#edit_delivery_request_modal').modal('hide');
+                        $('#edit_file').val('');
                         Swal.fire('Success!', 'Your request has been successfully updated.',
                             'success');
                         $('#deliver_tbl').DataTable().ajax.reload();

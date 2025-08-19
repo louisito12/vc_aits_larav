@@ -489,7 +489,7 @@ class Aits_Delivery_Controller extends Controller
                     'contact_receiver' => ['required'],
                     'delivery_type_id' => ['required'],
                     'area_id' => ['required'],
-                    'count_documents' => ['required'],
+                    // 'count_documents' => ['required'],
                     'complete_address' => ['required'],
                     'delivery_remarks' => ['required'],
                 ],

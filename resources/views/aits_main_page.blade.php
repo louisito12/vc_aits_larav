@@ -31,6 +31,8 @@
     }
 
 
+
+
     th,
     td {
         text-align: center !important;
@@ -38,6 +40,51 @@
         font-size: 0.8em !important;
     }
 </style>
+<style>
+    /* Full-screen white overlay */
+    #loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        /* solid white background */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+       z-index: 9999; 
+     
+
+    }
+
+    #loader-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Blue spinner modifications */
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 8px solid rgba(0, 0, 255, 0.2);
+        /* light blue border */
+        border-top-color: #0000ff;
+        /* blue spinner top */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
 
 <body>
 
@@ -514,12 +561,17 @@
         </div>
     </div>
     <!-- End Switcher -->
+    <div class="loader"></div>
 
 
     <!-- Loader -->
-    <div id="loader">
+    {{-- <div id="loader">
         <img src="{{ asset('aits_asset/assets/images/media/loader.svg') }}" alt="">
+    </div> --}}
+    <div id="loader-overlay">
+        <div class="spinner"></div>
     </div>
+
     <!-- Loader -->
 
     <div class="page">
@@ -684,11 +736,11 @@
     </div>
     <div id="responsive-overlay"></div>
 
-    <script>
-        // setTimeout(function () {
-        //     document.querySelector('.loader').style.display = 'none';
-        // }, 10000); 
-    </script>
+    {{-- <script>
+        setTimeout(function () {
+            document.querySelector('.loader').style.display = 'none';
+        }, 10000); 
+    </script> --}}
     @include('aits_includes.scripts')
     @yield('scripts')
     @php
@@ -713,7 +765,8 @@
                         $('#pms_body').empty();
                         $.each(e['data'], function(index, item) {
                             if (item['get_pms_details'] && item['get_pms_details'][
-                                'pms_name']) {
+                                    'pms_name'
+                                ]) {
                                 $('#pms_body').append('<li>' + item['get_pms_details'][
                                     'pms_name'
                                 ] + '</li>');
@@ -757,6 +810,18 @@
                     console.log("Updated Time: ", newTimeValue);
                 }
             });
+            // $('.loader').show();
+
+            $('#loader-overlay').addClass('show');
+
+
+            setTimeout(function() {
+                $('#loader-overlay').removeClass('show');
+            }, 2000);
+
+
+
+
         });
     </script>
 </body>
