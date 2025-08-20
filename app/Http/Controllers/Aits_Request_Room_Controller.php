@@ -119,12 +119,10 @@ class Aits_Request_Room_Controller extends Controller
             ]);
 
 
-
             $insert = $request->all();
             if ($request->event_id == "remarks") {
                 $insert = $request->except(['event_id']);
             }
-
 
 
             $data = AitsRequestRoomModel::insert([
@@ -144,8 +142,6 @@ class Aits_Request_Room_Controller extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
-
-
 
             AitsNotif::create([
                 'aits_table' => "aits_request_room_models",
@@ -184,15 +180,9 @@ class Aits_Request_Room_Controller extends Controller
             // ->where('date_created', '<', Carbon::now())
             $search = $request->input('search.value');
             $data = $data->get();
-
-
-
-
-
             return $this->room_request_datatable($data);
 
         } catch (\Exception $e) {
-
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
                 'data' => [],
@@ -208,30 +198,23 @@ class Aits_Request_Room_Controller extends Controller
     public function request_no()
     {
         $request_no = 1;
-
         $recent_request = AitsRequestRoomModel::where('is_transact', 1)
             ->whereDate('date_created', Carbon::today()->toDateString())
             ->orderBy('request_no', 'desc')
             ->first();
 
-
         if ($recent_request) {
             $request_no = (int) $recent_request->request_no + 1;
         }
-
         return $request_no;
-
-
 
     }
 
 
     public function request_room_validation($from_date, $to_date, $room_id)
     {
-
         $fromDate = Carbon::parse($from_date)->format('Y-m-d H:i:s');
         $toDate = Carbon::parse($to_date)->format('Y-m-d H:i:s');
-
         $query = "
         SELECT COUNT(*) AS overlapping_count
         FROM aits_request_room_models    WHERE
@@ -243,27 +226,20 @@ class Aits_Request_Room_Controller extends Controller
         AND room_id = $room_id;";
 
         // return $query;
-
         $data = DB::connection('sqlsrv')->select($query, []);
-
-
         $count = 0;
 
         if ($data) {
             $count = $data[0]->overlapping_count;
         }
 
-
         return $count;
-
-
 
     }
 
 
     public function room_request_datatable($data)
     {
-
 
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
@@ -316,17 +292,17 @@ class Aits_Request_Room_Controller extends Controller
                 $cancel_hidden = (!in_array($data->request_status, $array_2)) ? 'hidden' : '';
 
                 return '
-        <div  class="btn-group dropstart input_spec my-1">
-            <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Action
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
-                <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
-             <li><a class="dropdown-item btn_delete" ' . $cancel_hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
-                <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
-            </ul></div>    ';
+                    <div  class="btn-group dropstart input_spec my-1">
+                        <button type="button" class="btn btn-outline-secondary  dropdown-toggle rounded-pill"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="1" data-id="' . $data->id . '" href="javascript:void(0);">Approve</a></li>
+                            <li><a class="dropdown-item btn_approved" ' . $hidden . ' data-val="2" data-id="' . $data->id . '" href="javascript:void(0);">Disapprove</a></li>
+                        <li><a class="dropdown-item btn_delete" ' . $cancel_hidden . '  data-id="' . $data->id . '" href="javascript:void(0);">Cancel</a></li>
+                            <li><a class="dropdown-item btn_show_data" data-id="' . $data->id . '" href="javascript:void(0);">View</a></li>
+                        </ul></div>    ';
 
             })
             ->addColumn('request_no', function ($data) {
@@ -380,8 +356,6 @@ class Aits_Request_Room_Controller extends Controller
 
     public function table_logs($request)
     {
-
-
         try {
             AitsRequestRoomModel::insert([$request]);
         } catch (\Exception $e) {
@@ -405,7 +379,6 @@ class Aits_Request_Room_Controller extends Controller
             $data->date_to = date_coverters($data->date_to);
             $data->approve_date = date_converter($data->approve_date);
             return [
-
                 'msg' => 'Succesfully Provided',
                 'data' => $data,
                 'status' => 200,
@@ -434,7 +407,6 @@ class Aits_Request_Room_Controller extends Controller
                     'event_id' => ['required'],
                     'date_to' => ['required'],
                     'date_from' => ['required'],
-
                     'remarks' => ['required'],
                 ],
             );
@@ -470,8 +442,6 @@ class Aits_Request_Room_Controller extends Controller
 
             $from_date = Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A');
             $to_date = Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A');
-
-
 
             $validation = $this->request_room_validation($from_date, $to_date, $request->room_id);
             if ($validation != 0) {

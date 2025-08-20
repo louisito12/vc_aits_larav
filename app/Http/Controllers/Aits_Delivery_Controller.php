@@ -345,8 +345,7 @@ class Aits_Delivery_Controller extends Controller
                 $direction = dynamic_file($path, $link);
                 $filename = $messenge_file->orig_file;
             }
-
-
+            
             $data->req_name = $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
             $data->req_stat = $stat;
             $data->request_number = request_number($data->request_no, $data->date_created);
@@ -355,7 +354,6 @@ class Aits_Delivery_Controller extends Controller
             $data->procedure_date = date_converter($data->procedure_date);
             $data->messenger_file = $direction;
             $data->file_name = $filename;
-
 
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',
@@ -509,7 +507,6 @@ class Aits_Delivery_Controller extends Controller
             $area_id = $request->area_id;
             $area_val = messenger_id($area_id);
 
-
             if ($area_val['stat'] == 0) {
                 return response()->json([
                     'msg' => 'The area that you selected has no messenger',
@@ -518,12 +515,7 @@ class Aits_Delivery_Controller extends Controller
                 ]);
             }
 
-
             $request->merge(['messenger_id' => $area_val['data']->messenger_id, 'procedure_date' => $process_date]);
-
-
-
-
             $old_data = AitsDelivery::find($request->id);
 
 
@@ -549,7 +541,6 @@ class Aits_Delivery_Controller extends Controller
             }
             AitsDelivery::where('id', $request->id)->update($request->except(['id', 'file']));
 
-
             $object = [
                 'user_id' => Auth::user()->id,
                 'page' => 'Logistic Request',
@@ -559,7 +550,6 @@ class Aits_Delivery_Controller extends Controller
                 'status' => 1,
                 'date_created' => Carbon::now(),
             ];
-
 
             insert_audit($object);
 

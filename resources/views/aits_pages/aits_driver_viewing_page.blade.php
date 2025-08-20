@@ -457,12 +457,8 @@
                             }
 
                         }
-
                     }
                 })
-
-
-
 
             })
 
@@ -484,8 +480,6 @@
                                 '</span>');
                             return;
                         }
-
-
                         // departure_date
                         // appointment_date
                         // pick_up_date
@@ -494,8 +488,6 @@
                         // date_created
                         // remarks
                         // get_app_remarks.remarks
-
-
                         $('#request_no').val(e['data']['request_number']);
                         $('#date_requested').val(e['data']['date_created']);
                         $('#departure_date').val(e['data']['departure_date']);
@@ -506,8 +498,6 @@
                         $('#req_remarks').val(e['data']['get_app_remarks']['remarks']);
                         $('#app_remarks').val(e['data']['driver_app_remarks']);
                         $('#hidden_id').val(e['data']['id']);
-
-
                     }
                 });
             });
@@ -515,7 +505,6 @@
                 const shuttle_id = $('#hidden_id').val();
                 const upload_file = $('#upload_file').prop('files')[0];
                 const upload_remarks = $('#upload_remarks').val();
-
                 if (upload_file == undefined || upload_file == null || upload_file == '') {
                     alertify.error('<span style="color: white;">Upload file is required</span>');
                     return;
@@ -555,8 +544,6 @@
                                 '</span>');
                             return;
                         }
-
-
                         $('#tbl_transit_tbl').DataTable().ajax.reload();
                         $('#upload_file').val('');
                         $('#upload_remarks').val('');

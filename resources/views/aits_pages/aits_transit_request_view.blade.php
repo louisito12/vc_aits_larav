@@ -671,20 +671,22 @@
                     },
                     beforeSend: function() {
                         $('#loader-overlay').addClass('show');
-                        // $('#add_transit_room').modal('hide');
+                        $('#add_transit_room').modal('hide');
 
                     },
                     success: function(e) {
                         $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
-                            $('#add_room_request').on('hidden.bs.modal', function() {
-                                $(this).off('hidden.bs.modal').modal('show');
-                            });
+
 
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] +
                                 '</span>');
+
+                            $('#add_transit_room').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal').modal('show');
+                            });
                             return;
                         }
 

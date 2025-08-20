@@ -47,13 +47,11 @@ class AitsAssignAreaController extends Controller
             ->rawColumns(['action'])
 
             ->make(true);
-
     }
 
     public function aits_save_area_messenger(Request $request)
     {
         try {
-
 
             $validated = Validator::make(
                 $request->all(),
@@ -129,8 +127,6 @@ class AitsAssignAreaController extends Controller
     public function aits_mess_area_edit(Request $request)
     {
         try {
-
-
             $validated = Validator::make(
                 $request->all(),
                 [
@@ -138,7 +134,6 @@ class AitsAssignAreaController extends Controller
                     'area_id' => ['required'],
                 ],
             );
-
 
             if ($validated->fails()) {
                 return response()->json([
@@ -152,6 +147,7 @@ class AitsAssignAreaController extends Controller
                 ->where('status', 1)
                 ->whereNot('id', $request->id)
                 ->first();
+                
             if ($validation) {
                 return response()->json([
                     'msg' => 'The area and Messenger is Assign at the same time',
@@ -173,7 +169,6 @@ class AitsAssignAreaController extends Controller
                 'data' => $datas,
             ]);
 
-
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error Please Contact ICT department' . '<br>' . $e->getMessage(),
@@ -181,13 +176,10 @@ class AitsAssignAreaController extends Controller
                 'isValid' => false,
             ]);
         }
-
     }
 
     public function aits_mess_area_delete($id)
     {
-
-
         try {
             $validation = AitsMessengersArea::where('id', $id)->update([
                 'status' => 0

@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class Aits_logistics_approval extends Controller
 {
-
-
     public function get_logistics_request(Request $request)
     {
 
@@ -55,12 +53,6 @@ class Aits_logistics_approval extends Controller
             }
         }
 
-
-
-
-
-
-
         $data = $data->orderBy('procedures', 'asc')
             ->get();
         return DataTables::of($data)
@@ -81,7 +73,6 @@ class Aits_logistics_approval extends Controller
             })
             ->addColumn('requestor', function ($data) {
                 return $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
-
             })
 
             ->addColumn('req_status', function ($data) {
@@ -106,7 +97,6 @@ class Aits_logistics_approval extends Controller
                 $path = $data_file->folder_name . '/' . $data_file->year . '/' . $data_file->file_name;
                 $link = $data_file->file_link;
                 $url = dynamic_file($path, $link);
-
                 return ' <a href="' . $url . '" target="_blank" class="">' . htmlspecialchars($data_file->orig_file) . '</a>';
 
             })
@@ -171,8 +161,6 @@ class Aits_logistics_approval extends Controller
 
     public function assigned_messenger(Request $request)
     {
-
-
         try {
             $validated = Validator::make(
                 $request->all(),
@@ -180,8 +168,6 @@ class Aits_logistics_approval extends Controller
                     'messenger_id' => ['required'],
                     'procedure_date' => ['required'],
                     'assign_remarks' => ['required'],
-
-
                 ],
             );
 
@@ -202,7 +188,6 @@ class Aits_logistics_approval extends Controller
                 'procedure_date' => Carbon::parse($request->procedure_date, 'Asia/Manila')->format('Y-m-d h:i A'),
 
             ]);
-
 
             AitsDelivery::where('id', $request->id)->update($request->except(['id']));
 
@@ -226,14 +211,7 @@ class Aits_logistics_approval extends Controller
             //     'date_created' => Carbon::now(),
             //     'remarks' => $request->assign_remarks,
             // ]);
-
-
-
-
             insert_audit($object);
-
-
-
 
         } catch (\Exception $e) {
             return response()->json([
@@ -254,12 +232,10 @@ class Aits_logistics_approval extends Controller
     public function get_data_email()
     {
 
-
         $request_logistic = AitsNotif::where('aits_table', 'aits_deliveries')
             ->where('notif', 0)
             ->where('status', 1)
             ->get();
-
 
         $data = [];
 
@@ -313,9 +289,7 @@ class Aits_logistics_approval extends Controller
 
         }
 
-
         return $data;
-
 
     }
 }

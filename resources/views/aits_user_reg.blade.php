@@ -140,14 +140,12 @@
                                                             {{ $suffixs->description }}
                                                         </option>
                                                     @endforeach
-
                                                 </select>
                                                 @error('suffix_id')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
-
                                         <!-- Step 2 -->
                                         <div class="tab-pane fade" id="tab2" role="tabpanel">
                                             <div class="mb-3">

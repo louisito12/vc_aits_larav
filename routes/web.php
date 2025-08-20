@@ -278,7 +278,7 @@ route::get('test_fullname', function () {
     // return $dept_id = get_person_fname(Auth::user()->id);
     phpinfo();
 });
-
+Route::get('text_excel', [PdfController::class, 'text_excel']);
 
 Route::get('test_api_data', [PmsApprovalController::class, 'test_api_data']);
 

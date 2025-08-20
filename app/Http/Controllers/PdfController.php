@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\simple_arr;
 use Illuminate\Http\Request;
 use Omaralalwi\Gpdf\Facade\Gpdf as GpdfFacade;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class PdfController extends Controller
@@ -40,6 +43,15 @@ class PdfController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="invoice.pdf"',
         ]);
+
+    }
+    public function text_excel()
+    {
+        $data = [
+            ['data' => 1, 'data2' => 4]
+        ];
+
+        return (new simple_arr($data))->download('users.xlsx');
     }
 
 }

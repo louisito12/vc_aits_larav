@@ -47,8 +47,7 @@ class Aits_Car_Management_Controller extends Controller
     public function get_vehicle_data()
     {
 
-
-        try {
+      try {
             $data = AitsVehicleModel::where('status', 1)->get();
             return DataTables::of($data)
                 ->addColumn('status', function ($data) {
@@ -145,8 +144,6 @@ class Aits_Car_Management_Controller extends Controller
             $data = AitsVehicleModel::find($request->id);
             $this->vehicle_insert_logs($data);
             AitsVehicleModel::where('id', $request->id)->update($request->except(['id']));
-
-
             $object = [
                 'user_id' => Auth::user()->id,
                 'page' => 'Vehicle Management',

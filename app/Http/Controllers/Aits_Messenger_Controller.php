@@ -292,8 +292,6 @@ class Aits_Messenger_Controller extends Controller
 
 
             $message = 'Rescheduled';
-
-
             $update = AitsDelivery::where('id', $request->id)->update($data_update);
 
             $data_proc = AitsDelivery::where('id', $request->id)->first();
@@ -327,9 +325,7 @@ class Aits_Messenger_Controller extends Controller
             $ext = $item->getClientOriginalExtension();
             $fname = $item->getClientOriginalName();
             $year = Carbon::now()->year;
-
             $format_name = now()->format('YmdHis') . '_' . mt_rand('1111', '9999');
-
             AitsFileModel::create([
                 "table_name" => $table_name,
                 "attachment_id" => $id,
@@ -344,8 +340,6 @@ class Aits_Messenger_Controller extends Controller
                 'user_id' => Auth::user()->id,
                 'file_link' => url('/'),
             ]);
-
-
             $item->move('aits_delivery_file/' . $year . '/', $format_name . '.' . $ext);
         }
 
@@ -361,7 +355,6 @@ class Aits_Messenger_Controller extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="invoice.pdf"',
         ]);
-
 
         // $driver = AitsDriver::get();
         // $hello = 'GG PARE';

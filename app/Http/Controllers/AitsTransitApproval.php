@@ -67,13 +67,6 @@ class AitsTransitApproval extends Controller
             'all cancelled' => 'Cancelled'
         ];
         $filters = 'Pending';
-
-
-
-
-
-
-
         $data = AitsShuttleRequest::with(['get_event_data', 'get_requestor', 'get_requestor_data', 'get_car_data', 'get_driver_data'])
             ->where('status', 1);
         if ($request->pending_data) {
@@ -89,7 +82,6 @@ class AitsTransitApproval extends Controller
             }
         }
 
-
         $data = $data->get();
         $new_controller = new Aits_Transit_Controller();
         return $new_controller->transit_data_table($data);
@@ -99,9 +91,7 @@ class AitsTransitApproval extends Controller
     public function approve_shuttle_request(Request $request)
     {
         try {
-
             $data = AitsShuttleRequest::find($request->id);
-
             $spec_approve = 0;
             if ($request->spec_approval == 3) {
                 $spec_approve = 1;
@@ -139,8 +129,6 @@ class AitsTransitApproval extends Controller
             ];
             process_remarks($object);
 
-
-
             AitsNotif::create([
                 'aits_table' => "aits_shuttle_requests",
                 'aits_id' => $request->id,
@@ -159,10 +147,7 @@ class AitsTransitApproval extends Controller
                 'date_created' => Carbon::now(),
                 'remarks' => $request->driver_remarks,
                 'is_driver' => 1,
-
             ]);
-
-
 
             $object = [
                 'user_id' => Auth::user()->id,
@@ -174,8 +159,6 @@ class AitsTransitApproval extends Controller
                 'date_created' => Carbon::now(),
             ];
             insert_audit($object);
-
-
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
@@ -195,7 +178,6 @@ class AitsTransitApproval extends Controller
             'request_status' => "Disapproved",
             "date_approved" => Carbon::now()
         ]);
-
 
         $object = [
             'attachment_id' => $id,
@@ -218,10 +200,6 @@ class AitsTransitApproval extends Controller
             'date_created' => Carbon::now(),
             'remarks' => $remarks,
         ]);
-
-
-
-
 
         $object = [
             'user_id' => Auth::user()->id,
@@ -292,14 +270,8 @@ class AitsTransitApproval extends Controller
             ->where('driver_id', $driver_id)
             ->count();
 
-
-
-
         // $data = DB::connection('sqlsrv')->select($query, []);
-
-
         $count = 0;
-
         if ($overlappingCount > 0) {
             $count = $overlappingCount;
         }
