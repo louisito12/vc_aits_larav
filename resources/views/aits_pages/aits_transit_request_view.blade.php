@@ -45,6 +45,7 @@
                                         <th>Appointment Date</th>
                                         <th>Pick Up Date</th>
                                         <th>Destination</th>
+                                        <th>Purpose</th>
                                         <th>Requested By</th>
                                         <th>Type</th>
                                         <th>OB File</th>
@@ -565,6 +566,9 @@
                     },
                     {
                         data: "destination"
+                    },
+                    {
+                        data: "purpose"
                     },
                     {
                         data: "reuqeusted_by"

@@ -11,6 +11,7 @@ use App\Mail\ManulifeMail;
 use App\Models\Pms_Details;
 use App\Models\AitsDelivery;
 use Illuminate\Bus\Queueable;
+use App\Models\AitsShuttleType;
 use App\Models\AitsRequestCloser;
 use App\Models\AitsShuttleRequest;
 use Illuminate\Support\Facades\DB;
@@ -234,7 +235,12 @@ class TransactJobs implements ShouldQueue
                         $cancel_rem = $transits->remarks;
                     }
 
-
+                    $purpose_event = "";
+                    if ($transit_data->type == "remarks") {
+                        $purpose_event = $transit_data->purpose;
+                    } else {
+                        $purpose_event = AitsShuttleType::find($$transit_data->type)->type;
+                    }
 
 
 
@@ -256,6 +262,7 @@ class TransactJobs implements ShouldQueue
                         'vehicle' => $vehicle,
                         'is_approve' => $is_approve,
                         'app_remarks' => $app_remarks,
+                        'purpose' => $purpose_event
                     ];
 
                     Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($transit_data));

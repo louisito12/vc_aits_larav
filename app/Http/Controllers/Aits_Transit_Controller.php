@@ -404,6 +404,18 @@ class Aits_Transit_Controller extends Controller
 
                 return $this->status_html($data->request_status);
             })
+            ->addColumn('purpose', function ($data) {
+
+                $purpose_event = "";
+                if ($data->type == "remarks") {
+                    $purpose_event = $data->purpose;
+                } else {
+                    $purpose_event = AitsShuttleType::find($data->type)->type;
+                }
+
+
+                return $purpose_event;
+            })
             ->addColumn('reuqeusted_by', function ($data) {
                 return $data['get_requestor_data']['firstname'] . ' ' . $data['get_requestor_data']['lastname'];
             })
