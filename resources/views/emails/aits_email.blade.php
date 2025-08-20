@@ -173,6 +173,13 @@
                             <th>Destination</th>
                             <td>{{ $mail_data['destination'] }}</td>
                         </tr>
+
+                        <tr>
+                            <th>Purpose</th>
+                            <td>{{ $mail_data['purpose'] }}</td>
+                        </tr>
+
+
                         <tr>
                             <th>Appointment Date</th>
                             <td>{{ $mail_data['appointment_date'] }}</td>

@@ -239,7 +239,7 @@ class TransactJobs implements ShouldQueue
                     if ($transit_data->type == "remarks") {
                         $purpose_event = $transit_data->purpose;
                     } else {
-                        $purpose_event = AitsShuttleType::find($$transit_data->type)->type;
+                        $purpose_event = AitsShuttleType::find($transit_data->type)->type;
                     }
 
 
