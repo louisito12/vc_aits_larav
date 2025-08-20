@@ -78,19 +78,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row purpose_row">
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Departure Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="departure_date"
                                 class="spec_input form-control date_time_input ">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Appointment Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00" id="appointment_date"
                                 class="spec_input form-control date_time_input">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Pick Up Date</label>
 
                             <input type="datetime-local" id="pickup_date"
@@ -99,7 +99,7 @@
                                 class="spec_input form-control date_time_input">
                         </div>
 
-                        <div class="col-4 purpose_col">
+                        <div class="col-xl-4 col-sm-6 purpose_col">
                             <label>Purpose</label>
                             <select name="" class="form-control spec_input" id="purpose">
                                 <option value="">Please Select Purpose</option>
@@ -109,7 +109,7 @@
                                 <option value="remarks">Others</option>
                             </select>
                         </div>
-                        <div hidden class="col-2 purpose_column_hidden">
+                        <div hidden class="col-xl-2 col-sm-6 purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input type="text" id="other_purpose" class="form-control spec_input">
                         </div>
@@ -127,21 +127,21 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Client Name</label>
                             <input type="text" id="client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Number of Passengers</label>
                             <input type="number" id="number_pass" min="1" class="form-control spec_input">
                         </div>
 
 
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Estimated Contract Value</label>
                             <input type="text" id="ecv" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
                             <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
                             <select name="" class="form-control" id="manager_app">
@@ -153,7 +153,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
                             <input type="file" id="ob_form_file" class="form-control spec_input">
                         </div>
@@ -185,7 +185,7 @@
                 <div class="modal-body">
 
                     <div class="row purpose_row">
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Departure Date</label>
                             <input type="text" hidden id="edit_id" class="spec_input form-control ">
 
@@ -193,20 +193,20 @@
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
                                 id="edit_departure_date" class="spec_input form-control ">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Appointment Date</label>
                             <input type="datetime-local" min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
                                 id="edit_appointment_date" class="spec_input form-control">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Pick Up Date</label>
                             <input type="datetime-local" id="edit_pick_up_date"
                                 min="{{ Carbon\Carbon::now()->format('Y-m-d') }}T00:00:00"
                                 max="{{ Carbon\Carbon::now()->addMonth()->format('Y-m-d') }}T00:00"
                                 class="spec_input form-control">
                         </div>
-                        <div class="col-4 purpose_col">
+                        <div class="col-xl-4 col-sm-6  purpose_col">
                             <label>Purpose</label>
                             <select name="" class="form-control spec_input" id="edit_type">
                                 <option value="">Please Select Purpose</option>
@@ -217,7 +217,7 @@
                             </select>
                         </div>
 
-                        <div class="col-2 edit_purpose_column_hidden">
+                        <div class="col-xl-2 col-sm-6 edit_purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input type="text" id="edit_purpose" class="form-control spec_input">
                         </div>
@@ -236,21 +236,21 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Client Name</label>
                             <input type="text" id="edit_client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Number of Passengers</label>
                             <input type="number" id="edit_passenger_number" min="1"
                                 class="form-control spec_input">
                         </div>
 
-                        <div class="col-2">
+                        <div class="col-xl-2 col-sm-6">
                             <label>Estimated Contract Value</label>
                             <input type="text" id="edit_ecv" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
                             <!-- <input type="text" id="edit_manager_id" class="form-control spec_input"> -->
                             <select name="" class="form-control" id="edit_manager_id">
@@ -262,7 +262,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
                             <input type="file" id="edit_ob_form" class="form-control spec_input">
                         </div>
@@ -289,23 +289,23 @@
                 <div class="modal-body">
 
                     <div class="row purpose_row">
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Departure Date</label>
                             <input type="text" hidden id="show_id" class="spec_input form-control ">
 
                             <input disabled type="datetime-local" id="show_departure_date"
                                 class="spec_input form-control ">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Appointment Date</label>
                             <input disabled type="datetime-local" id="show_appointment_date"
                                 class="spec_input form-control">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Pick Up Date</label>
                             <input disabled type="datetime-local" id="show_pick_up_date" class="spec_input form-control">
                         </div>
-                        <div class="col-4 purpose_col">
+                        <div class="col-xl-4 col-sm-6 purpose_col">
                             <label>Purpose</label>
                             <select disabled name="" class="form-control spec_input" id="show_type">
                                 <option value="">Please Select Purpose</option>
@@ -316,7 +316,7 @@
                             </select>
                         </div>
 
-                        <div class="col-2 show_purpose_column_hidden">
+                        <div class="col-xl-2 col-sm-6 show_purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input disabled type="text" id="show_purpose" class="form-control spec_input">
                         </div>
@@ -335,23 +335,23 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Client Name</label>
                             <input disabled type="text" id="show_client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Number of Passengers</label>
                             <input disabled type="number" id="show_passenger_number" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Requestor Name</label>
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
-                        <div hidden class="col-3">
+                        <div hidden class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>

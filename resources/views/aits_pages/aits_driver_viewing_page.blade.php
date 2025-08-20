@@ -85,15 +85,15 @@
 
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Request Number</label>
                             <input type="text" class="form-control spec_input" id="request_no" readonly>
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Date Requested</label>
                             <input type="text" class="form-control spec_input" id="date_requested" readonly>
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Destination</label>
                             <textarea class="form-control spec_input" disabled id="destination"></textarea>
                             <input type="text" id="hidden_id" hidden>
@@ -104,15 +104,15 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Client Name</label>
                             <input type="text" class="form-control spec_input" id="client_name" readonly>
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Requestor Remarks</label>
                             <textarea class="form-control spec_input" disabled id="req_remarks"></textarea>
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Driver Remarks</label>
                             <textarea class="form-control spec_input" disabled id="app_remarks"></textarea>
                         </div>
@@ -120,15 +120,15 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Departure Date</label>
                             <input type="datetime-local" class="form-control spec_input" disabled id="departure_date">
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Appointment Date</label>
                             <input type="datetime-local" class="form-control spec_input" disabled id="apointment_date">
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Pick Up Date</label>
                             <input type="datetime-local" class="form-control spec_input" disabled id="pick_up_date">
                         </div>
@@ -171,23 +171,23 @@
                 <div class="modal-body">
 
                     <div class="row purpose_row">
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Departure Date</label>
                             <input type="text" hidden id="show_id" class="spec_input form-control ">
 
                             <input disabled type="datetime-local" id="show_departure_date"
                                 class="spec_input form-control ">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Appointment Date</label>
                             <input disabled type="datetime-local" id="show_appointment_date"
                                 class="spec_input form-control">
                         </div>
-                        <div class="col-2 purpose_col">
+                        <div class="col-xl-2 col-sm-6 purpose_col">
                             <label>Pick Up Date</label>
                             <input disabled type="datetime-local" id="show_pick_up_date" class="spec_input form-control">
                         </div>
-                        <div class="col-4 purpose_col">
+                        <div class="col-xl-4 col-sm-6 purpose_col">
                             <label>Purpose</label>
                             <select disabled name="" class="form-control spec_input" id="show_type">
                                 <option value="">Please Select Purpose</option>
@@ -198,7 +198,7 @@
                             </select>
                         </div>
 
-                        <div class="col-2 show_purpose_column_hidden">
+                        <div class="col-xl-2 col-sm-6 show_purpose_column_hidden">
                             <label for="manager_app">Other Purpose</label>
                             <input disabled type="text" id="show_purpose" class="form-control spec_input">
                         </div>
@@ -217,23 +217,23 @@
                     </div>
                     <br><br>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Client Name</label>
                             <input disabled type="text" id="show_client_name" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Number of Passengers</label>
                             <input disabled type="number" id="show_passenger_number" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-xl-3 col-sm-6">
                             <label>Requestor Name</label>
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
-                        <div hidden class="col-3">
+                        <div hidden class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>
@@ -241,16 +241,16 @@
 
                     <br>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Request Status</label>
                             <input disabled type="text" class="form-control" id="show_req_stats">
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Approved By</label>
                             <input disabled type="text" class="form-control" id="show_approver">
 
                         </div>
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Approved Date</label>
                             <input disabled type="text" class="form-control" id="show_approve_date">
 
@@ -258,17 +258,17 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Driver</label>
                             <input type="text" disabled class="form-control spec_input" id="show_driver">
                         </div>
 
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Vehicle</label>
                             <input type="text" disabled class="form-control spec_input" id="show_vehicle">
                         </div>
 
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-6">
                             <label>Approve Remarks</label>
                             {{-- <input type="text" disabled class="form-control spec_input" id="app_remarks"> --}}
 
@@ -540,14 +540,23 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    beforeSend: function() {
+                        $('#loader-overlay').addClass('show');
+                        $('#file_upload_modal').modal('hide');
+                    },
                     success: function(response) {
+                        $('#loader-overlay').removeClass('show');
                         if (response['isValid'] == false) {
+                            $('#file_upload_modal').one('hidden.bs.modal',
+                                function() {
+                                    $(this).modal('show');
+                                });
                             alertify.error('<span style="color: white;">' + response['msg'] +
                                 '</span>');
                             return;
                         }
 
-                        $('#file_upload_modal').modal('hide');
+
                         $('#tbl_transit_tbl').DataTable().ajax.reload();
                         $('#upload_file').val('');
                         $('#upload_remarks').val('');
