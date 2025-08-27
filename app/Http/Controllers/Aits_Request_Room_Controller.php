@@ -265,8 +265,8 @@ class Aits_Request_Room_Controller extends Controller
 
             })
             ->addColumn('department', function ($data) {
-                $profile = get_user_profile($data->request_by);
-                return DepartmentModel::find($profile->deparment_id)->description;
+                // $profile = get_user_profile($data->request_by);
+                return DepartmentModel::find($data->dept_id)->description;
 
             })
             ->addColumn('date_from', function ($data) {

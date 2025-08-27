@@ -12,6 +12,8 @@
 
         }
     </style>
+
+
     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
         <div class="my-auto">
             <h5 class="page-title fs-21 mb-1">Shuttle Request Approval</h5>
@@ -108,6 +110,7 @@
                                     <tr>
                                         <th>Request #</th>
                                         <th>Date Requested</th>
+                                        <th>Department</th>
                                         <th>Departure Date</th>
                                         <th>Appointment Date</th>
                                         <th>Pick Up Date</th>
@@ -255,7 +258,7 @@
                     <br><br>
                     <div class="row driver_row">
                         <div class="col-6">
-                            <label>Driver Remarks</label>
+                            <label>Message to the driver</label>
                             <textarea class="form-control spec_input" disabled id="driver_remarks"></textarea>
                         </div>
 
@@ -290,7 +293,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Driver</label>
-                            <select name="" class="form-control" id="driver_id">
+                            <select name="" class="form-control drop_down_arr spec_input" id="driver_id">
                                 <option value="">Select Driver</option>
                                 @foreach ($driver as $drivers)
                                     <option value="{{ $drivers->cen_user_id }}">{{ $drivers->fname }} {{ $drivers->lname }}
@@ -301,7 +304,7 @@
                         </div>
                         <div class="col-6">
                             <label>Car</label>
-                            <select name="" class="form-control" id="car_id">
+                            <select name="" class="form-control spec_input drop_down_arr" id="car_id">
                                 <option value="">Select Car</option>
                                 @foreach ($car as $cars)
                                     <option value="{{ $cars->id }}">{{ $cars->plate_number }} </option>
@@ -441,6 +444,9 @@
                     },
                     {
                         data: "date_created"
+                    },
+                    {
+                        data: "department"
                     },
                     {
                         data: "departure_date"
@@ -619,8 +625,6 @@
                 }
                 if ($(this).data('val') == 2) {
                     //dissapproved
-
-
                     Swal.fire({
                         title: "Are you sure?",
                         text: "You want to Disapprove this request?",
@@ -630,7 +634,7 @@
                         cancelButtonColor: "#d33",
                         confirmButtonText: "Yes, Disapprove it!",
                         input: 'textarea',
-                        inputPlaceholder: 'Reason for deletion?',
+                        inputPlaceholder: 'Reason of disapproval?',
                         inputAttributes: {
                             'aria-label': 'Enter your remarks'
                         },

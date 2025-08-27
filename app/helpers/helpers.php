@@ -2,6 +2,7 @@
 
 use App\Models\Aits_audit_logs;
 use App\Models\AitsProcessRemarks;
+use App\Models\UserModel;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -89,7 +90,6 @@ function insert_type()
 
 function dynamic_file($path, $link)
 {
-
     if (config('app.env') == 'local') {
         return ($link . '/' . $path);
     } else {
@@ -99,7 +99,6 @@ function dynamic_file($path, $link)
 
 function insert_driver()
 {
-
 
     DB::table('aits_drivers')->insert([
 
@@ -292,6 +291,28 @@ function get_person_fname($user_id)
 }
 
 
+function get_email_data($array)
+{
+    $emails = UserModel::whereIn('id', [1])
+        ->whereNotnull('user_email')
+        ->pluck('user_email')
+        ->toArray();
+
+    $emails_arr = [];
+    foreach ($emails as $email) {
+        $validator = Validator::make(
+            ['email' => $email],
+            ['email' => 'required|email:rfc,dns,spoof']
+        );
+        if ($validator->fails()) {
+            return $emails_arr[] = 'louie.ojide@valuecarehealth.com';
+        }
+        $emails_arr[] = $email;
+
+    }
+    return $emails_arr;
+
+}
 
 
 

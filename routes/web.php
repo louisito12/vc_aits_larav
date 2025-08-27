@@ -282,7 +282,12 @@ Route::get('text_excel', [PdfController::class, 'text_excel']);
 
 Route::get('test_api_data', [PmsApprovalController::class, 'test_api_data']);
 
+Route::get('test_email', function () {
 
+
+return    get_email_data([]);
+
+});
 
 // Route::Get('test_data', function () {
 //     $now = Carbon::now();

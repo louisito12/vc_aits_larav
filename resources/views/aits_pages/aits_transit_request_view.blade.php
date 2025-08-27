@@ -41,6 +41,8 @@
                                     <tr>
                                         <th>Request #</th>
                                         <th>Date Requested</th>
+                                        <th>Department</th>
+
                                         <th>Departure Date</th>
                                         <th>Appointment Date</th>
                                         <th>Pick Up Date</th>
@@ -556,6 +558,9 @@
                         data: "date_created"
                     },
                     {
+                        data: "department"
+                    },
+                    {
                         data: "departure_date"
                     },
                     {
@@ -783,8 +788,6 @@
             // });
 
 
-
-
             $(document).on('click', '.btn_delete', function() {
                 Swal.fire({
                     title: "Are you sure?",
@@ -836,8 +839,6 @@
                     }
                 })
             });
-
-
 
 
             $('#edit_shuttle_btn').click(function() {

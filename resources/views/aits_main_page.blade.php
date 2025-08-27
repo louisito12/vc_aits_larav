@@ -56,8 +56,8 @@
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease;
-       z-index: 9999; 
-     
+        z-index: 9999;
+
 
     }
 
@@ -84,7 +84,36 @@
         }
     }
 </style>
+<style>
+   
 
+    /* Hide the browser default arrow */
+    .drop_down_arr {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 100%;
+        padding: 0.5em 2.5em 0.5em 0.5em;
+        /* extra right padding for the arrow */
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+
+        /* Insert your custom arrow */
+        background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            );
+        background-repeat: no-repeat;
+        background-position: right 0.75em center;
+        background-size: 0.75em;
+        cursor: pointer;
+    }
+
+    /* Hide the arrow in IE/Edge */
+    .drop_down_arr::-ms-expand {
+        display: none;
+    }
+</style>
 
 <body>
 

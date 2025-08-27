@@ -8,6 +8,7 @@ use App\Models\AitsNotif;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
 use App\Models\AitsShuttleType;
+use App\Models\DepartmentModel;
 use App\Models\AitsVehicleModel;
 use Yajra\DataTables\DataTables;
 use App\Models\AitsRequestCloser;
@@ -475,6 +476,10 @@ class Aits_Transit_Controller extends Controller
                         </ul>
                     </div>
                 ';
+            })
+            ->addColumn('department', function ($data) {
+                return DepartmentModel::find($data->dept_id)->description;
+
             })
             ->rawColumns(['action', 'status_html', 'action_file', 'admin_action', 'driver_action'])
             ->make(true);
