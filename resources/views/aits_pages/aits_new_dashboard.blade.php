@@ -765,7 +765,8 @@
                 setInterval(function() {
                     counters();
                 }, 5 * 60 * 1000);
-            @elseif (in_array(4, $roles))
+            @endif
+            @if (in_array(4, $roles))
 
                 function messenger_counter() {
                     $.ajax({

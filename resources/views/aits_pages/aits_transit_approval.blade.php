@@ -674,13 +674,6 @@
                             });
                         }
                     })
-
-
-
-
-
-
-
                 }
 
 
@@ -699,7 +692,6 @@
                                 '</span>');
                             return
                         }
-
                         $('#show_shuttle_modal').modal('show');
                         $('#show_id').val(e['data']['id']);
                         $('#show_departure_date').val(e['data']['departure_date']);
@@ -725,7 +717,6 @@
                             'data'][
                             'request_status'
                         ]);
-
                         if (e['data']['request_status'] != 'Cancelled') {
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data'][
                                     'get_approver_data'
@@ -739,7 +730,6 @@
                                 e['data']['get_driver_data']['lname'] :
                                 ''
                             );
-
                             $('#show_vehicle').val(e['data']['get_car_data'] ? e['data'][
                                 'get_car_data'
                             ]['plate_number'] : '');
@@ -751,8 +741,6 @@
                                 ] :
                                 ''
                             );
-
-
                             if (e['data']['driver_remarks']) {
                                 $('.driver_row').removeAttr('hidden');
                                 $('#driver_remarks').val(e['data']['driver_remarks'])
@@ -763,19 +751,9 @@
                             }
 
                         }
-
-
-
-
                     }
-                })
-
-
-
-
-
-
-            })
+                });
+            });
 
 
             $('#car_id').change(function() {

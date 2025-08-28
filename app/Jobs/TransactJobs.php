@@ -155,6 +155,22 @@ class TransactJobs implements ShouldQueue
                     if ($aits_data->get_event_data) {
                         $event_name = $aits_data->get_event_data->event;
                     }
+                    $room_arr_email = [];
+                    $list_of_email = "";
+
+                    $process_arr = ['Approved', 'Disapproved', 'Cancell_request'];
+                    if ($req->aits_process == "Request") {
+                        $list_user_admin = DB::table('aits_role_access')
+                            ->where('role_id', 2)
+                            ->where('status', 1)
+                            ->pluck('user_id')
+                            ->toArray();
+                        $room_arr_email = get_email_data($list_user_admin);
+                    }
+                    if (in_array($req->aits_process, $process_arr)) {
+                        $room_arr_email = get_email_data([$aits_data->request_by]);
+
+                    }
 
 
                     $data_req = [
@@ -169,9 +185,10 @@ class TransactJobs implements ShouldQueue
                         "is_cancel" => $is_cancel,
                         'cancel_by' => $cancel_by_name,
                         'cancel_remarks' => $cancel_rem,
+                        'emails_test' => implode(',', $room_arr_email),
 
                     ];
-                    Mail::to(['johnpaultanion001@gmail.com', 'louisitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($data_req));
+                    Mail::to(['louie.ojide@valuecarehealth.com'])->send(new RequestMail($data_req));
 
                     AitsNotif::where('id', $req->id)->update([
                         'notif' => 1,
@@ -242,7 +259,23 @@ class TransactJobs implements ShouldQueue
                         $purpose_event = AitsShuttleType::find($transit_data->type)->type;
                     }
 
+                    $transit_emailer = [];
+                    $transit_process = ["Approve", "Disapprove", "Cancell_request"];
+                    if (in_array($transits->aits_process, $transit_process)) {
+                        $transit_emailer = get_email_data([$transit_data->user_id]);
+                    }
+                    if ($transits->aits_process == "Request") {
+                        $list_user_admin_transit = DB::table('aits_role_access')
+                            ->where('role_id', 2)
+                            ->where('status', 1)
+                            ->pluck('user_id')
+                            ->toArray();
+                        $transit_emailer = get_email_data([$list_user_admin_transit]);
+                    }
+                    if ($transits->aits_process == "Approve_driver") {
+                        $transit_emailer = get_email_data([$transit_data->driver_id]);
 
+                    }
 
 
                     $transit_data = [
@@ -262,7 +295,8 @@ class TransactJobs implements ShouldQueue
                         'vehicle' => $vehicle,
                         'is_approve' => $is_approve,
                         'app_remarks' => $app_remarks,
-                        'purpose' => $purpose_event
+                        'purpose' => $purpose_event,
+                        'emails_test' => implode(',', $transit_emailer),
                     ];
 
                     Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($transit_data));

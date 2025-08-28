@@ -293,7 +293,7 @@ function get_person_fname($user_id)
 
 function get_email_data($array)
 {
-    $emails = UserModel::whereIn('id', [1])
+    $emails = UserModel::whereIn('id', $array)
         ->whereNotnull('user_email')
         ->pluck('user_email')
         ->toArray();

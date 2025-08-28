@@ -58,7 +58,6 @@
         transition: opacity 0.3s ease;
         z-index: 9999;
 
-
     }
 
     #loader-overlay.show {

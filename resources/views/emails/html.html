@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>List Task</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #eef2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .task-box {
+      width: 420px; /* wider */
+      height: 480px; /* fixed height */
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 14px 18px;
+      background-color: #4e89ff;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .content {
+      padding: 16px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    .date-group {
+      margin-bottom: 24px;
+    }
+
+    .date-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .tasks-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tasks-list li {
+      background: #f5f7fa;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .tasks-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .tasks-list input[type="checkbox"] {
+      margin-right: 10px;
+      accent-color: #4e89ff;
+      width: 16px;
+      height: 16px;
+    }
+
+    .tasks-list li:hover {
+      background: #e2e6ef;
+    }
+
+    @media (max-width: 450px) {
+      .task-box {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="task-box">
+    <div class="header">List Task</div>
+    <div class="content">
+      <div class="date-group">
+        <div class="date-label">Tue Sep 02 2025</div>
+        <ul class="tasks-list">
+          <li><input type="checkbox" checked> Task A</li>
+          <li><input type="checkbox" checked> Task B</li>
+          <li><input type="checkbox"> Task C</li>
+          <li><input type="checkbox"> Task D</li>
+        </ul>
+      </div>
+
+      <div class="date-group">
+        <div class="date-label">Wed Sep 03 2025</div>
+        <ul class="tasks-list">
+          <li><input type="checkbox"> Task A</li>
+          <li><input type="checkbox"> Task B</li>
+        </ul>
+      </div>
+
+      <div class="date-group">
+        <div class="date-label">Thu Sep 04 2025</div>
+        <ul class="tasks-list">
+          <li><input type="checkbox"> Task A</li>
+        </ul>
+      </div>
+
+      <div class="date-group">
+        <div class="date-label">Fri Sep 05 2025</div>
+        <ul class="tasks-list">
+          <li><input type="checkbox"> Task A</li>
+          <li><input type="checkbox"> Task B</li>
+          <li><input type="checkbox"> Task C</li>
+        </ul>
+      </div>
+      
+      <!-- Add more days/tasks as needed -->
+    </div>
+  </div>
+
+</body>
+</html>
