@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Mail\RequestMail;
+use App\Models\AitsNotif;
 use App\Models\AitsDelivery;
 use Illuminate\Http\Request;
 use App\Models\AitsFileModel;
@@ -12,6 +14,7 @@ use App\Models\AitsShuttleRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\AitsRequestRoomModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class Aits_Dashboard extends Controller
 {
@@ -100,9 +103,12 @@ class Aits_Dashboard extends Controller
 
         }
         if ($params == 2 || $params == 3) {
-            $date_ex = $params == 3 ? '<' : '=';
-            $data->whereDate('appointment_date', $date_ex, Carbon::now()->toDateString())
+            $date_ex = $params == 3 ? '<' : '>';
+            $data->where('pick_up_date', $date_ex, Carbon::now())
                 ->where('request_status', 'Approved');
+            if ($params == 2) {
+                $data->whereDate('pick_up_date', '=', Carbon::now()->toDateString());
+            }
         }
         if ($params == 4) {
             $data->where('request_status', 'Cancelled');
@@ -112,9 +118,6 @@ class Aits_Dashboard extends Controller
 
         $controller = new Aits_Transit_Controller();
         return $controller->transit_data_table($data);
-
-
-
 
     }
 
@@ -139,9 +142,6 @@ class Aits_Dashboard extends Controller
                 $shuttle_request_id = " AND user_id =$user_id";
             }
 
-
-
-
             $now = Carbon::now();
             $room_request = "SELECT SUM(CASE WHEN request_status = 'Pending' THEN 1  WHEN request_status ='Approved'   AND CONVERT(VARCHAR(10), date_to, 23) > CONVERT(VARCHAR(10), GETDATE(), 23) THEN 1   ELSE 0 END) AS pending_count,
             SUM(CASE WHEN request_status = 'Approved' AND CONVERT(VARCHAR(10), date_to, 23) = CONVERT(VARCHAR(10), GETDATE(), 23) AND date_to > '$now'
@@ -159,7 +159,6 @@ class Aits_Dashboard extends Controller
             SUM(CASE WHEN request_status ='Cancelled' Then 1 ELSE 0 END) AS vehicle_cancelled
                         FROM aits_shuttle_requests WHERE (is_transact = 1  AND status = 1) $shuttle_request_id";
 
-
             $logistics_query = "
               SELECT CASE WHEN procedures = 1 THEN 'For Delivery'
               WHEN procedures = 2 THEN 'For Collection' WHEN procedures = 3 THEN 'For Pick Up' 
@@ -172,16 +171,13 @@ class Aits_Dashboard extends Controller
 
             $room_counts = DB::connection('sqlsrv')->select($room_request, )[0];
 
-
             $vehicle_counts = DB::connection('sqlsrv')->select($shuttle_request, [
             ])[0];
-
 
             $logistics_count = DB::connection('sqlsrv')->select(
                 $logistics_query,
                 []
             );
-
 
 
             return response()->json([
@@ -221,10 +217,6 @@ class Aits_Dashboard extends Controller
                 $logistics_query,
                 []
             );
-
-
-
-
 
             return response()->json([
                 'logistics_request_messenger' => $logistics_count,
@@ -272,14 +264,46 @@ class Aits_Dashboard extends Controller
 
         $data = $data->get();
 
-
-
-
         $db_tbl = $this->logistics_datatable($data, $procedure);
         return $db_tbl;
 
 
 
+    }
+
+    public function room_reserve_html($room_id)
+    {
+
+        $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_department'])->where('request_status', 'Approved')
+            ->where('is_transact', 1)
+            ->where('date_to', '>', Carbon::now())
+            ->where('room_id', 7)
+            ->get();
+            
+        $html = "";
+        if (count($data) > 0) {
+            $html = '<div id="" class="priority low"><span>Approved Request</span></div>';
+            foreach ($data as $datas) {
+                $date_from = Carbon::parse($datas->date_from)->format('g:i A');
+                $date_to = Carbon::parse($datas->date_to)->format('g:i A');
+                $date_day = Carbon::parse($datas->date_to)->format('M j, Y');
+                $event = $datas->get_event_data ? $datas->get_event_data->event : 'Other';
+                $remarks = $datas->remarks;
+                $html .= '  <div class="task low">
+                                            <div class="desc">
+                                                <div class="title"> ' . $datas->get_room_data->room_name . '(' . $datas->get_department->description . ')</div>
+                                                <div>(<b>' . $event . '</b>)    ' . $remarks . ' </div>
+                                            </div>
+                                            <div class="time">
+                                                <div class="date">' . $date_day . '</div>
+                                                <div> ' . $date_from . '- ' . $date_to . '</div>
+                                            </div>
+                                        </div>
+                                </div> ';
+            }
+        }
+
+        return $html;
     }
 
 

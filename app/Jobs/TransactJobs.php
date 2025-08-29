@@ -106,9 +106,6 @@ class TransactJobs implements ShouldQueue
 
 
 
-
-
-
             //Room request Emailer
 
             $request = AitsNotif::where('aits_table', 'aits_request_room_models')
@@ -304,11 +301,124 @@ class TransactJobs implements ShouldQueue
                         'notif' => 1,
                     ]);
                 }
-
             }
 
-
             //logistic request
+            // $request_logistic = AitsNotif::where('aits_table', 'aits_deliveries')
+            //     ->where('notif', 0)
+            //     ->where('status', 1)
+            //     ->get();
+
+
+            // $logistic_data = [];
+
+            // foreach ($request_logistic as $email_logistic) {
+            //     $data_log = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->where('id', $email_logistic->aits_id)->first();
+            //     if ($data_log) {
+            //         $number = $data_log->request_no ?: 0;
+            //         $request_number = sprintf('%03d', $number);
+            //         $req_number = Carbon::parse($email_logistic->date_created)->format('Y-m-d') . '-' . $request_number;
+            //         $procedure = $data_log->procedures;
+
+            //         if ($procedure == 1) {
+            //             $stat = 'For Delivery';
+            //         }
+            //         if ($procedure == 2) {
+            //             $stat = 'For Collection';
+            //         }
+            //         if ($procedure == 3) {
+            //             $stat = 'For Pick Up';
+            //         }
+
+            //         $subject = 'Notification for Logisitic Request' . ' ' . $stat . ' Request#' . ' ' . $req_number;
+            //         $process = "";
+
+            //         $email_arr_logistics = [];
+
+
+
+
+            //         if ($email_logistic->aits_process == 'Delivered messenger') {
+            //             $process = $stat . ' ' . 'is completed';
+            //         }
+            //         if ($email_logistic->aits_process == 'Request') {
+            //             $process = 'Request is for ' . $stat;
+            //         }
+
+            //         if ($email_logistic->aits_process == 'Reschedule messenger') {
+            //             $process = $stat . ' ' . 'is rescheduled';
+            //         }
+
+            //         $is_cancel = 0;
+            //         $cancel_rem = "";
+            //         $cancel_by_name = "";
+            //         if ($email_logistic->aits_process == "Cancell_request") {
+            //             $process = "Request is Cancelled";
+            //             $is_cancel = 1;
+            //             $cancel_by = get_person_fname($email_logistic->cancelled_by);
+
+            //             $cancel_by_name = $cancel_by['firstname'] . ' ' . $cancel_by['lastname'];
+            //             $cancel_rem = $email_logistic->remarks;
+            //         }
+            //         $logistic_emailer = [];
+
+            //         $log_process_arr = ['Cancell_request', 'Reschedule messenger', 'Delivered messenger'];
+
+            //         if ($email_logistic->aits_process == 'Request') {
+            //             //admin messenger emailer
+            //             $email_arr_logistics[] = $data_log->messenger_id;
+            //             $list_user_admin_logistic = DB::table('aits_role_access')
+            //                 ->where('role_id', 2)
+            //                 ->where('status', 1)
+            //                 ->pluck('user_id')
+            //                 ->toArray();
+
+
+            //             foreach ($list_user_admin_logistic as $list_user_admin_logistics) {
+            //                 $email_arr_logistics[] = $list_user_admin_logistics;
+            //             }
+
+            //             $logistic_emailer = get_email_data($email_arr_logistics);
+
+            //         }
+            //         if (in_array($email_logistic->aits_process, $log_process_arr)) {
+            //             //requestor emailer only,
+            //             $logistic_emailer[] = get_email_data([$data_log->user_id]);
+            //         }
+
+            //         $logistic_data = [
+            //             'requestor' => $data_log['get_requestor_fullname']['firstname'] . ' ' . $data_log['get_requestor_fullname']['lastname'],
+            //             'request_number' => $req_number,
+            //             'type' => $data_log['get_delivery_type']['del_type'],
+            //             'request_for' => $stat,
+            //             'date_requested' => date_converter($email_logistic->date_created),
+            //             'area' => $data_log['get_area_request']['area'],
+            //             'company_name' => $data_log->company_name,
+            //             'address' => $data_log->complete_address,
+            //             "trans_process" => 3,
+            //             'process' => $process,
+            //             "subject" => $subject,
+            //             "is_cancel" => $is_cancel,
+            //             'cancel_by' => $cancel_by_name,
+            //             'cancel_remarks' => $cancel_rem,
+            //             'email_test' => implode(',', $email_arr_logistics)
+            //         ];
+
+
+            //         Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($logistic_data));
+            //         AitsNotif::where('id', $email_logistic->id)->update([
+            //             'notif' => 1,
+            //         ]);
+
+
+
+            //     }
+
+            // }
+
+
+
+
 
             $request_logistic = AitsNotif::where('aits_table', 'aits_deliveries')
                 ->where('notif', 0)
@@ -320,7 +430,6 @@ class TransactJobs implements ShouldQueue
 
             foreach ($request_logistic as $email_logistic) {
                 $data_log = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])->where('id', $email_logistic->aits_id)->first();
-
                 if ($data_log) {
                     $number = $data_log->request_no ?: 0;
                     $request_number = sprintf('%03d', $number);
@@ -338,8 +447,13 @@ class TransactJobs implements ShouldQueue
                     }
 
                     $subject = 'Notification for Logisitic Request' . ' ' . $stat . ' Request#' . ' ' . $req_number;
-
                     $process = "";
+
+                    $email_arr_logistics = [];
+
+
+
+
                     if ($email_logistic->aits_process == 'Delivered messenger') {
                         $process = $stat . ' ' . 'is completed';
                     }
@@ -350,6 +464,7 @@ class TransactJobs implements ShouldQueue
                     if ($email_logistic->aits_process == 'Reschedule messenger') {
                         $process = $stat . ' ' . 'is rescheduled';
                     }
+
                     $is_cancel = 0;
                     $cancel_rem = "";
                     $cancel_by_name = "";
@@ -361,6 +476,32 @@ class TransactJobs implements ShouldQueue
                         $cancel_by_name = $cancel_by['firstname'] . ' ' . $cancel_by['lastname'];
                         $cancel_rem = $email_logistic->remarks;
                     }
+
+
+                    $log_process_arr = ['Cancell_request', 'Reschedule messenger', 'Delivered messenger'];
+                    $logistic_emailer = [];
+                    if ($email_logistic->aits_process == 'Request') {
+                        //admin messenger emailer
+                        $email_arr_logistics[] = $data_log->messenger_id;
+                        $list_user_admin_logistic = DB::table('aits_role_access')
+                            ->where('role_id', 2)
+                            ->where('status', 1)
+                            ->pluck('user_id')
+                            ->toArray();
+
+
+                        foreach ($list_user_admin_logistic as $list_user_admin_logistics) {
+                            $email_arr_logistics[] = $list_user_admin_logistics;
+                        }
+
+                        $logistic_emailer = get_email_data($email_arr_logistics);
+
+                    }
+                    if (in_array($email_logistic->aits_process, $log_process_arr)) {
+                        //requestor emailer only,
+                        $logistic_emailer = get_email_data([$data_log->user_id]);
+                    }
+
 
 
                     $logistic_data = [
@@ -378,6 +519,7 @@ class TransactJobs implements ShouldQueue
                         "is_cancel" => $is_cancel,
                         'cancel_by' => $cancel_by_name,
                         'cancel_remarks' => $cancel_rem,
+                        'emails_test' => implode(',', $logistic_emailer)
                     ];
 
 
@@ -389,7 +531,6 @@ class TransactJobs implements ShouldQueue
 
 
                 }
-
             }
 
 
@@ -397,15 +538,11 @@ class TransactJobs implements ShouldQueue
 
 
 
-
             $closer_data = AitsRequestCloser::where('status', 1)->first();
-
             if ($closer_data) {
                 $date_end = $closer_data->date_end;
                 $date_now = carbon::now()->format('Y-m-d H:i:s.v');
                 $date_yes = Carbon::parse($date_end)->format('Y-m-d H:i:s.v');
-
-
                 $closer_id = $closer_data->id;
                 if ($closer_data->initial_notif == 0) {
                     $value = 1;
@@ -418,9 +555,6 @@ class TransactJobs implements ShouldQueue
                         "is_cancel" => 0,
 
                     ];
-
-
-
                     AitsRequestCloser::where('id', $closer_id)->update([
                         'initial_notif' => 1,
                     ]);
@@ -448,20 +582,11 @@ class TransactJobs implements ShouldQueue
                             'notif' => 1,
                         ]);
 
-
                         Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($emailer_data));
-
-
 
                     }
 
-
-
-
                 }
-
-
-
 
             }
 
@@ -535,7 +660,6 @@ class TransactJobs implements ShouldQueue
                         'reason_cancellation' => $manulife_emailer->remarks,
                         'requestor' => $requestor_name,
                         'emailer' => $email_rec,
-
                     ];
 
                     $mail_manulife = Mail::to(['louie.ojide@valuecarehealth.com'])->send(new ManulifeMail($mailer_obs));

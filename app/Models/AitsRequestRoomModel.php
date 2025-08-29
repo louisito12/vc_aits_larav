@@ -48,7 +48,7 @@ class AitsRequestRoomModel extends Model
     // }
     public function get_department()
     {
-        return $this->belongsTo(DepartmentModel::class, 'department_id');
+        return $this->belongsTo(DepartmentModel::class, 'dept_id');
     }
 
 

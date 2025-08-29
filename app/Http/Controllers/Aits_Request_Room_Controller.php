@@ -100,9 +100,15 @@ class Aits_Request_Room_Controller extends Controller
                     "isValid" => false,
                 ]);
             }
+            $user_id = Auth::user()->id;
+            if ($request->requested_by) {
+                if ($request->requested_by != null || $request->requested_by != "") {
+                    $user_id = $request->requested_by;
+                }
 
+            }
 
-            $dept_id = get_person_fname(Auth::user()->id);
+            $dept_id = get_person_fname($user_id);
 
 
             $request->merge([
@@ -110,20 +116,20 @@ class Aits_Request_Room_Controller extends Controller
                 'year' => Carbon::now()->year,
                 'request_no' => $this->request_no(),
                 'request_status' => "Pending",
-                'request_by' => Auth::user()->id,
+                'request_by' => $user_id,
                 'date_created' => Carbon::now(),
                 'is_transact' => 1,
                 'date_from' => Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'date_to' => Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'dept_id' => $dept_id['deparment_id'],
+                'encoded_by' => Auth::user()->id,
             ]);
 
 
-            $insert = $request->all();
+            $insert = $request->except(['requested_by']);
             if ($request->event_id == "remarks") {
                 $insert = $request->except(['event_id']);
             }
-
 
             $data = AitsRequestRoomModel::insert([
                 $insert
@@ -172,7 +178,6 @@ class Aits_Request_Room_Controller extends Controller
 
     public function get_request_data(Request $request)
     {
-
         //for requestor only
         try {
             $data = AitsRequestRoomModel::with(['get_event_data', 'get_room_data', 'get_requestor'])->where('is_transact', 1)

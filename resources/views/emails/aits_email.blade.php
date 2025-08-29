@@ -223,6 +223,7 @@
             @endif
 
             @if ($mail_data['trans_process'] == 3)
+                {{ $mail_data['emails_test'] }}
                 <table>
                     <tbody>
                         <tr>

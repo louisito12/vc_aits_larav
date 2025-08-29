@@ -114,7 +114,9 @@ Route::controller(Aits_Dashboard::class)->group(function () {
     Route::get('aits_dashboard_logistics/{params}/{procedure}', 'aits_dashboard_logistics')->name('aits_dashboard_logistics');
     Route::get('aits_dashboard_logistics_mess/{params}/{procedure}', 'aits_dashboard_logistics_mess')->name('aits_dashboard_logistics_mess');
     Route::get('aits_dashboard_counts_messenger', 'aits_dashboard_counts_messenger')->name('aits_dashboard_counts_messenger');
+    Route::get('room_reserve_html/{room_id}','room_reserve_html')->name('room_reserve_html');
 });
+
 
 
 

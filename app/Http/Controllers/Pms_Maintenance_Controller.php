@@ -588,6 +588,7 @@ class Pms_Maintenance_Controller extends Controller
 
     public function get_noted_by(Request $request)
     {
+        $data_new = [];
         $data = UserProfile::on('main_user')
             ->select('tbl_personal_datas.user_id', 'tbl_personal_datas.firstname', 'tbl_personal_datas.lastname')
             ->where(DB::raw("CONCAT(firstname, ' ', lastname)"), 'LIKE', '%' . $request->searchTerm . '%')
@@ -596,7 +597,8 @@ class Pms_Maintenance_Controller extends Controller
             ->limit(400)
             ->OrderBy('firstname', 'asc')
             ->get();
-        $data_new = [];
+        $data_new[] = ['id' => '', "text" => 'Choose Person'];
+
         foreach ($data as $dt) {
             $data_new[] = array("id" => $dt->user_id, "text" => $dt->firstname . ' ' . $dt->lastname);
         }

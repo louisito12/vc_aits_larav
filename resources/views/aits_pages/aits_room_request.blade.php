@@ -116,6 +116,26 @@
                         </div>
                     </div>
                     <br>
+
+
+                    @php
+                        $roles = roles_array(Auth::user()->id);
+                    @endphp
+
+                    @if (in_array(2, $roles))
+                        <div class="row">
+                            <div class="col-6">
+                                <div id="" class="row">
+                                    <div class="col-12">
+                                        <label>Requested By</label>
+                                        <select name="" class="form-control spec_input" id="requested_by"></select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br>
+                    @endif
                     <div id="purpose_row" class="row">
                         <div class="col-12">
                             <label>Purpose</label>
@@ -299,12 +319,18 @@
                 $('#add_room_request').modal('show')
             })
 
+
+            // requested_by
+
             $('#save_room_request').click(function() {
                 const room_id = $('#room_val').val();
                 const event_id = $('#event_val').val();
                 const date_to = $('#date_to').val();
                 const date_from = $('#date_from').val();
                 const purpose = $('#purpose').val();
+                const requested_by = $('#requested_by').val();
+
+
 
                 $.ajax({
                     url: "{{ route('aits_save_room_request') }}",
@@ -314,7 +340,8 @@
                         event_id: event_id,
                         date_to: date_to,
                         date_from: date_from,
-                        remarks: purpose
+                        remarks: purpose,
+                        requested_by: requested_by
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -339,10 +366,40 @@
                         $('#date_to').val("");
                         $('#date_from').val("");
                         $('#purpose').val("");
+                        $('#requested_by').val(null).trigger('change');
                     }
 
                 });
             });
+
+
+
+            $('#add_room_request').on('shown.bs.modal', function() {
+                $('#requested_by').select2({
+                    dropdownParent: $('#add_room_request .modal-content'),
+                    ajax: {
+                        url: '{{ route('get_noted_by') }}',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "post",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                searchTerm: params.term
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    },
+                })
+            });
+
             // $('#event_val').change(function () {
             //     $('#purpose').val('');
             //     if ($(this).val() == "remarks") {

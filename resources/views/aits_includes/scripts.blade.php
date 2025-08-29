@@ -1,4 +1,4 @@
-<script src="{{asset('aits_asset/assets/libs/@popperjs/core/umd/popper.min.js')}}"></script>
+<script src="{{ asset('aits_asset/assets/libs/@popperjs/core/umd/popper.min.js') }}"></script>
 
 
 
@@ -53,8 +53,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+ --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script> --}}
 
 
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
