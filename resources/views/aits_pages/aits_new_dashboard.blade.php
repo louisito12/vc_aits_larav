@@ -61,15 +61,15 @@
     @endphp
     <div class="container-fluid mt-5">
         <style>
-            body {
+            /* body {
                 margin-top: 40px;
                 background: #eee;
-            }
+            } */
 
             .page-todo .tasks {
-                background: #fff;
+                /* background: #fff; */
                 padding: 0;
-                border-right: 1px solid #d1d4d7;
+                /* border-right: 1px solid #d1d4d7; */
                 /* margin: -30px 15px -30px -15px */
             }
 
@@ -91,19 +91,19 @@
             .page-todo .priority.high span {
                 background: #f86c6b;
                 padding: 2px 10px;
-                color: #fff;
+                /* color: #fff; */
                 display: inline-block;
                 font-size: 12px
             }
 
             .page-todo .priority.medium {
-                background: #fff0ab;
+                /* background: #fff0ab; */
                 margin-bottom: 1px
             }
 
             .page-todo .priority.medium span {
                 background: #f8cb00;
-                padding: 2px 10px;
+                /* padding: 2px 10px; */
                 color: #fff;
                 display: inline-block;
                 font-size: 12px
@@ -117,13 +117,13 @@
             .page-todo .priority.low span {
                 background: #4dbd74;
                 padding: 2px 10px;
-                color: #fff;
+                /* color: #fff; */
                 display: inline-block;
                 font-size: 12px
             }
 
             .page-todo .task {
-                border-bottom: 1px solid #e4e5e6;
+                /* border-bottom: 1px solid #e4e5e6; */
                 margin-bottom: 1px;
                 position: relative
             }
@@ -1244,7 +1244,6 @@
                     counters();
                 }, 5 * 60 * 1000);
             @elseif (in_array(4, $roles))
-
                 function messenger_counter() {
                     $.ajax({
                         url: "{{ route('aits_dashboard_counts_messenger') }}",
@@ -1256,9 +1255,6 @@
                                 alertify.error('<span style="color: white;">' + e['msg'] + '</span>');
                                 return;
                             }
-
-
-
                             var logisticsRequests = e['logistics_request_messenger'];
                             var for_delivery = "For Delivery";
                             var index_messenger = -1;

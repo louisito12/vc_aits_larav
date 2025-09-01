@@ -463,7 +463,6 @@ class Pms_Maintenance_Controller extends Controller
             for ($m = 1; $m <= 12; $m++) {
                 $highlight = false;
 
-
                 if ($schedule == 'monthly') {
                     if ($start->year < $year || ($start->year == $year && $start->month <= $m)) {
                         $highlight = true;
@@ -519,7 +518,6 @@ class Pms_Maintenance_Controller extends Controller
                 } elseif ($schedule == 'daily') {
                     // // if ($start->year == $year && $start->month == $m) {}
                     // $highlight = true;
-
                     if (($start->year == $year && $start->month <= $m) || $start->year < $year) {
                         $highlight = true;
                     }
@@ -734,7 +732,6 @@ class Pms_Maintenance_Controller extends Controller
 
 
 
-
         } catch (\Exception $e) {
             return response()->json([
                 'msg' => 'Error, Please Contact ICT department.' . '<br>' . $e->getMessage(),
@@ -743,12 +740,7 @@ class Pms_Maintenance_Controller extends Controller
             ]);
         }
 
-
-
-
     }
-
-
 
 
     public function add_pms_remarks(Request $request)
@@ -780,8 +772,6 @@ class Pms_Maintenance_Controller extends Controller
             $date_start = Carbon::createFromFormat('Y-m-d H:i:s.u', $dateString)->format('Y-m-d');
             $start_date = next_date_pms($date_start, $pms_details->pms_date_types);
             $this->insert_pms_alert($pms_file->pms_id, $start_date);
-
-
 
         } catch (\Exception $e) {
             return response()->json([
