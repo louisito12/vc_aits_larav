@@ -111,6 +111,7 @@ class Aits_Request_Room_Controller extends Controller
             $dept_id = get_person_fname($user_id);
 
 
+
             $request->merge([
                 'status' => 1,
                 'year' => Carbon::now()->year,
@@ -156,6 +157,42 @@ class Aits_Request_Room_Controller extends Controller
                 'send_to_user_id' => 'Admin',
                 'date_created' => Carbon::now(),
             ]);
+
+
+            if ($request->room_id == 7) {
+                if (Auth::user()->id == 682) {
+                    AitsRequestRoomModel::where('id', $latest_id)->update([
+                        'request_status' => 'Approved',
+                        'approve_by' => Auth::user()->id,
+                        'approve_date' => Carbon::now(),
+                    ]);
+
+                    $object = [
+                        'attachment_id' => $latest_id,
+                        'remarks' => $request->remarks,
+                        'procedures' => 'Approved' . ' of Room Request',
+                        'table_name' => 'aits_request_room_models',
+                        'users_id' => Auth::user()->id,
+                        'status' => 1,
+                        'ate_created' => Carbon::now(),
+                    ];
+                    process_remarks($object);
+
+
+                    AitsNotif::create([
+                        'aits_table' => "aits_request_room_models",
+                        'aits_id' => $latest_id,
+                        'aits_process' => 'Approved',
+                        'send_to_user_id' => $user_id,
+                        'date_created' => Carbon::now(),
+                        'remarks' => $request->remarks,
+                    ]);
+                }
+            }
+
+
+
+
 
             return response()->json([
                 'msg' => 'Successfully Inserted Request Room',

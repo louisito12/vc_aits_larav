@@ -267,11 +267,11 @@ class TransactJobs implements ShouldQueue
                             ->where('status', 1)
                             ->pluck('user_id')
                             ->toArray();
-                        $transit_emailer = get_email_data([$list_user_admin_transit]);
+                        $transit_emailer = get_email_data($list_user_admin_transit);
                     }
                     if ($transits->aits_process == "Approve_driver") {
                         $transit_emailer = get_email_data([$transit_data->driver_id]);
-
+                        $status = 'Email notification for Driver';
                     }
 
 

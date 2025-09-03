@@ -746,7 +746,7 @@ class Pms_Maintenance_Controller extends Controller
     public function add_pms_remarks(Request $request)
     {
         try {
-
+            //this is my comment
             foreach ($request->file('file') as $item) {
                 $ext = $item->getClientOriginalExtension();
                 $fname = $item->getClientOriginalName();
