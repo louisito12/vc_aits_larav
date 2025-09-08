@@ -62,9 +62,9 @@
     <div class="container-fluid mt-5">
         <style>
             /* body {
-                margin-top: 40px;
-                background: #eee;
-            } */
+                    margin-top: 40px;
+                    background: #eee;
+                } */
 
             .page-todo .tasks {
                 /* background: #fff; */
@@ -511,7 +511,6 @@
         </div>
 
         <div class="container-fluid my-4">
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -539,9 +538,9 @@
 
 
         @if (in_array(2, $roles) || in_array(3, $roles))
-            <div class="row g-4">
+            <div class="row mx-auto">
                 <!-- Pending Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-warning shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-warning mb-4">
@@ -583,7 +582,7 @@
                 </div>
 
                 <!-- Total Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-primary shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-4">
@@ -624,7 +623,7 @@
                 </div>
 
                 <!-- Approved Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-success shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-success mb-4">
@@ -671,7 +670,7 @@
 
                 {{-- Cancelled Request --}}
                 <!-- Approved Requests -->
-                <div class="col-md-3">
+                <div hidden class="col-md-3">
                     <div class="card border-danger shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-danger mb-4">
@@ -716,16 +715,15 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
+            <br>
         @endif
 
-        <br>
-        @if (in_array(4, $roles))
-            <div class="row g-4">
+
+        @if (in_array(4, haystack: $roles))
+            <div class="row g-3">
                 <!-- Pending Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-warning shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-warning mb-4">
@@ -757,7 +755,7 @@
                 </div>
 
                 <!-- Total Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-primary shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-primary mb-4">
@@ -786,7 +784,7 @@
                 </div>
 
                 <!-- Approved Requests -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-success shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-success mb-4">
@@ -820,7 +818,7 @@
 
                 <!--  Cancelled Request-->
 
-                <div class="col-md-3">
+                <div hidden class="col-md-3">
                     <div class="card border-danger shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title text-danger mb-4">
@@ -851,10 +849,9 @@
                     </div>
                 </div>
             </div>
+            <br>
         @endif
     </div>
-
-
 
 
 
@@ -938,8 +935,6 @@
             </div>
         </div>
     </div>
-
-
 
 
 
@@ -1244,6 +1239,7 @@
                     counters();
                 }, 5 * 60 * 1000);
             @elseif (in_array(4, $roles))
+
                 function messenger_counter() {
                     $.ajax({
                         url: "{{ route('aits_dashboard_counts_messenger') }}",

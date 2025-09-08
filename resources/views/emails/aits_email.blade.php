@@ -128,7 +128,7 @@
             <br>
 
             @if ($mail_data['trans_process'] == 1)
-                {{ $mail_data['emails_test'] }}
+         
                 <table>
                     <tbody>
                         <tr>
@@ -160,7 +160,7 @@
             @endif
 
             @if ($mail_data['trans_process'] == 2)
-                {{ $mail_data['emails_test'] }}
+           
                 <table>
                     <tbody>
                         <tr>
@@ -223,7 +223,7 @@
             @endif
 
             @if ($mail_data['trans_process'] == 3)
-                {{ $mail_data['emails_test'] }}
+          
                 <table>
                     <tbody>
                         <tr>

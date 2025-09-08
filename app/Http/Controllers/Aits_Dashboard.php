@@ -279,7 +279,7 @@ class Aits_Dashboard extends Controller
             ->where('date_to', '>', Carbon::now())
             ->where('room_id', 7)
             ->get();
-            
+
         $html = "";
         if (count($data) > 0) {
             $html = '<div id="" class="priority low"><span>Approved Request</span></div>';
@@ -288,11 +288,12 @@ class Aits_Dashboard extends Controller
                 $date_to = Carbon::parse($datas->date_to)->format('g:i A');
                 $date_day = Carbon::parse($datas->date_to)->format('M j, Y');
                 $event = $datas->get_event_data ? $datas->get_event_data->event : 'Other';
+
                 $remarks = $datas->remarks;
                 $html .= '  <div class="task low">
                                             <div class="desc">
-                                                <div class="title"> ' . $datas->get_room_data->room_name . '(' . $datas->get_department->description . ')</div>
-                                                <div>(<b>' . $event . '</b>)    ' . $remarks . ' </div>
+                                                <div class="title"> ' . $datas->get_room_data->room_name .' '. '(' . $datas->requested_text . ')</div>
+                                                <div>(<b>' . $event . '</b>)' . ' ' . $remarks . ' </div>
                                             </div>
                                             <div class="time">
                                                 <div class="date">' . $date_day . '</div>

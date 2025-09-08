@@ -36,19 +36,25 @@ class Aits_Request_Room_Controller extends Controller
 
     public function aits_save_room_request(Request $request)
     {
+        $list_add = [682];
+        $rules = [
+            'room_id' => [
+                'required',
+            ],
+            'event_id' => ['required'],
+            'date_to' => ['required'],
+            'date_from' => ['required'],
+            'remarks' => ['required'],
+        ];
+
+        if (in_array(Auth::user()->id, $list_add)) {
+            $rules['requested_text'] = ['required'];
+        }
 
         try {
             $validated = Validator::make(
                 $request->all(),
-                [
-                    'room_id' => [
-                        'required',
-                    ],
-                    'event_id' => ['required'],
-                    'date_to' => ['required'],
-                    'date_from' => ['required'],
-                    'remarks' => ['required'],
-                ],
+                $rules,
             );
 
 
@@ -101,10 +107,13 @@ class Aits_Request_Room_Controller extends Controller
                 ]);
             }
             $user_id = Auth::user()->id;
-            if ($request->requested_by) {
-                if ($request->requested_by != null || $request->requested_by != "") {
-                    $user_id = $request->requested_by;
-                }
+            if ($request->requested_text) {
+                // if ($request->requested_by != null || $request->requested_by != "") {
+                //     $user_id = $request->requested_by;
+                // }
+                $request->merge([
+                    'requested_text' => $request->requested_text
+                ]);
 
             }
 
@@ -117,7 +126,7 @@ class Aits_Request_Room_Controller extends Controller
                 'year' => Carbon::now()->year,
                 'request_no' => $this->request_no(),
                 'request_status' => "Pending",
-                'request_by' => $user_id,
+                'request_by' => Auth::user()->id,
                 'date_created' => Carbon::now(),
                 'is_transact' => 1,
                 'date_from' => Carbon::parse($request->date_from, 'Asia/Manila')->format('Y-m-d h:i A'),

@@ -149,11 +149,27 @@ class Pms_Maintenance_Controller extends Controller
             }
 
             if ($request->is_email == 1) {
-                if ($request->send_to == "" || $request->cc_to == "") {
+                $validator = Validator::make($request->all(), [
+                    'send_to' => 'required|array|min:1',
+                    'send_to.*' => 'required|email:rfc,dns',
+                    'cc_to' => 'required|array|min:1',
+                    'cc_to.*' => 'required|email:rfc,dns',
+                ], [
+                    'send_to.required' => 'Send To field is required.',
+                    'send_to.array' => 'Send To must be an array of emails.',
+                    'send_to.*.required' => 'Each Send To email is required.',
+                    'send_to.*.email' => 'Each Send To value must be a valid email.',
+                    'cc_to.required' => 'CC To field is required.',
+                    'cc_to.array' => 'CC To must be an array of emails.',
+                    'cc_to.*.required' => 'Each CC To email is required.',
+                    'cc_to.*.email' => 'Each CC To value must be a valid email.',
+                ]);
+
+                if ($validator->fails()) {
                     return response()->json([
-                        'msg' => 'Send to and CC to is required',
-                        'status' => 402,
-                        "isValid" => false,
+                        'msg' => $validator->errors()->first(),
+                        'status' => 400,
+                        'isValid' => false,
                     ]);
                 }
             }

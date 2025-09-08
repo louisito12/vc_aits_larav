@@ -78,7 +78,7 @@ class TransactJobs implements ShouldQueue
                             'noted_by' => $records['get_noted_by']['firstname'] . ' ' . $records['get_noted_by']['lastname'],
                             'conducted_by' => $records['conducted_by'],
                         ];
-                        Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
+                        Mail::to(explode(',', $records->send_to))->cc(explode(',', $records->cc_to))->send(new PmsMailer($data));
                         Pms_Details::where('id', $pms_datas->pms_id)->update(
                             ['pms_notif' => 1]
                         );
@@ -92,7 +92,7 @@ class TransactJobs implements ShouldQueue
                                 'noted_by' => $records['get_noted_by']['firstname'] . ' ' . $records['get_noted_by']['lastname'],
                                 'conducted_by' => $records['conducted_by'],
                             ];
-                            Mail::to('louie.ojide@valuecarehealth.com')->send(new PmsMailer($data));
+                            Mail::to(explode(',', $records->send_to))->cc(explode(',', $records->cc_to))->send(new PmsMailer($data));
                             PmsFiles::where('id', $pms_datas->id)->update(
                                 ['notif' => 1]
                             );
@@ -104,10 +104,7 @@ class TransactJobs implements ShouldQueue
             }
 
 
-
-
             //Room request Emailer
-
             $request = AitsNotif::where('aits_table', 'aits_request_room_models')
                 ->where('notif', 0)
                 ->where('status', 1)
@@ -185,7 +182,7 @@ class TransactJobs implements ShouldQueue
                         'emails_test' => implode(',', $room_arr_email),
 
                     ];
-                    Mail::to(['louie.ojide@valuecarehealth.com'])->send(new RequestMail($data_req));
+                    Mail::to($room_arr_email)->send(new RequestMail($data_req));
 
                     AitsNotif::where('id', $req->id)->update([
                         'notif' => 1,
@@ -296,7 +293,7 @@ class TransactJobs implements ShouldQueue
                         'emails_test' => implode(',', $transit_emailer),
                     ];
 
-                    Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($transit_data));
+                    Mail::to($transit_emailer)->send(new RequestMail($transit_data));
                     AitsNotif::where('id', $transits->id)->update([
                         'notif' => 1,
                     ]);
@@ -523,7 +520,7 @@ class TransactJobs implements ShouldQueue
                     ];
 
 
-                    Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($logistic_data));
+                    Mail::to($logistic_emailer)->send(new RequestMail($logistic_data));
                     AitsNotif::where('id', $email_logistic->id)->update([
                         'notif' => 1,
                     ]);
@@ -582,7 +579,7 @@ class TransactJobs implements ShouldQueue
                             'notif' => 1,
                         ]);
 
-                        Mail::to(['lousitoojide@gmail.com', 'louie.ojide@valuecarehealth.com'])->send(new RequestMail($emailer_data));
+                        Mail::to(['allemailusers@valuecarehealth.com'])->send(new RequestMail($emailer_data));
 
                     }
 

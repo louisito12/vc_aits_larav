@@ -145,15 +145,16 @@
                         </div>
                         <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
+                            <input type="text" class="form-control spec_input" id="manager_text">
                             <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
-                            <select name="" class="form-control" id="manager_app">
+                            {{-- <select name="" class="form-control" id="manager_app">
                                 <option value="">Select Manager</option>
                                 @foreach ($manager as $managers)
                                     <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
                                         {{ $managers->lastname }}
                                     </option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                         </div>
                         <div class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
@@ -255,14 +256,15 @@
                         <div class="col-xl-3 col-sm-6">
                             <label>Manager</label>
                             <!-- <input type="text" id="edit_manager_id" class="form-control spec_input"> -->
-                            <select name="" class="form-control" id="edit_manager_id">
+                            {{-- <select name="" class="form-control" id="edit_manager_id">
                                 <option value="">Select Manager</option>
                                 @foreach ($manager as $managers)
                                     <option value="{{ $managers->user_id }}">{{ $managers->firstname }}
                                         {{ $managers->lastname }}
                                     </option>
                                 @endforeach
-                            </select>
+                            </select> --}}
+                            <input type="text" class="form-control spec_input" id="edit_manager_text">
                         </div>
                         <div class="col-xl-3 col-sm-6">
                             <label>OB Form</label>
@@ -450,6 +452,7 @@
                             $('#edit_passenger_number').val(e['data']['passenger_number']);
                             $('#edit_manager_id').val(e['data']['manager_id']);
                             $('#edit_ecv').val(e['data']['ecv'] ? e['data']['ecv'] : '');
+                            $('#edit_manager_text').val(e['data']['manager_text']);
                         }
 
                         if (procedure == "show_data") {
@@ -464,15 +467,15 @@
                             $('#show_remarks').val(e['data']['remarks']);
                             $('#show_client_name').val(e['data']['client_name']);
                             $('#show_passenger_number').val(e['data']['passenger_number']);
-                            $('#show_manager_id').val(e['data']['manager_id']);
+                            $('#show_manager_id').val(e['data']['manager_text']);
                             $('#show_passenger_number').val(e['data']['passenger_number']);
                             $('#view_data_header').text('View Shuttle Request  #' + e['data'][
                                 'request_number'
                             ])
                             $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
                                 ' ' + e['data']['get_requestor_data']['lastname']);
-                            $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' +
-                                e['data']['get_manager_data']['lastname']);
+                            // $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] + ' ' +
+                            //     e['data']['get_manager_data']['lastname']);
                             $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e['data'][
                                 'request_status'
                             ]);
@@ -495,14 +498,12 @@
                                     'get_car_data'
                                 ]['plate_number'] : '');
 
-
                                 $('#app_remarks').val(
                                     e['data']['get_app_remarks'] ? e['data']['get_app_remarks'][
                                         'remarks'
                                     ] :
                                     ''
                                 );
-
 
                                 if (e['data']['driver_remarks']) {
                                     $('.driver_row').removeAttr('hidden');
@@ -535,21 +536,21 @@
 
                 },
 
-                dom: 'Bfrtip',
-                buttons: [
+                // dom: 'Bfrtip',
+                // buttons: [
 
-                    'excel',
-                    {
-                        extend: 'pdfHtml5',
-                        orientation: 'landscape',
-                        pageSize: 'A4',
-                        text: 'PDF',
-                        title: 'Messenger Logistics Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    }
-                ],
+                //     'excel',
+                //     {
+                //         extend: 'pdfHtml5',
+                //         orientation: 'landscape',
+                //         pageSize: 'A4',
+                //         text: 'PDF',
+                //         title: 'Messenger Logistics Report',
+                //         exportOptions: {
+                //             columns: ':visible'
+                //         }
+                //     }
+                // ],
 
                 columns: [{
                         data: "request_no"
@@ -637,6 +638,7 @@
                 const ob_form_file = $('#ob_form_file')[0].files[0];
                 const add_shuttle_data = new FormData();
                 const ecv = $('#ecv').val();
+                const manager_text = $('#manager_text').val();
 
                 if (ob_form_file == undefined || ob_form_file == null || ob_form_file == '') {
                     alertify.error('<span style="color: white;">OB form file is required</span>');
@@ -658,12 +660,13 @@
                 add_shuttle_data.append('purpose', other_purpose);
                 add_shuttle_data.append('passenger_number', number_pass);
                 add_shuttle_data.append('client_name', client_name);
-                add_shuttle_data.append('manager_id', manager_app);
+                // add_shuttle_data.append('manager_id', manager_app);
                 add_shuttle_data.append('passenger_number', number_pass);
                 add_shuttle_data.append('destination', destination);
                 add_shuttle_data.append('remarks', remarks);
                 add_shuttle_data.append('file[]', ob_form_file);
                 add_shuttle_data.append('ecv', ecv);
+                add_shuttle_data.append('manager_text', manager_text);
 
                 $.ajax({
                     url: "{{ route('aits_save_shuttle_request') }}",
@@ -682,13 +685,10 @@
                     success: function(e) {
                         $('#loader-overlay').removeClass('show');
                         if (e['isValid'] == false) {
-
-
                             // alertify.set('notifier', 'position', 'top-right');
                             // alertify.set('notifier', 'delay', 5);
                             alertify.error('<span style="color: white;">' + e['msg'] +
                                 '</span>');
-
                             $('#add_transit_room').on('hidden.bs.modal', function() {
                                 $(this).off('hidden.bs.modal').modal('show');
                             });
@@ -856,6 +856,7 @@
                 const edit_ob_form = $('#edit_ob_form')[0].files[0];
                 const edit_ecv = $('#edit_ecv').val();
                 const edit_shuttle_data = new FormData();
+                const edit_manager_text = $('#edit_manager_text').val();
 
                 $('#edit_shuttle_modal').modal('hide');
 
@@ -871,6 +872,7 @@
                 edit_shuttle_data.append('passenger_number', edit_passenger_number);
                 edit_shuttle_data.append('manager_id', edit_manager_id);
                 edit_shuttle_data.append('ecv', edit_ecv);
+                edit_shuttle_data.append('manager_text', edit_manager_text);
 
                 // Append the file if it exists
                 if (edit_ob_form) {

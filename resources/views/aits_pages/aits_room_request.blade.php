@@ -1,5 +1,7 @@
 @extends('aits_main_page')
-
+@php
+    $list_add = [682];
+@endphp
 
 
 @section('content')
@@ -13,8 +15,6 @@
                 </ol>
             </nav>
         </div>
-
-
     </div>
     <style>
         #room_request_tbl th,
@@ -22,8 +22,6 @@
             text-align: center !important;
             vertical-align: middle;
         }
-
-
         .alertify-logs {
             z-index: 999999 !important;
         }
@@ -39,9 +37,7 @@
                     <div class="card-title m-1 p-3">Room Request</div>
                     <button id="add_request_btn" class="btn btn-success m-3">Add Request</button>
                 </div>
-
                 <div class="card-body">
-
                     <div class="table-responsive">
                         <table id="room_request_tbl" class="table table-bordered text-nowrap table-sm w-100 text-center">
                             <thead>
@@ -64,8 +60,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!-- add user -->
     <div class="modal fade" id="add_room_request" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
@@ -122,13 +116,15 @@
                         $roles = roles_array(Auth::user()->id);
                     @endphp
 
-                    @if (in_array(2, $roles))
+                    @if (in_array(Auth::user()->id, $list_add))
                         <div class="row">
                             <div class="col-6">
                                 <div id="" class="row">
                                     <div class="col-12">
                                         <label>Requested By</label>
-                                        <select name="" class="form-control spec_input" id="requested_by"></select>
+                                        <input type="text" id="requested_text" class="form-control spec_input">
+                                        {{-- <select hidden name="" class="form-control spec_input d-none"
+                                            id="requested_by"></select> --}}
                                     </div>
                                 </div>
 
@@ -328,8 +324,8 @@
                 const date_to = $('#date_to').val();
                 const date_from = $('#date_from').val();
                 const purpose = $('#purpose').val();
-                const requested_by = $('#requested_by').val();
-
+                // const requested_by = $('#requested_by').val();
+                const requested_text = $('#requested_text').val();
 
 
                 $.ajax({
@@ -341,7 +337,8 @@
                         date_to: date_to,
                         date_from: date_from,
                         remarks: purpose,
-                        requested_by: requested_by
+                        requested_text: requested_text,
+                        // requested_by: requested_by
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -366,7 +363,7 @@
                         $('#date_to').val("");
                         $('#date_from').val("");
                         $('#purpose').val("");
-                        $('#requested_by').val(null).trigger('change');
+                        // $('#requested_by').val(null).trigger('change');
                     }
 
                 });
@@ -374,31 +371,31 @@
 
 
 
-            $('#add_room_request').on('shown.bs.modal', function() {
-                $('#requested_by').select2({
-                    dropdownParent: $('#add_room_request .modal-content'),
-                    ajax: {
-                        url: '{{ route('get_noted_by') }}',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "post",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                searchTerm: params.term
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        },
-                        cache: true
-                    },
-                })
-            });
+            // $('#add_room_request').on('shown.bs.modal', function() {
+            //     $('#requested_by').select2({
+            //         dropdownParent: $('#add_room_request .modal-content'),
+            //         ajax: {
+            //             url: '{{ route('get_noted_by') }}',
+            //             headers: {
+            //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //             },
+            //             type: "post",
+            //             dataType: 'json',
+            //             delay: 250,
+            //             data: function(params) {
+            //                 return {
+            //                     searchTerm: params.term
+            //                 };
+            //             },
+            //             processResults: function(response) {
+            //                 return {
+            //                     results: response
+            //                 };
+            //             },
+            //             cache: true
+            //         },
+            //     })
+            // });
 
             // $('#event_val').change(function () {
             //     $('#purpose').val('');
@@ -417,21 +414,21 @@
                     url: "{{ route('get_request_data') }}",
 
                 },
-                dom: 'Bfrtip',
-                buttons: [
+                // dom: 'Bfrtip',
+                // buttons: [
 
-                    'excel',
-                    {
-                        extend: 'pdfHtml5',
-                        orientation: 'landscape',
-                        pageSize: 'A4',
-                        text: 'PDF',
-                        title: 'Messenger Logistics Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    }
-                ],
+                //     'excel',
+                //     {
+                //         extend: 'pdfHtml5',
+                //         orientation: 'landscape',
+                //         pageSize: 'A4',
+                //         text: 'PDF',
+                //         title: 'Messenger Logistics Report',
+                //         exportOptions: {
+                //             columns: ':visible'
+                //         }
+                //     }
+                // ],
                 columns: [{
                         data: "request_no"
                     },

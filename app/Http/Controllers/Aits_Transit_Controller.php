@@ -48,6 +48,8 @@ class Aits_Transit_Controller extends Controller
 
 
 
+
+
         return view('aits_pages.aits_transit_request_view', compact('vehicle', 'type', 'manager'));
     }
 
@@ -62,7 +64,8 @@ class Aits_Transit_Controller extends Controller
                     'pick_up_date' => ['required'],
                     'client_name' => ['required'],
                     'type' => ['required'],
-                    'manager_id' => ['required'],
+                    // 'manager_id' => ['required'],
+                    'manager_text' => ['required'],
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],
@@ -70,6 +73,38 @@ class Aits_Transit_Controller extends Controller
                 ],
             );
 
+
+            $array_monday = [1];// 6;
+            $array_wed_th = [2, 3, 4];//5;
+            $friday_arr = [5];   //4;
+            $date = Carbon::parse($request->pick_up_date);
+            $dayNumber = $date->dayOfWeekIso;
+
+            if (in_array($dayNumber, $array_monday)) {
+                $limit_req = 6;
+            }
+
+            if (in_array($dayNumber, $array_wed_th)) {
+                $limit_req = 4;
+            }
+
+            if (in_array($dayNumber, $friday_arr)) {
+                $limit_req = 3;
+            }
+
+            $pick_up_date_format = Carbon::parse($request->pick_up_date)->format('Y-m-d');
+            $req_validation_count = AitsShuttleRequest::where('is_transact', 1)
+                ->whereDate('pick_up_date', $pick_up_date_format)
+                ->whereNot('request_status', 'Cancelled')->count();
+
+            if ($limit_req <= $req_validation_count) {
+                return response()->json([
+                    'msg' => 'Systems is alrready fully request on that day',
+                    'status' => 402,
+                    "isValid" => false,
+                ]);
+    
+            } 
 
 
 
@@ -97,7 +132,6 @@ class Aits_Transit_Controller extends Controller
             $appointment_date = $formatted = Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $departure = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $date_pick_up = $formatted = Carbon::parse($request->pick_up_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
-
             $validation_date = $this->date_validations($date_pick_up, $departure, $appointment_date);
             if ($validation_date['stat'] == 1) {
                 return response()->json([
@@ -513,7 +547,7 @@ class Aits_Transit_Controller extends Controller
 
             $driver_file = '';
             $data = AitsShuttleRequest::
-                with(['get_event_data', 'get_manager_data', 'get_requestor', 'get_requestor_data', 'get_approver_data', 'get_car_data', 'get_driver_data', 'get_app_remarks'])
+                with(['get_event_data', 'get_requestor', 'get_requestor_data', 'get_approver_data', 'get_car_data', 'get_driver_data', 'get_app_remarks'])
                 ->find($id);
 
 
@@ -678,7 +712,8 @@ class Aits_Transit_Controller extends Controller
                     'pick_up_date' => ['required'],
                     'client_name' => ['required'],
                     'type' => ['required'],
-                    'manager_id' => ['required'],
+                    'manager_text' => ['required'],
+                    // 'manager_id' => ['required'],
                     'passenger_number' => ['required'],
                     'destination' => ['required'],
                     'remarks' => ['required'],

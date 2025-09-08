@@ -110,8 +110,8 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Collection Counts</label>
-                            <input type="number" id="count_documents" min="1" class="form-control spec_input">
+                            <label>Amount to be colleted</label>
+                            <input type="text" id="count_documents" class="form-control spec_input">
                         </div>
                     </div>
                     <br>
@@ -195,7 +195,7 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Collection Counts</label>
+                            <label>Amount to be collected</label>
                             <input type="number" id="edit_count_documents" min="1"
                                 class="form-control spec_input">
                         </div>
@@ -280,7 +280,7 @@
 
                         </div>
                         <div class="col-4">
-                            <label>Collection Counts</label>
+                            <label>Amount to be Collected</label>
                             <input disabled type="number" id="show_count_documents" class="form-control spec_input">
                         </div>
                     </div>
@@ -745,7 +745,6 @@
 
 
             $('#edit_delivery').click(function() {
-
                 const edit_id = $('#edit_id').val();
                 const edit_name_receiver = $('#edit_name_receiver').val();
                 const edit_company_name = $('#edit_company_name').val();
@@ -756,8 +755,6 @@
                 const edit_complete_address = $('#edit_complete_address').val();
                 const edit_delivery_remarks = $('#edit_delivery_remarks').val();
                 const edit_file = $('#edit_file')[0].files[0];
-
-
                 const edit_form_data = new FormData();
                 edit_form_data.append('name_receiver', edit_name_receiver);
                 edit_form_data.append('company_name', edit_company_name);
@@ -783,10 +780,7 @@
                 }
 
 
-
                 $('#edit_delivery_request_modal').modal('hide');
-
-
                 $.ajax({
                     url: "{{ route('edit_delivery_request') }}",
                     type: "POST",
@@ -828,24 +822,6 @@
             });
 
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

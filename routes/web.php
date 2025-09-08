@@ -175,7 +175,6 @@ Route::controller(Aits_logistics_approval::class)->group(function () {
 Route::controller(Aits_Messenger_Controller::class)->group(function () {
     Route::get('aits_messenger_logistics', 'aits_messenger_logistics')->name('aits_messenger_logistics');
     Route::post('messenger_delivered', 'messenger_delivered')->name('messenger_delivered');
-
     Route::get('get_doctors_hospitals', 'get_doctors_hospitals')->name('get_doctors_hospitals');
 });
 
@@ -227,11 +226,11 @@ Route::controller(PdfController::class)->group(function () {
     Route::get('oximeter_pdf_view', 'oximeter_pdf_view')->name('oximeter_pdf_view');
 });
 
-
 Route::controller(DriverController::class)->group(function () {
     Route::get('/driver_data', 'driver_data')->name('driver_data');
     Route::post('driver_upload_remarks', 'driver_upload_remarks')->name('driver_upload_remarks');
 });
+
 //pages authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('aits_dashboard', [LoginController::class, 'aits_dashboard'])->name('aits_dashboard');
