@@ -103,10 +103,8 @@ class Aits_Transit_Controller extends Controller
                     'status' => 402,
                     "isValid" => false,
                 ]);
-    
+
             } 
-
-
 
 
             if ($validated->fails()) {
@@ -127,7 +125,6 @@ class Aits_Transit_Controller extends Controller
                     ]);
                 }
             }
-
 
             $appointment_date = $formatted = Carbon::parse($request->appointment_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
             $departure = $formatted = Carbon::parse($request->departure_date, 'Asia/Manila')->format('Y-m-d H:i:s.u');
