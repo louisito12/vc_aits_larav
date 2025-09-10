@@ -729,7 +729,6 @@
 
             $('#edit_type').change(function() {
                 $('#edit_purpose').val('');
-
                 if ($(this).val() === 'remarks') {
                     $('.edit_purpose_column_hidden').removeAttr('hidden');
                 } else {
