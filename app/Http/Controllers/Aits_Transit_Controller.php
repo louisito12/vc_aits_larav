@@ -299,7 +299,10 @@ class Aits_Transit_Controller extends Controller
         }
 
 
-
+        if ($dayNumber == 6 || $dayNumber == 7) {
+            $val = 1;
+            $message = 'The request is no longer available on that day';
+        }
 
 
 

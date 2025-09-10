@@ -156,7 +156,7 @@
                             </select> --}}
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>OB Form(Must be Approved by supervisor)</label>
+                            <label>OB Form(Must be approved by supervisor)</label>
                             <input type="file" id="ob_form_file" class="form-control spec_input">
                         </div>
                     </div>
@@ -704,13 +704,14 @@
                         $('#remarks').val('');
                         $('#number_pass').val('');
                         $('#manager_app').val('');
+                        $('#manager_text').val('');
                         $('#ob_form_file').val('');
                         $('#ecv').val('');
                         $('#add_transit_room').modal('hide');
                         $('#tbl_transit').DataTable().ajax.reload();
                         // Swal.fire('Success!', 'Your request has been successfully added.','success');
                         Swal.fire({
-                            title: "Note: That your request is not guaranteed all of your request will be approved",
+                            title: "Please be aware that there is no assurance that all aspects of your request will receive approval",
                             text: "Your request has been successfully added.",
                             icon: "success",
                             timer: 10000

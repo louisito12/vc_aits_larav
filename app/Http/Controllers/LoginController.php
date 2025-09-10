@@ -28,15 +28,31 @@ class LoginController extends Controller
                     ->where('status', 1)
                     ->first();
 
+
+
                 if ($roles_acces) {
                     Auth::login($user);
+
+                    $local_link = 'http://vc-fmdtracksys.valucarehealth.com';
+                    $current_link = url('/');
+                    //.com validation
+                    if ($local_link == $current_link) {
+                        //messenger can only access that com
+                        $roles_arr = roles_array(Auth::user()->id);
+                        if (!in_array(4, $roles_arr) || !in_array(7, $roles_arr)) {
+                            auth()->logout();
+                            return redirect()->route('login')->with(['error' => 'You cannot access this']);
+                        }
+
+                    }
+
+
                     $object = [
                         'user_id' => $user->id,
                         'page' => 'Login Page',
                         'description' => 'login User',
                         'status' => 1,
                         'date_created' => Carbon::now(),
-
                     ];
                     insert_audit($object);
                     return redirect()->route('aits_dashboard');
