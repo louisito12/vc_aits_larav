@@ -74,37 +74,7 @@ class Aits_Transit_Controller extends Controller
             );
 
 
-            $array_monday = [1];// 6;
-            $array_wed_th = [2, 3, 4];//5;
-            $friday_arr = [5];   //4;
-            $date = Carbon::parse($request->pick_up_date);
-            $dayNumber = $date->dayOfWeekIso;
 
-            if (in_array($dayNumber, $array_monday)) {
-                $limit_req = 6;
-            }
-
-            if (in_array($dayNumber, $array_wed_th)) {
-                $limit_req = 4;
-            }
-
-            if (in_array($dayNumber, $friday_arr)) {
-                $limit_req = 3;
-            }
-
-            $pick_up_date_format = Carbon::parse($request->pick_up_date)->format('Y-m-d');
-            $req_validation_count = AitsShuttleRequest::where('is_transact', 1)
-                ->whereDate('pick_up_date', $pick_up_date_format)
-                ->whereNot('request_status', 'Cancelled')->count();
-
-            if ($limit_req <= $req_validation_count) {
-                return response()->json([
-                    'msg' => 'Systems is alrready fully request on that day',
-                    'status' => 402,
-                    "isValid" => false,
-                ]);
-
-            } 
 
 
             if ($validated->fails()) {
@@ -190,7 +160,7 @@ class Aits_Transit_Controller extends Controller
                 'request_status' => 'Pending',
                 'request_no' => $this->request_no(),
                 'dept_id' => $dept_id['deparment_id'],
-
+                'request_no_text' => req_no_text($this->request_no(), Carbon::now())
             ]);
 
 
@@ -292,6 +262,44 @@ class Aits_Transit_Controller extends Controller
             $val = 1;
             $message = 'The appointment date is not be later than pick up date';
         }
+
+
+        $array_monday = [1];// 6;
+        $array_wed_th = [2, 3, 4];//5;
+        $friday_arr = [5];   //4;
+        $date = Carbon::parse($pick_date);
+        $dayNumber = $date->dayOfWeekIso;
+
+        if (in_array($dayNumber, $array_monday)) {
+            $limit_req = 6;
+        }
+
+        if (in_array($dayNumber, $array_wed_th)) {
+            $limit_req = 4;
+        }
+
+        if (in_array($dayNumber, $friday_arr)) {
+            $limit_req = 3;
+        }
+
+        $pick_up_date_format = Carbon::parse($pick_date)->format('Y-m-d');
+        $req_validation_count = AitsShuttleRequest::where('is_transact', 1)
+            ->whereDate('pick_up_date', $pick_up_date_format)
+            ->whereNot('request_status', 'Cancelled')->count();
+
+        if ($limit_req <= $req_validation_count) {
+            // return response()->json([
+            //     'msg' => 'Systems is alrready fully request on that day',
+            //     'status' => 402,
+            //     "isValid" => false,
+            // ]);
+            $val = 1;
+            $message = 'Systems is alrready fully request on that day';
+
+        }
+
+
+
 
 
 
@@ -554,6 +562,12 @@ class Aits_Transit_Controller extends Controller
                 ->where('is_driver', 1)
                 ->first();
 
+            $notif_driver = AitsNotif::where('aits_id', $id)
+                ->where('aits_table', 'aits_shuttle_requests')
+                ->where('aits_process', 'Approve_driver')
+                ->where('is_driver', 1)
+                ->first();
+
             $data_file = AitsFileModel::where('table_name', 'driver_file')
                 ->where('status', 1)
                 ->where('attachment_id', $id)
@@ -577,6 +591,8 @@ class Aits_Transit_Controller extends Controller
             $data->request_number = $req_no;
             $data->driver_app_remarks = $driver_remarks;
             $data->driver_file = $driver_file;
+            $data->driver_app_remarks = $notif_driver->remarks;
+
 
             if ($data->type == null) {
                 $data->type == "remarks";

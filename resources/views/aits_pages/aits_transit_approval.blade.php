@@ -205,7 +205,7 @@
                             <input disabled type="number" id="show_passenger_number" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>Manager</label>
+                            <label>Department Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
@@ -217,7 +217,6 @@
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>
                     </div>
-
                     <br>
                     <div class="row">
                         <div class="col-xl-4 col-sm-6">
@@ -710,13 +709,15 @@
                         ])
                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
                             ' ' + e['data']['get_requestor_data']['lastname']);
-                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
-                            ' ' +
-                            e['data']['get_manager_data']['lastname']);
+                        // $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
+                        //     ' ' +
+                        //     e['data']['get_manager_data']['lastname']);
                         $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e[
                             'data'][
                             'request_status'
                         ]);
+
+                        $('#show_manager_id').val(e['data']['manager_text'])
                         if (e['data']['request_status'] != 'Cancelled') {
                             $('#show_approver').val(e['data']['get_approver_data'] ? e['data'][
                                     'get_approver_data'

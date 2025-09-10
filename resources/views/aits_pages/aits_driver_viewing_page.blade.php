@@ -418,9 +418,11 @@
                         ])
                         $('#show_requestor').val(e['data']['get_requestor_data']['firstname'] +
                             ' ' + e['data']['get_requestor_data']['lastname']);
-                        $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
-                            ' ' +
-                            e['data']['get_manager_data']['lastname']);
+                        // $('#show_manager_id').val(e['data']['get_manager_data']['firstname'] +
+                        //     ' ' +
+                        //     e['data']['get_manager_data']['lastname']);
+
+                        $('#show_manager_id').val(e['data']['manager_text']);
                         $('#show_req_stats').val(e['data']['status'] == 0 ? 'Cancelled' : e[
                             'data'][
                             'request_status'

@@ -114,7 +114,7 @@ Route::controller(Aits_Dashboard::class)->group(function () {
     Route::get('aits_dashboard_logistics/{params}/{procedure}', 'aits_dashboard_logistics')->name('aits_dashboard_logistics');
     Route::get('aits_dashboard_logistics_mess/{params}/{procedure}', 'aits_dashboard_logistics_mess')->name('aits_dashboard_logistics_mess');
     Route::get('aits_dashboard_counts_messenger', 'aits_dashboard_counts_messenger')->name('aits_dashboard_counts_messenger');
-    Route::get('room_reserve_html/{room_id}','room_reserve_html')->name('room_reserve_html');
+    Route::get('room_reserve_html/{room_id}', 'room_reserve_html')->name('room_reserve_html');
 });
 
 
@@ -286,10 +286,16 @@ Route::get('test_api_data', [PmsApprovalController::class, 'test_api_data']);
 Route::get('test_email', function () {
 
 
-return    get_email_data([]);
+    return get_email_data([]);
 
 });
+Route::Get('test_req_no', function () {
 
+    $text = req_no_text(5, Carbon::now());
+
+    var_dump($text);
+
+});
 // Route::Get('test_data', function () {
 //     $now = Carbon::now();
 //     $date_pick_up = $formatted = Carbon::parse('2025-07-22 12:00:00.000', 'Asia/Manila')->format('Y-m-d H:i:s.u');

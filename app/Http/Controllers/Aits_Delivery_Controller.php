@@ -141,6 +141,10 @@ class Aits_Delivery_Controller extends Controller
                 'messenger_id' => $area_val['data']->messenger_id,
                 'procedure_date' => $process_date,
                 'dept_id' => $dept_id['deparment_id'],
+                'request_no_text' => req_no_text($this->request_no($request->procedures), Carbon::now()),
+
+
+
             ]);
 
 
@@ -345,7 +349,7 @@ class Aits_Delivery_Controller extends Controller
                 $direction = dynamic_file($path, $link);
                 $filename = $messenge_file->orig_file;
             }
-            
+
             $data->req_name = $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
             $data->req_stat = $stat;
             $data->request_number = request_number($data->request_no, $data->date_created);

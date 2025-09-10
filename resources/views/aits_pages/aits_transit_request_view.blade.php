@@ -55,7 +55,6 @@
                                         <th>Status</th>
                                         <th>Driver</th>
                                         <th>Vehicle</th>
-
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -144,7 +143,7 @@
                             <input type="text" id="ecv" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>Manager</label>
+                            <label>Department Manager</label>
                             <input type="text" class="form-control spec_input" id="manager_text">
                             <!-- <input type="text" id="manager_app" class="form-control spec_input"> -->
                             {{-- <select name="" class="form-control" id="manager_app">
@@ -157,7 +156,7 @@
                             </select> --}}
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>OB Form</label>
+                            <label>OB Form(Must be Approved by supervisor)</label>
                             <input type="file" id="ob_form_file" class="form-control spec_input">
                         </div>
                     </div>
@@ -254,7 +253,7 @@
                             <input type="text" id="edit_ecv" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>Manager</label>
+                            <label>Department Manager</label>
                             <!-- <input type="text" id="edit_manager_id" class="form-control spec_input"> -->
                             {{-- <select name="" class="form-control" id="edit_manager_id">
                                 <option value="">Select Manager</option>
@@ -267,7 +266,7 @@
                             <input type="text" class="form-control spec_input" id="edit_manager_text">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>OB Form</label>
+                            <label>OB Form(Must be Approved by supervisor)</label>
                             <input type="file" id="edit_ob_form" class="form-control spec_input">
                         </div>
                     </div>
@@ -348,7 +347,7 @@
                             <input disabled type="number" id="show_passenger_number" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>Manager</label>
+                            <label>Department Manager</label>
                             <input disabled type="text" id="show_manager_id" class="form-control spec_input">
                         </div>
                         <div class="col-xl-3 col-sm-6">
@@ -709,8 +708,14 @@
                         $('#ecv').val('');
                         $('#add_transit_room').modal('hide');
                         $('#tbl_transit').DataTable().ajax.reload();
-                        Swal.fire('Success!', 'Your request has been successfully added.',
-                            'success');
+                        // Swal.fire('Success!', 'Your request has been successfully added.','success');
+                        Swal.fire({
+                            title: "Note: That your request is not guaranteed all of your request will be approved",
+                            text: "Your request has been successfully added.",
+                            icon: "success",
+                            timer: 10000
+                        });
+
 
                     }
                 })

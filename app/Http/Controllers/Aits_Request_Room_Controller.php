@@ -133,6 +133,7 @@ class Aits_Request_Room_Controller extends Controller
                 'date_to' => Carbon::parse($request->date_to, 'Asia/Manila')->format('Y-m-d h:i A'),
                 'dept_id' => $dept_id['deparment_id'],
                 'encoded_by' => Auth::user()->id,
+                'req_text' => req_no_text($this->request_no(), Carbon::now())
             ]);
 
 

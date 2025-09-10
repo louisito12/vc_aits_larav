@@ -315,6 +315,13 @@ function get_email_data($array)
 }
 
 
+function req_no_text($no, $date_created)
+{
+    $number = $no;
+    $request_number = sprintf('%03d', $number);
+    return Carbon::parse($date_created)->format('Y-m-d') . '-' . $request_number;
+
+}
 
 
 // $dateString = '2025-07-09 00:00:00.000';
