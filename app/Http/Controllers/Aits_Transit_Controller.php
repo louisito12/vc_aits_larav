@@ -594,8 +594,10 @@ class Aits_Transit_Controller extends Controller
             $data->request_number = $req_no;
             $data->driver_app_remarks = $driver_remarks;
             $data->driver_file = $driver_file;
-            $data->driver_app_remarks = $notif_driver->remarks;
 
+            if ($notif_driver) {
+                $data->driver_app_remarks = $notif_driver->remarks;
+            }
 
             if ($data->type == null) {
                 $data->type == "remarks";
@@ -611,7 +613,7 @@ class Aits_Transit_Controller extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'msg' => $e,
+                'msg' => $e->getMessage(),
                 'status' => 402,
                 'isValid' => false,
             ]);

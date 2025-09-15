@@ -35,7 +35,7 @@ class Aits_logistics_approval extends Controller
 
 
 
-        $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname'])
+        $data = AitsDelivery::with(['get_area_request', 'get_requestor', 'get_delivery_type', 'get_requestor_fullname', 'get_messenger_name'])
             ->where('status', 1);
         if ($request->pending_data) {
             $data->where('request_status', 'Pending');
@@ -55,6 +55,7 @@ class Aits_logistics_approval extends Controller
 
         $data = $data->orderBy('procedures', 'asc')
             ->get();
+
         return DataTables::of($data)
             ->addColumn('request_no', function ($data) {
                 return request_number($data->request_no, $data->date_created);
@@ -82,6 +83,13 @@ class Aits_logistics_approval extends Controller
                 $aits_deliver = new Aits_Delivery_Controller();
                 return $aits_deliver->status_html($data->request_status, $data->procedures, $data->if);
 
+            })
+            ->addColumn('messenger_name_data', function ($data) {
+                $mess_name = '';
+                if ($data->get_messenger_name) {
+                    $mess_name = $data['get_messenger_name']['firstname'] . ' ' . $data['get_messenger_name']['lastname'];
+                }
+                return $mess_name;
             })
 
             ->addColumn('view_file_request', function ($data) {

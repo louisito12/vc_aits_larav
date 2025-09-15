@@ -156,7 +156,7 @@
                             </select> --}}
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>OB Form(Must be approved by supervisor)</label>
+                            <label>OB Form(Must be approved by Department Head)</label>
                             <input type="file" id="ob_form_file" class="form-control spec_input">
                         </div>
                     </div>
@@ -266,7 +266,7 @@
                             <input type="text" class="form-control spec_input" id="edit_manager_text">
                         </div>
                         <div class="col-xl-3 col-sm-6">
-                            <label>OB Form(Must be Approved by supervisor)</label>
+                            <label>OB Form(Must be approved by Department Head)</label>
                             <input type="file" id="edit_ob_form" class="form-control spec_input">
                         </div>
                     </div>
@@ -355,7 +355,7 @@
                             <input disabled type="text" id="show_requestor" class="form-control">
                         </div>
                         <div hidden class="col-xl-3 col-sm-6">
-                            <label>OB Form</label>
+                            <label>OB Form(Must be approved by Department Head)</label>
                             <input type="file" id="show_ob_form" class="form-control spec_input">
                         </div>
                     </div>
@@ -711,12 +711,11 @@
                         $('#tbl_transit').DataTable().ajax.reload();
                         // Swal.fire('Success!', 'Your request has been successfully added.','success');
                         Swal.fire({
-                            title: "Please be aware that there is no assurance that all aspects of your request will receive approval",
-                            text: "Your request has been successfully added.",
+                            title: "Your request has been successfully added.",
+                            text: "Disclaimer: Please remember that securing a VC service vehicle is for official business use only. The vehicle may be used for other trips during and after your reserved schedule. In the event of emergencies, vehicle issues, or other unavoidable situations, we may need to recall the vehicle. Thank you for your understanding",
                             icon: "success",
                             timer: 10000
                         });
-
 
                     }
                 })

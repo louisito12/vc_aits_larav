@@ -25,8 +25,16 @@ class Aits_Request_Room_Controller extends Controller
 
     public function request_room_view()
     {
+        $list_add = [682];
 
-        $room = AitsRoomModel::where('status', 1)->get();
+        $room =
+            AitsRoomModel::where('status', 1);
+        if (!in_array(Auth::user()->id, $list_add)) {
+
+            $room->whereNot('id', 7);
+        }
+
+        $room = $room->get();
         $event = AitsEventModel::where('status', 1)->get();
         return view('aits_pages.aits_room_request', compact(['room', 'event']));
 

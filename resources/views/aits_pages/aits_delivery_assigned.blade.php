@@ -91,6 +91,8 @@
                                     <th class="text-center">Requestor </th>
                                     <th class="text-center">Delivery Address</th>
                                     <th class="text-center">Area </th>
+                                    <th class="text-center">Messenger Name </th>
+
                                     <th class="text-center">Client Name </th>
                                     <th class="text-center">Company Name </th>
                                     <th class="text-center">View Request File </th>
@@ -347,6 +349,9 @@
                         render: function(data, type, row) {
                             return row.get_area_request.area;
                         }
+                    },
+                    {
+                        data: "messenger_name_data"
                     },
                     {
                         data: "name_receiver"
