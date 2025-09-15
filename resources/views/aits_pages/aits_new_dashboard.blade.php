@@ -62,9 +62,9 @@
     <div class="container-fluid mt-5">
         <style>
             /* body {
-                    margin-top: 40px;
-                    background: #eee;
-                } */
+                                                        margin-top: 40px;
+                                                        background: #eee;
+                                                    } */
 
             .page-todo .tasks {
                 /* background: #fff; */
@@ -978,11 +978,57 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+    <div class="modal fade" id="intro_modal" aria-labelledby="exampleModalLgLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="logistic_header">Welcome to AITS System
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <img src="{{ asset('new_assets/assets/img/aits_intro.jpg') }}" class="w-100" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    {{-- <div class="col-lg-4">
+      <img
+        src="https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+        data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/2.webp"
+        alt="Winter Landscape"
+        class="w-100"
+      />
+    </div> --}}
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function() {
+
+            // $('#intro_modal').modal('show');
+
             function columns_data(type_request) {
                 if (type_request == "room_request") {
                     return [{
@@ -1091,8 +1137,7 @@
             }
 
 
-
-
+         
 
             @if (in_array(2, $roles) || in_array(3, $roles))
 

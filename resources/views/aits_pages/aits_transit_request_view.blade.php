@@ -723,9 +723,6 @@
             });
 
 
-
-
-
             $('#edit_type').change(function() {
                 $('#edit_purpose').val('');
                 if ($(this).val() === 'remarks') {
@@ -750,15 +747,12 @@
             $(document).on('click', '.btn_show_data', function() {
                 $('.driver_row').attr('hidden', true);
                 retrieve_shuttle($(this).data('id'), 'show_data')
-
             });
 
 
 
             $(document).on('click', '.btn_edit', function() {
                 retrieve_shuttle($(this).data('id'), 'edit_data')
-
-
             });
 
             // $(document).on('click', '.btn_delete ', function () {

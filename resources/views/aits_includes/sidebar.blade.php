@@ -10,6 +10,9 @@
             <img style="width: 180px; height:80px; object-fit: cover;"
                 src="{{ asset('aits_asset/assets/images/aits_logo.png') }}" alt="logo" class="desktop-logo">
 
+            {{-- <img style="width: 180px; height:80px; object-fit: cover;" src="{{ asset('new_assets/assets/img/aits_intro.jpg') }}"
+                alt="logo" class="desktop-logo"> --}}
+
             <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo"
                 class="toggle-logo">
 

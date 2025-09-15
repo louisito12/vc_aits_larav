@@ -842,14 +842,24 @@
                     console.log("Updated Time: ", newTimeValue);
                 }
             });
+
+
             // $('.loader').show();
+            @if (request()->is('aits_dashboard'))
 
-            $('#loader-overlay').addClass('show');
+                @if (session('success_login'))
+                    $('#intro_modal').modal('show');
+                    setTimeout(function() {
+                        $('#intro_modal').modal('hide');
+                    }, 10000);
+                @endif
+            @else
 
-
-            setTimeout(function() {
-                $('#loader-overlay').removeClass('show');
-            }, 2000);
+                $('#loader-overlay').addClass('show');
+                setTimeout(function() {
+                    $('#loader-overlay').removeClass('show');
+                }, 2000);
+            @endif
 
 
 

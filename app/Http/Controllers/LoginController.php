@@ -55,7 +55,7 @@ class LoginController extends Controller
                         'date_created' => Carbon::now(),
                     ];
                     insert_audit($object);
-                    return redirect()->route('aits_dashboard');
+                    return redirect()->route('aits_dashboard')->with('success_login', true);
                 }
 
                 return redirect()->route('login')->with(['error' => 'Please Activate your account']);
