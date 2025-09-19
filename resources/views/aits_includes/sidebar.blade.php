@@ -1,17 +1,17 @@
 <style>
     .app-sidebar .main-sidebar-header {
-        height: 6rem !important;
+        height: 8rem !important;
     }
 </style>
 <aside class="app-sidebar sticky" id="sidebar">
     <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header">
         <a href="{{ route('aits_dashboard') }}" class="header-logo">
-            <img style="width: 180px; height:80px; object-fit: cover;"
-                src="{{ asset('aits_asset/assets/images/aits_logo.png') }}" alt="logo" class="desktop-logo">
+            {{-- <img style="width: 180px; height:80px; object-fit: cover;"
+                src="{{ asset('aits_asset/assets/images/aits_logo.png') }}" alt="logo" class="desktop-logo"> --}}
 
-            {{-- <img style="width: 180px; height:80px; object-fit: cover;" src="{{ asset('new_assets/assets/img/aits_intro.jpg') }}"
-                alt="logo" class="desktop-logo"> --}}
+            <img style="width: 180px; height:110px;border-radius: 5%;" src="{{ asset('new_assets/assets/img/aits_logo_new.png') }}"
+                alt="logo" class="desktop-logo">
 
             <img src="{{ asset('aits_asset/assets/images/brand-logos/vc_icon.png') }}" alt="logo"
                 class="toggle-logo">
@@ -24,6 +24,7 @@
     </div>
     <!-- End::main-sidebar-header -->
 
+    <br><br>
     <!-- Start::main-sidebar -->
     <div class="main-sidebar" id="sidebar-scroll">
 

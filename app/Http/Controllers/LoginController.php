@@ -33,16 +33,37 @@ class LoginController extends Controller
                 if ($roles_acces) {
                     Auth::login($user);
 
+
                     $local_link = 'http://vc-fmdtracksys.valucarehealth.com';
+                    $local_link_htps = 'https://vc-fmdtracksys.valucarehealth.com';
+
+
+
                     $current_link = url('/');
+                    $is_messenger = 0;
+                    $roles = DB::table('aits_role_access')
+                        ->where('user_id', Auth::user()->id)
+                        ->whereIn('role_id', [4, 7])
+                        ->where('status', 1)
+                        ->first();
+                    if ($roles) {
+                        $is_messenger = 1;
+                    }
                     //.com validation
-                    if ($local_link == $current_link) {
-                        //messenger can only access that com
-                        $roles_arr = roles_array(Auth::user()->id);
-                        if (!in_array(4, $roles_arr) || !in_array(7, $roles_arr)) {
+                    if ($local_link == $current_link || $current_link == $local_link_htps) {
+                        // //messenger can only access that com
+                        // $roles_arr = roles_array(Auth::user()->id);
+                        // if (!in_array(4, $roles_arr) || !in_array(7, $roles_arr)) {
+                        //     auth()->logout();
+                        //     return redirect()->route('login')->with(['error' => 'You cannot access this']);
+                        // }
+                        if ($is_messenger == 0) {
                             auth()->logout();
                             return redirect()->route('login')->with(['error' => 'You cannot access this']);
                         }
+
+
+
 
                     }
 

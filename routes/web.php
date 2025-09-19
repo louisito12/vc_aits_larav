@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExcelController;
 use Carbon\Carbon;
 use App\Models\PmsFiles;
 use App\Mail\RequestMail;
@@ -301,6 +302,9 @@ Route::Get('test_url', function () {
 
     $current_link = url('/');
 });
+
+Route::get('view_excel', [ExcelController::class, 'view_excel'])->name('view_excel');
+Route::post('test_upload', [ExcelController::class, 'upload_excel'])->name('excel.upload.handle');
 // Route::Get('test_data', function () {
 //     $now = Carbon::now();
 //     $date_pick_up = $formatted = Carbon::parse('2025-07-22 12:00:00.000', 'Asia/Manila')->format('Y-m-d H:i:s.u');

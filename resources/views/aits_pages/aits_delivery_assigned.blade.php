@@ -92,6 +92,11 @@
                                     <th class="text-center">Delivery Address</th>
                                     <th class="text-center">Area </th>
                                     <th class="text-center">Messenger Name </th>
+                                    <th class="text-center">Amount to be collected </th>
+
+
+
+
 
                                     <th class="text-center">Client Name </th>
                                     <th class="text-center">Company Name </th>
@@ -352,6 +357,9 @@
                     },
                     {
                         data: "messenger_name_data"
+                    },
+                    {
+                        data: "collection_number"
                     },
                     {
                         data: "name_receiver"

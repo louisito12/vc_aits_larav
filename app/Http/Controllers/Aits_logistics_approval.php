@@ -75,6 +75,19 @@ class Aits_logistics_approval extends Controller
             ->addColumn('requestor', function ($data) {
                 return $data['get_requestor_fullname']['firstname'] . ' ' . $data['get_requestor_fullname']['lastname'];
             })
+            ->addColumn('collection_number', function ($data) {
+                // $collect_number = '';
+                // if ($data->delivery_type_id == 3) {
+                //     $collect_number = 
+                // }
+                if ($data->delivery_type_id == 3) {
+                    return $data->count_documents;
+                } else {
+                    return '';
+                }
+
+
+            })
 
             ->addColumn('req_status', function ($data) {
                 if ($data->status == 0) {

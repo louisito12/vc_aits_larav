@@ -71,6 +71,19 @@ class Aits_Messenger_Controller extends Controller
 
             })
 
+            ->addColumn('collection_number', function ($data) {
+                // $collect_number = '';
+                // if ($data->delivery_type_id == 3) {
+                //     $collect_number = 
+                // }
+                if ($data->delivery_type_id == 3) {
+                    return $data->count_documents;
+                } else {
+                    return '';
+                }
+
+
+            })
             ->addColumn('view_file_request', function ($data) {
                 $data_file = AitsFileModel::where('table_name', 'AitsDelivery')
                     ->where('procedure', $data->procedures)

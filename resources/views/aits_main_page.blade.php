@@ -846,12 +846,16 @@
 
             // $('.loader').show();
             @if (request()->is('aits_dashboard'))
-
                 @if (session('success_login'))
                     $('#intro_modal').modal('show');
                     setTimeout(function() {
                         $('#intro_modal').modal('hide');
                     }, 10000);
+                @else
+                    $('#loader-overlay').addClass('show');
+                    setTimeout(function() {
+                        $('#loader-overlay').removeClass('show');
+                    }, 2000);
                 @endif
             @else
 
