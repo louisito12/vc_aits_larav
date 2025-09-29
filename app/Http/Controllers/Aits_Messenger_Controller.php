@@ -76,7 +76,7 @@ class Aits_Messenger_Controller extends Controller
                 // if ($data->delivery_type_id == 3) {
                 //     $collect_number = 
                 // }
-                if ($data->delivery_type_id == 3) {
+                if ($data->procedures == 2) {
                     return $data->count_documents;
                 } else {
                     return '';

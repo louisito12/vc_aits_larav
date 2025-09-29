@@ -62,9 +62,9 @@
     <div class="container-fluid mt-5">
         <style>
             /* body {
-                                                        margin-top: 40px;
-                                                        background: #eee;
-                                                    } */
+                                                            margin-top: 40px;
+                                                            background: #eee;
+                                                        } */
 
             .page-todo .tasks {
                 /* background: #fff; */
@@ -1137,7 +1137,7 @@
             }
 
 
-         
+
 
             @if (in_array(2, $roles) || in_array(3, $roles))
 
@@ -1283,7 +1283,9 @@
                 setInterval(function() {
                     counters();
                 }, 5 * 60 * 1000);
-            @elseif (in_array(4, $roles))
+            @endif
+            
+            @if (in_array(4, $roles))
 
                 function messenger_counter() {
                     $.ajax({
